@@ -1,8 +1,9 @@
 import React, { Component, ReactNode } from 'react'
-import { View, StyleSheet, ViewStyle, StyleProp, TextStyle } from 'react-native'
+import { View, StyleSheet, ViewStyle, StyleProp, TextStyle, Image, ImageSourcePropType} from 'react-native'
 
 import { Avatar, Day, utils, IMessage, User, LeftRightStyle, AvatarProps, BubbleProps, DayProps} from 'react-native-gifted-chat'
-import Bubble from './bubble-simple'
+import Bubble from './bubble'
+import { userAvatar } from '../data'
 
 const { isSameUser, isSameDay } = utils
 
@@ -14,10 +15,10 @@ interface MessageProps {
   nextMessage: IMessage,
   previousMessage: IMessage,
   user: User,
-  containerStyle: LeftRightStyle<ViewStyle>
-  messageTextStyle?: StyleProp<TextStyle> | StyleProp<TextStyle>[];
-  position: 'left' | 'right'
-  inverted?: boolean
+  containerStyle: LeftRightStyle<ViewStyle>,
+  messageTextStyle?: StyleProp<TextStyle> | StyleProp<TextStyle>[],
+  position: 'left' | 'right',
+  inverted?: boolean,
 }
 
 class Message extends Component<MessageProps> {
@@ -30,13 +31,13 @@ class Message extends Component<MessageProps> {
     previousMessage: {},
     user: {},
     containerStyle: {},
+    position: null,
   }
 
   getInnerComponentProps() {
     const { containerStyle, ...props } = this.props
     return {
       ...props,
-      position: 'left' as 'left',
       isSameUser,
       isSameDay,
     }
@@ -56,21 +57,14 @@ class Message extends Component<MessageProps> {
   }
 
   renderAvatar = () => {
-    let extraStyle
-    if (
-      isSameUser(this.props.currentMessage, this.props.previousMessage) &&
-      isSameDay(this.props.currentMessage, this.props.previousMessage)
-    ) {
-      // Set the invisible avatar height to 0, but keep the width, padding, etc.
-      extraStyle = { height: 0 }
-    }
 
     const avatarProps = this.getInnerComponentProps()
     return (
       <Avatar
         {...avatarProps}
         imageStyle={{
-          left: [styles.slackAvatar, extraStyle],
+          left: [styles[avatarProps.position].slackAvatar],
+          right: [styles[avatarProps.position].slackAvatar],
         }}
       />
     )
@@ -92,7 +86,7 @@ class Message extends Component<MessageProps> {
         <View
           style={[
             styles[position].container,
-            { marginBottom: sameUser ? 2 : 10 },
+            { marginBottom: sameUser ? 0 : 10 },
             !this.props.inverted && { marginBottom: 2 },
             containerStyle && containerStyle[position],
           ]}
@@ -115,7 +109,12 @@ const styles = {
       marginLeft: 8,
       marginRight: 0,
     },
-    
+    slackAvatar: {
+      // The bottom should roughly line up with the first line of message text.
+      height: 40,
+      width: 40,
+      borderRadius: 3,
+    },
   }),
   right: StyleSheet.create({
     container: {
@@ -125,13 +124,13 @@ const styles = {
       marginLeft: 0,
       marginRight: 8,
     },
+    slackAvatar: {
+      // The bottom should roughly line up with the first line of message text.
+      height: 40,
+      width: 40,
+      borderRadius: 3,
+    },
   }),
-  slackAvatar: {
-    // The bottom should roughly line up with the first line of message text.
-    height: 40,
-    width: 40,
-    borderRadius: 3,
-  },
 }
 
 export default Message;
