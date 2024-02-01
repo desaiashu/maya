@@ -83,6 +83,7 @@ const Chat: React.FC = () => {
         renderMessage={renderMessage}
         renderInputToolbar={renderInputToolbar}
         alignTop={true}
+        messagesContainerStyle={styles.messagesContainer}
       />
     </SafeAreaView>
   );
@@ -92,6 +93,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  messagesContainer: {
+    // flex: 1
   },
 });
 

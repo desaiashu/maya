@@ -4,6 +4,80 @@ Maya is a chat client for LLMs to experiment with multi-agent and multi-human co
 
 It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB datastore.
 
+---------
+
+### Todos
+In progress:
+- Build message refresh
+- Build websockets
+
+Next up:
+- Build auth/verify/profile
+- Build out discussion rules
+
+Backlog:
+- Build web demo on maya url
+- Allow custom avatars (cloudflare CDN)
+- Push notifications
+- Invite ppl via sms
+- Host on maya url rather than txtai.co
+- Expire login codes
+- Enable multiple dynos via redis/pubsub
+
+-------
+
+### Maya backend architecture
+
+Maya chat operates on a websocket for the following functions:
+- Sending/receiving messages
+- Creating/updating chats
+
+Additionally it has the following API endpoints:
+- Websocket (manages message sending/receiving and creating/updating chats)
+- Refresh (updates the chat list and recent messages)
+- Update profile (updates a user's username/avatar)
+- Auth / verify (sms based authentication)
+
+### MongoDB architecture
+
+Users:
+```
+{
+    userid: string
+    username: string
+    avatar: string
+}
+```
+
+Chatlist:
+```
+{
+    chatid: string
+    participants: [string]
+}
+```
+
+Messages:
+```
+{
+    chatid: string
+    message: string
+    sender: string
+    timestamp: DateTime
+}
+```
+
+Auth:
+```
+{
+    userid: string
+    token: string
+    timestamp: DateTime
+}
+```
+
+-------
+
 ## Installation
 
 Install/update xcode and command line tools
@@ -18,7 +92,7 @@ sudo gem install cocoapods
 
 >See [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, if you have trouble.
 
-## Step 1: Start the Metro Server
+### Step 1: Start the Metro Server
 
 First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
 
@@ -32,11 +106,11 @@ npm start
 yarn start
 ```
 
-## Step 2: Start your Application
+### Step 2: Start your Application
 
 Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
 
-### For Android
+#### For Android
 
 ```bash
 # using npm
@@ -46,7 +120,7 @@ npm run android
 yarn android
 ```
 
-### For iOS
+#### For iOS
 
 ```bash
 # using npm

@@ -3,8 +3,8 @@
 import React from 'react';
 import Navigator from './src/navigator';
 
-const App = () => {
+const maya = () => {
   return <Navigator />;
 };
 
-export default App;
+export default maya;
