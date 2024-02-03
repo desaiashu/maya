@@ -10,14 +10,20 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 In progress:
 - Build message refresh
 - Build websockets
+  - Helper function for websocket to create the right json
+  - Enable websocket to route different commands
+- Create new message, select AIs
+- Build out discussion protocol, to allow other devs to implement a different framework
+- Build out discussion on server w/ multiple LLMs
 
 Next up:
 - Build auth/verify/profile
-- Build out discussion rules
+- Include authtoken in each HTTP request
 
 Backlog:
 - Build web demo on maya url
 - Allow custom avatars (cloudflare CDN)
+- Secure storage rather than async storage
 - Push notifications
 - Invite ppl via sms
 - Host on maya url rather than txtai.co
@@ -37,44 +43,6 @@ Additionally it has the following API endpoints:
 - Refresh (updates the chat list and recent messages)
 - Update profile (updates a user's username/avatar)
 - Auth / verify (sms based authentication)
-
-### MongoDB architecture
-
-Users:
-```
-{
-    userid: string
-    username: string
-    avatar: string
-}
-```
-
-Chatlist:
-```
-{
-    chatid: string
-    participants: [string]
-}
-```
-
-Messages:
-```
-{
-    chatid: string
-    message: string
-    sender: string
-    timestamp: DateTime
-}
-```
-
-Auth:
-```
-{
-    userid: string
-    token: string
-    timestamp: DateTime
-}
-```
 
 -------
 
