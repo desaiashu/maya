@@ -7,8 +7,7 @@
     "ios": "react-native run-ios --simulator='iPhone 15 (17.0)'",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest",
-    "debug": "react-native start --experimental-debugger"
+    "test": "jest"
   },
   "dependencies": {
     "@eva-design/eva": "^2.2.0",

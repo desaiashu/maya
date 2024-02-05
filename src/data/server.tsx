@@ -1,6 +1,7 @@
 import { store } from './store';
-import { setChats, Chat } from './slices/chatlist';
-import { addMessage, Message } from './slices/messages';
+import { setChats } from './slices/chatlist';
+import { addMessage } from './slices/messages';
+import { ChatInfo, Message } from './types'
 
 const API_URL = 'https://localhost:5001/maya-refresh';
 const WS_URL = 'wss://localhost:5001/maya-ws/';
@@ -15,7 +16,7 @@ export const fetchChats = async (): Promise<void> => {
       },
       body: JSON.stringify(params),
     });
-    const chats: Chat[] = await response.json();
+    const chats: ChatInfo[] = await response.json();
     store.dispatch(setChats(chats));
   } catch (error) {
     console.error('Failed to fetch chats:', error);

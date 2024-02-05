@@ -1,14 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-export interface Chat {
-  id: number;
-  title: string;
-  lastMessage: string;
-  timestamp: number;
-}
+import { ChatInfo } from '../types'
 
 interface ChatState {
-  chats: Chat[];
+  chats: ChatInfo[];
 }
 
 const initialState: ChatState = {
@@ -19,7 +13,7 @@ const chatlistSlice = createSlice({
   name: 'chatlist',
   initialState,
   reducers: {
-    setChats(state, action: PayloadAction<Chat[]>) {
+    setChats(state, action: PayloadAction<ChatInfo[]>) {
       state.chats = action.payload;
     },
   },

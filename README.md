@@ -15,13 +15,17 @@ In progress:
 - Create new message, select AIs
 - Build out discussion protocol, to allow other devs to implement a different framework
 - Build out discussion on server w/ multiple LLMs
+- Set chat topic
 
 Next up:
+- Audit all async/await
+- Frontend api requests
 - Build auth/verify/profile
-- Include authtoken in each HTTP request
+- Enable fast chats - ie. if you message a string of messages the server should wait, adjust and not double respond
 
 Backlog:
 - Build web demo on maya url
+- Refresh authtoken each session
 - Allow custom avatars (cloudflare CDN)
 - Secure storage rather than async storage
 - Push notifications
@@ -29,6 +33,52 @@ Backlog:
 - Host on maya url rather than txtai.co
 - Expire login codes
 - Enable multiple dynos via redis/pubsub
+
+-------
+
+### Run, debug, deploy
+
+#### Here's how I run things:
+- Cursor IDE (VSCode w/ ChatGPT built in)
+- Create VS workspace containing both "maya" and "the-oracle" repositories
+- Hide everything non-essential in workspace settings, pull from finder
+
+#### Set up several terminals in primary workspace
+
+1. the-oracle - split terminal (backend)
+  - server ```heroku local```
+  - tests/types ```pytest``` and ```./scripts/types.sh```
+
+2. maya - split terminal (frontend)
+  - react ```npx react-native start --experimental-debugger```
+  - ios ```npx run-ios```
+
+3. the-oracle/maya split terminal (version control)
+  - git - the oracle
+  - git - maya
+
+-------
+
+### Updating types
+
+Types update automagically from python into typescript!
+
+-------
+
+### Running the app
+
+1. In one terminal window:
+
+
+
+2. In another terminal window:
+```
+npx run-ios
+```
+
+Notes:
+- Check ios version in package.json
+- Replace ```ios``` with ```android``` for android
 
 -------
 
@@ -60,44 +110,15 @@ sudo gem install cocoapods
 
 >See [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, if you have trouble.
 
-### Step 1: Start the Metro Server
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+----------
 
-To start Metro, run the following command from the _root_ of your React Native project:
+## Running locally
 
-```bash
-# using npm
-npm start
+1. Local mongodb (check command to run in background)
 
-# OR using Yarn
-yarn start
-```
+2. Local LLM (use OpenChat 3.5 via LM Studio, run as server)
 
-### Step 2: Start your Application
+3. Offline chatbot (Deepseek coder via Ollama and VSCode Continue plugin)
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-#### For Android
-
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-#### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+```ollama run deepseek-coder:33b```

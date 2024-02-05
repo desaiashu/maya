@@ -15,15 +15,13 @@ export interface ChatInfo {
   creator: string;
   participants: string[];
   profiles?: User[];
+  topic?: string;
   protocol: string;
 }
 export interface User {
   userid: string;
   username: string;
   avatar?: string;
-}
-export interface ChatList {
-  chats: ChatInfo[];
 }
 export interface ChatRequest {
   userid: string;
@@ -55,6 +53,7 @@ export interface ErrorUpdate {
   update: string;
   data: string;
 }
+export interface JsonableModel {}
 export interface LastRefresh {
   time: number;
 }
@@ -62,21 +61,17 @@ export interface MayaRequest {
   userid: string;
   token: string;
   command: string;
-  data?: BaseModel;
+  data?: unknown;
 }
-export interface BaseModel {}
 export interface MayaUpdate {
   update: string;
-  data?: BaseModel;
+  data?: unknown;
 }
 export interface Message {
   chatid: string;
   content: string;
   sender: string;
   timestamp: number;
-}
-export interface MessageList {
-  messages: Message[];
 }
 export interface MessageRequest {
   userid: string;
@@ -88,7 +83,7 @@ export interface MessageUpdate {
   update: string;
   data: Message;
 }
-export interface MongoBaseModel {}
+export interface MongoModel {}
 export interface RefreshData {
   chatlist: ChatInfo[];
   messages: Message[];

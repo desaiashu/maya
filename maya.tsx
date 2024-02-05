@@ -11,7 +11,7 @@ const Maya = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <Navigator />;
+        <Navigator />
       </PersistGate>
     </Provider>
   );
