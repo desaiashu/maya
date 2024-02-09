@@ -3,13 +3,13 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator, NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import ChatList from './chat/list';
-import Chat from './chat/chat';
-import { ChatItemType } from './chat/data';
+import ChatList from './chat/screens/list';
+import Chat from './chat/screens/chat';
+import { ChatInfo } from '../data';
 
 export type RootStackParamList = {
   ChatList: undefined;
-  Chat: ChatItemType;
+  Chat: ChatInfo;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -24,7 +24,7 @@ const Navigator: React.FC = () => {
         <Stack.Screen
           name="Chat"
           component={Chat}
-          options={({ route }) => ({ title: `${route.params.title}` })}
+          options={({ route }) => ({ title: `${route.params.topic}` })}
         />
       </Stack.Navigator>
     </NavigationContainer>

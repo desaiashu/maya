@@ -4,8 +4,8 @@ import React from 'react';
 
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { store, persistor } from './src/data/store';
-import Navigator from './src/navigator';
+import { store, persistor } from './src/data/data/store';
+import Navigator from './src/views/navigator';
 
 const Maya = () => {
   return (

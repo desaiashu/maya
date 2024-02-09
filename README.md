@@ -8,31 +8,38 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 
 ### Todos
 In progress:
-- Build message refresh
-- Build websockets
-  - Helper function for websocket to create the right json
-  - Enable websocket to route different commands
+- Hook up frontend
 - Create new message, select AIs
-- Build out discussion protocol, to allow other devs to implement a different framework
-- Build out discussion on server w/ multiple LLMs
-- Set chat topic
 
 Next up:
-- Audit all async/await
-- Frontend api requests
-- Build auth/verify/profile
+- Build more discussion protocols
 - Enable fast chats - ie. if you message a string of messages the server should wait, adjust and not double respond
 
-Backlog:
+Experimental:
 - Build web demo on maya url
+- Build web editor for chatagents (login via sms code, add python for agents, or add webhooks for people to build/host their own)
+
+Backlog
 - Refresh authtoken each session
+- Swap Mongodb with async
+- Audit all async/await
 - Allow custom avatars (cloudflare CDN)
 - Secure storage rather than async storage
+- Figure out how to deal with syncing local and server in cases they get out of sync
 - Push notifications
 - Invite ppl via sms
 - Host on maya url rather than txtai.co
 - Expire login codes
 - Enable multiple dynos via redis/pubsub
+
+Done
+- Build message refresh
+- Build websockets
+  - Helper function for websocket to create the right json
+  - Enable websocket to route different commands
+- Set chat topic
+- Build out discussion protocol, to allow other devs to implement a different framework
+- Build out discussion on server w/ multiple LLMs
 
 -------
 
@@ -47,7 +54,7 @@ Backlog:
 
 1. the-oracle - split terminal (backend)
   - server ```heroku local```
-  - tests/types ```pytest``` and ```./scripts/types.sh```
+  - tests/types ```pytest```, ```pytest -c populate.ini```, ```./scripts/types.sh```
 
 2. maya - split terminal (frontend)
   - react ```npx react-native start --experimental-debugger```
@@ -62,23 +69,6 @@ Backlog:
 ### Updating types
 
 Types update automagically from python into typescript!
-
--------
-
-### Running the app
-
-1. In one terminal window:
-
-
-
-2. In another terminal window:
-```
-npx run-ios
-```
-
-Notes:
-- Check ios version in package.json
-- Replace ```ios``` with ```android``` for android
 
 -------
 
@@ -117,7 +107,9 @@ sudo gem install cocoapods
 
 1. Local mongodb (check command to run in background)
 
-2. Local LLM (use OpenChat 3.5 via LM Studio, run as server)
+2. Local LLM (use OpenChat ollama)
+
+```ollama run openchat```
 
 3. Offline chatbot (Deepseek coder via Ollama and VSCode Continue plugin)
 

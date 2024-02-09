@@ -1,19 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-export interface User {
-  userid: string;
-  username: string;
-  avatar?: string;
-}
+import { User } from '../data/types'
+import { RootState } from '../data/store';
 
 interface UserState {
   currentUser: User | null;
   isAuthenticated: boolean;
+  token: string;
 }
 
 const initialState: UserState = {
-  currentUser: null,
+  // currentUser: null,
+  currentUser: {
+    userid: '+16504305130',
+    username: 'ashu',
+    avatar: 'local://einstein.png'
+  },
   isAuthenticated: false,
+  token: '',
 };
 
 const userSlice = createSlice({
@@ -33,5 +36,13 @@ const userSlice = createSlice({
 });
 
 export const { setUser, clearUser } = userSlice.actions;
+
+export const getLocalUser = (state: RootState) => {
+  let user = state.user.currentUser;
+  if (user === null) {
+    user = { userid: 'error', username: 'error', avatar: ''}
+  }
+  return user;
+}
 
 export default userSlice.reducer;

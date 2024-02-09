@@ -3,7 +3,6 @@ import { View, StyleSheet, ViewStyle, StyleProp, TextStyle, Image, ImageSourcePr
 
 import { Avatar, Day, utils, IMessage, User, LeftRightStyle, AvatarProps, BubbleProps, DayProps} from 'react-native-gifted-chat'
 import Bubble from './bubble'
-import { userAvatar } from '../data'
 
 const { isSameUser, isSameDay } = utils
 
@@ -21,7 +20,7 @@ interface MessageProps {
   inverted?: boolean,
 }
 
-class Message extends Component<MessageProps> {
+class MessageUI extends Component<MessageProps> {
   static defaultProps = {
     renderAvatar: undefined,
     renderBubble: null,
@@ -133,4 +132,4 @@ const styles = {
   }),
 }
 
-export default Message;
+export default MessageUI;
