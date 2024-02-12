@@ -5,16 +5,19 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { Input, Button, Words } from '@/ui/atoms';
 import { RootStackParamList } from '@/views/navigator';
+import { Theme, useTheme } from '@/ui/theme';
 
-export const authOptions = (): NativeStackNavigationOptions => ({
+export const authOptions = (theme: Theme): NativeStackNavigationOptions => ({
     title: 'auth',
     headerShown: false,
   });
 
   
 const Auth: React.FC = () => {
-    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-    const [phoneNumber, setPhoneNumber] = useState('+');
+  const styles = getStyles(useTheme());
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const [phoneNumber, setPhoneNumber] = useState('+');
 
   return (
     <View style={styles.container}>
@@ -29,11 +32,12 @@ const Auth: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: theme.colors.background,
   },
   text: {
     // alignSelf: 'flex-start',

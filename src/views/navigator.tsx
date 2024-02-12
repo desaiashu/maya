@@ -4,12 +4,8 @@ import React from 'react';
 import { TouchableOpacity, Image, Text, StyleSheet, View, TextStyle, StyleProp } from 'react-native';
 import { NavigationContainer, NavigationProp, useNavigation} from '@react-navigation/native';
 import { createNativeStackNavigator, NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import ChatList, { chatListOptions } from './chat/screens/list';
-import Chat from './chat/screens/chat';
-import NewChat, { newChatOptions } from './chat/screens/new';
-import Profile, { profileOptions } from './setup/screens/profile';
-import Auth, { authOptions } from './setup/screens/auth';
-import Verify, { verifyOptions } from './setup/screens/verify';
+import { Chat, chatOptions, ChatList, chatListOptions, NewChat, newChatOptions } from '@/views/chat';
+import { Profile, profileOptions, Auth, authOptions, Verify, verifyOptions } from '@/views/setup';
 import { ChatInfo } from '@/data/types';
 import {Theme, useTheme}  from '@/ui/theme';
 
@@ -31,28 +27,28 @@ const Navigator: React.FC = () => {
 
   // If logged in, navigate to ChatList
   // Else navigate to Auth
-  const initialRoute = 'Auth';
+  const initialRoute = 'ChatList';
 
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initialRoute} screenOptions={defaultNavigationOptions(theme)}>
         <Stack.Screen name="ChatList" component={ChatList} 
-          options={({ navigation }) => (chatListOptions(navigation))}
+          options={({ navigation }) => (chatListOptions(navigation, theme))}
         />
         <Stack.Screen name="NewChat" 
           component={NewChat} 
-          options={({ navigation }) => (newChatOptions(navigation))}
+          options={({ navigation }) => (newChatOptions(navigation, theme))}
         />
         <Stack.Screen name="Profile" 
           component={Profile} 
-          options={({ navigation }) => (profileOptions(navigation))} />
+          options={({ navigation }) => (profileOptions(navigation, theme))} />
         <Stack.Screen name="Chat"
           component={Chat}
-          options={({ route }) => ({ title: `${route.params.topic}` })}
+          options={({ route }) => (chatOptions(route, theme))}
         />
         <Stack.Screen name="Auth"
           component={Auth}
-          options={authOptions()}
+          options={authOptions(theme)}
         />
         <Stack.Screen name="Verify" 
           component={Verify} 

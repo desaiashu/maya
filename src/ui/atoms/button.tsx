@@ -7,22 +7,28 @@ interface ButtonProps {
     title: string;
     onPress: () => void;
     style?: StyleProp<ViewStyle>;
+    outlined?: boolean;
   }
 
-const Button: React.FC<ButtonProps> = ({ title, onPress }) => {
+const Button: React.FC<ButtonProps> = ({ title, onPress, outlined }) => {
     const theme = useTheme();
-    const styles = getStyles(theme);
+    if (outlined === undefined) {
+        outlined = false;
+    }
+    const styles = getStyles(theme, outlined);
 
     return (
         <TouchableOpacity style={styles.button} onPress={onPress} >
-            <Words tag='button'>{title}</Words>
+            <Words tag='button' alt={outlined}>{title}</Words>
         </TouchableOpacity>
     );
 };
 
-const getStyles = (theme: Theme) => StyleSheet.create({
+const getStyles = (theme: Theme, outlined: boolean) => StyleSheet.create({
     button: {
-        backgroundColor: theme.colors.button, // Set the background color
+        backgroundColor: outlined ? theme.colors.background : theme.colors.button,
+        borderWidth: outlined ? 1 : 0,
+        borderColor: theme.colors.outline,
         paddingTop: 14, // Add padding
         paddingBottom: 14, // Add padding
         paddingLeft: 20, // Add padding

@@ -11,12 +11,23 @@ import { User, Message, ChatInfo } from '@/data/types';
 import { selectMessagesByChatId, getTopicByChatId, getLocalUser, addMessage } from '@/data/slices';
 import { sendMessage } from '@/data/server';
 import { useSelector, useDispatch } from 'react-redux';
+import { Theme, useTheme } from '@/ui/theme';
+import { RouteProp } from '@react-navigation/native';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import { RootStackParamList } from '@/views/navigator';
 
 type RenderMessageProps = MessageProps<IMessage>;
 type RenderToolbarProps = InputToolbarProps<IMessage>;
 
+export const chatOptions = (route: RouteProp<RootStackParamList, 'Chat'>, theme: Theme): NativeStackNavigationOptions => {
+  const styles = getStyles(theme);
+    return ({
+      title: `${route.params.topic}`,
+  })};
+
 const Chat: React.FC = () => {
 
+  const styles = getStyles(useTheme());
   const route = useRoute();
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -163,11 +174,11 @@ const Chat: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: Theme) => ({
   container: {
     flex: 1,
     marginBottom: -25,
-    // backgroundColor: 'white',
+    backgroundColor: theme.colors.background,
   },
   containerKeyboard: {
     flex: 1,

@@ -1,13 +1,13 @@
 // TokenVerificationScreen.js
 import React, { useState } from 'react';
-import { TouchableOpacity, Text, TextInput, Button } from 'react-native';
+import { TouchableOpacity, Text, View, TextInput, StyleSheet } from 'react-native';
 import { verifyUser } from '@/data/server';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/views/navigator';
-import { Theme } from '@/ui/theme';
-import { Words } from '@/ui/atoms';
+import { Theme, useTheme } from '@/ui/theme';
+import { Words, Input, Button } from '@/ui/atoms';
 
 export const verifyOptions = (navigation: StackNavigationProp<RootStackParamList, 'Verify'>, theme: Theme): NativeStackNavigationOptions => {
     // const theme = useTheme();
@@ -16,6 +16,7 @@ export const verifyOptions = (navigation: StackNavigationProp<RootStackParamList
         headerStyle: {
             backgroundColor: theme.colors.background//"#F2F2F2",
         },
+        headerTransparent: true,
         headerLeft: () => (
         <TouchableOpacity onPress={() => navigation.goBack()}>
             <Words tag='body'>back</Words>
@@ -25,6 +26,7 @@ export const verifyOptions = (navigation: StackNavigationProp<RootStackParamList
   };
 
 const Verify: React.FC = () => {
+    const styles = getStyles(useTheme());
     const navigation = useNavigation();
     const [token, setToken] = useState('');
 
@@ -41,11 +43,36 @@ const Verify: React.FC = () => {
     };
 
     return (
-        <>
-            <TextInput value={token} onChangeText={setToken} />
-            <Button title="Go" onPress={handleValidateToken} />
-        </>
+        <View style={styles.container}>
+        <View>
+            <Words style={styles.text} tag='h3'>we texted you a token</Words>
+            <View style={styles.form}>
+            <Input value={phoneNumber}/>
+            <Button title="verify" onPress={handleValidateToken} />
+            </View>
+            <Button title="text again" onPress={handleValidateToken} outlined />
+        </View>
+        </View>
     );
 };
+
+const getStyles = (theme: Theme) => StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: theme.colors.background,
+    },
+    text: {
+      // alignSelf: 'flex-start',
+      marginLeft: 10,
+    },
+    form: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: 20,
+    },
+  });
 
 export default Verify;

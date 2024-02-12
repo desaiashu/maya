@@ -19,7 +19,7 @@ export const darkTheme = {
     colors: {
         background: '#101',
         button: 'white',
-        outline: '#333',
+        outline: '#777',
         header: 'black',
         text: {
             primary: 'white',

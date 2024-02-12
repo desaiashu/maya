@@ -5,7 +5,7 @@ import { useTheme, Theme } from '@/ui/theme';
 interface InputProps {
   phone?: boolean;
   value: string;
-  onChangeText: (text: string) => void;
+  onChangeText?: (text: string) => void;
   style?: StyleProp<TextStyle>;
 }
 
@@ -14,13 +14,15 @@ const Input: React.FC<InputProps> = ({ phone, value, onChangeText }) => {
     const styles = getStyles(theme);
 
     const handleTextChange = (newText: string) => {
-        if (phone && newText === '' ) {
-            onChangeText('+');
-        } else if (phone && !/^\+?[0-9]*$/.test(newText)) {
-            onChangeText(value);
-        } else {
-            onChangeText(newText);
-        }
+      if (onChangeText === undefined) 
+        return;
+      if (phone && newText === '' ) {
+        onChangeText('+');
+      } else if (phone && !/^\+?[0-9]*$/.test(newText)) {
+        onChangeText(value);
+      } else {
+        onChangeText(newText);
+      }
     };
 
   return (
@@ -43,6 +45,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         padding: 15,
         margin: 10,
         fontSize: theme.fonts.input.fontSize,
+        color: theme.colors.text.primary,
       },
   });
 

@@ -10,28 +10,31 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createSelector } from 'reselect';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import { Theme, useTheme } from '@/ui/theme';
 
-export const chatListOptions = (navigation: StackNavigationProp<RootStackParamList, 'ChatList'>): NativeStackNavigationOptions => ({ 
-  title: `chats`,
-  headerRight: () => (
-    <TouchableOpacity onPress={() => navigation.navigate('NewChat')}>
-      <Image
-        source={require('../../../assets/icons/newchat.png')} // Replace with the actual path to your image
-        style={styles.composeButton} // Adjust the size as needed
-      />
+export const chatListOptions = (navigation: StackNavigationProp<RootStackParamList, 'ChatList'>, theme: Theme): NativeStackNavigationOptions => {
+  const styles = getStyles(theme);
+  return ({
+    title: `chats`,
+    headerRight: () => (
+      <TouchableOpacity onPress={() => navigation.navigate('NewChat')}>
+        <Image
+          source={require('../../../assets/icons/newchat.png')} // Replace with the actual path to your image
+          style={styles.composeButton} // Adjust the size as needed
+        />
+        </TouchableOpacity>
+    ), 
+    headerLeft: () => (
+      <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+        <View>
+        <Image
+          source={require('../../../assets/icons/profile.png')} // Replace with the actual path to your image
+          style={styles.profileButton} // Adjust the size as needed
+        />
+        </View>
       </TouchableOpacity>
-  ), 
-  headerLeft: () => (
-    <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-      <View>
-      <Image
-        source={require('../../../assets/icons/profile.png')} // Replace with the actual path to your image
-        style={styles.profileButton} // Adjust the size as needed
-      />
-      </View>
-    </TouchableOpacity>
-  ), 
-});
+    ), 
+})};
 
 // Memoized selectors for Avatars and Topics to display in the chat list
 const selectChatList = (state: RootState) => state.chatlist.chats;
@@ -58,8 +61,10 @@ const selectTopics = createSelector(
 );
 
 const ChatList: React.FC = () => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  const styles = getStyles(useTheme());
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const chatList = useSelector((state: RootState) => state.chatlist.chats);
 
   const avatars = useSelector(selectAvatars);
@@ -111,11 +116,11 @@ const ChatList: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 5,
-    // backgroundColor: 'white',
+    backgroundColor: theme.colors.background,
   },
   itemContainer: {
     padding: 20,
