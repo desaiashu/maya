@@ -1,10 +1,37 @@
 import React from 'react';
 import { View, FlatList, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { NavigationProp, useNavigation, useFocusEffect } from '@react-navigation/native';
-import { RootStackParamList } from '../../navigator';
-import { ChatInfo, RootState, refreshChatlist, getAvatarByChatId, getParticipantsByChatId, getTopicByChatId, getLocalUser, defaultAvatar} from '../../../data';
+import { RootStackParamList } from '@/views/navigator';
+import { ChatInfo } from '@/data/types';
+import { RootState,  defaultAvatar } from '@/data';
+import { getAvatarByChatId, getTopicByChatId, getParticipantsByChatId } from '@/data/slices';
+import { refreshChatlist } from '@/data/server';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector } from 'reselect';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+
+export const chatListOptions = (navigation: StackNavigationProp<RootStackParamList, 'ChatList'>): NativeStackNavigationOptions => ({ 
+  title: `chats`,
+  headerRight: () => (
+    <TouchableOpacity onPress={() => navigation.navigate('NewChat')}>
+      <Image
+        source={require('../../../assets/icons/newchat.png')} // Replace with the actual path to your image
+        style={styles.composeButton} // Adjust the size as needed
+      />
+      </TouchableOpacity>
+  ), 
+  headerLeft: () => (
+    <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+      <View>
+      <Image
+        source={require('../../../assets/icons/profile.png')} // Replace with the actual path to your image
+        style={styles.profileButton} // Adjust the size as needed
+      />
+      </View>
+    </TouchableOpacity>
+  ), 
+});
 
 // Memoized selectors for Avatars and Topics to display in the chat list
 const selectChatList = (state: RootState) => state.chatlist.chats;
@@ -29,7 +56,6 @@ const selectTopics = createSelector(
     return acc;
   }, {} as Record<string, ReturnType<typeof getTopicByChatId>>)
 );
-
 
 const ChatList: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -123,6 +149,18 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     borderRadius: 3,
+  },
+  composeButton: {
+    width: 35, 
+    height: 40, 
+    marginTop: 0, 
+    marginRight: -5,
+  },
+  profileButton: {
+    width: 30, 
+    height: 30, 
+    marginTop: 0, 
+    marginLeft: 2 ,
   },
 });
 

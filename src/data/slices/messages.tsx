@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 
-import { Message, MessageRequest, MessageUpdate } from '../data/types'
-import { RootState } from '../data/store';
+import { Message, MessageRequest, MessageUpdate } from '@/data/types'
+import { RootState } from '@/data';
 
 
 interface MessagesState {

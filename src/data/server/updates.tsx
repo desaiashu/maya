@@ -1,8 +1,7 @@
-import { store } from '../data/store';
-import { setChats } from '../slices/chatlist';
-import { updateMessages } from '../slices/messages';
-import { MayaUpdate, RefreshUpdate, ChunkUpdate, ErrorUpdate, MessageUpdate, SuccessUpdate } from '../data/types';
-import { RefreshData, ChatInfo, Message, Chunk } from '../data/types'
+import { store } from '@/data';
+import { setChats, updateMessages } from '@/data/slices';
+import { MayaUpdate, RefreshUpdate, ChunkUpdate, ErrorUpdate, MessageUpdate, SuccessUpdate } from '@/data/types';
+import { RefreshData, ChatInfo, Message, Chunk } from '@/data/types'
 
 // Define handler functions for each update type
 export const handleRefreshUpdate = (data: RefreshData) => {

@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ChatInfo } from '../data/types'
-import { RootState } from '../data/store';
-import { getAvatarSource } from '../data/funx'
+import { ChatInfo } from '@/data/types'
+import { RootState, getAvatarSource } from '@/data';
 
 interface ChatState {
   chats: ChatInfo[];

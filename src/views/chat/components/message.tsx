@@ -1,105 +1,70 @@
-import React, { Component, ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 import { View, StyleSheet, ViewStyle, StyleProp, TextStyle, Image, ImageSourcePropType} from 'react-native'
-
 import { Avatar, Day, utils, IMessage, User, LeftRightStyle, AvatarProps, BubbleProps, DayProps} from 'react-native-gifted-chat'
-import Bubble from './bubble'
-
-const { isSameUser, isSameDay } = utils
+import { Bubble } from '@/views/chat'
+import { Theme, useTheme } from '@/ui/theme'
 
 interface MessageProps {
   renderAvatar?: (props: AvatarProps<IMessage>) => ReactNode,
   renderBubble?: (props: BubbleProps<IMessage>) => ReactNode,
   renderDay?: (props: DayProps<IMessage>) => ReactNode,
   currentMessage: IMessage,
-  nextMessage: IMessage,
-  previousMessage: IMessage,
+  nextMessage?: IMessage,
+  previousMessage?: IMessage,
   user: User,
-  containerStyle: LeftRightStyle<ViewStyle>,
-  messageTextStyle?: StyleProp<TextStyle> | StyleProp<TextStyle>[],
+  containerStyle?: LeftRightStyle<ViewStyle>,
+  messageTextStyle?: StyleProp<TextStyle>,
   position: 'left' | 'right',
   inverted?: boolean,
 }
 
-class MessageUI extends Component<MessageProps> {
-  static defaultProps = {
-    renderAvatar: undefined,
-    renderBubble: null,
-    renderDay: null,
-    currentMessage: {},
-    nextMessage: {},
-    previousMessage: {},
-    user: {},
-    containerStyle: {},
-    position: null,
-  }
+const MessageUI: React.FC<MessageProps> = (props) => {
+  const {
+    currentMessage,
+    nextMessage,
+    position,
+    containerStyle,
+  } = props
 
-  getInnerComponentProps() {
-    const { containerStyle, ...props } = this.props
-    return {
-      ...props,
-      isSameUser,
-      isSameDay,
-    }
-  }
+  const styles = getStyles(useTheme());
 
-  renderDay() {
-    if (this.props.currentMessage.createdAt) {
-      const dayProps = this.getInnerComponentProps()
-      return <Day {...dayProps} />
-    }
-    return null
-  }
+  const { isSameUser } = utils;
+  const sameUser = isSameUser(currentMessage, nextMessage!)
 
-  renderBubble() {
-    const bubbleProps = this.getInnerComponentProps()
-    return <Bubble {...bubbleProps} />
-  }
-
-  renderAvatar = () => {
-
-    const avatarProps = this.getInnerComponentProps()
+  const renderAvatar = () => {
     return (
       <Avatar
-        {...avatarProps}
+        {...props}
         imageStyle={{
-          left: [styles[avatarProps.position].slackAvatar],
-          right: [styles[avatarProps.position].slackAvatar],
+          left: [styles[props.position].slackAvatar],
+          right: [styles[props.position].slackAvatar],
         }}
       />
     )
   }
 
-  render() {
-    const {
-      currentMessage,
-      nextMessage,
-      position,
-      containerStyle,
-    } = this.props
-
-    const sameUser = isSameUser(currentMessage, nextMessage!)
-
-    return (
-      <View>
-        {this.renderDay()}
-        <View
-          style={[
-            styles[position].container,
-            { marginBottom: sameUser ? 0 : 10 },
-            !this.props.inverted && { marginBottom: 2 },
-            containerStyle && containerStyle[position],
-          ]}
-        >
-          {this.props.position === 'left' ? this.renderAvatar() : null}
-          {this.renderBubble()}
-          {this.props.position === 'right' ? this.renderAvatar() : null}
-        </View>
+  return (
+    <View>
+      {props.currentMessage.createdAt 
+        && <Day {...props} containerStyle={{}} />
+      }
+      <View
+        style={[
+          styles[position].container,
+          { marginBottom: sameUser ? 0 : 10 },
+          !props.inverted && { marginBottom: 2 },
+          containerStyle && containerStyle[position],
+        ]}
+      >
+        {props.position === 'left' ? renderAvatar() : null}
+        <Bubble {...props} containerStyle={{}} />
+        {props.position === 'right' ? renderAvatar() : null}
       </View>
-    )
-  }
+    </View>
+  )
 }
 
-const styles = {
+const getStyles = (theme: Theme) => ({
   left: StyleSheet.create({
     container: {
       flexDirection: 'row',
@@ -130,6 +95,6 @@ const styles = {
       borderRadius: 3,
     },
   }),
-}
+});
 
 export default MessageUI;

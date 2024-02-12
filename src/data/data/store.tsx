@@ -2,10 +2,7 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import userReducer from '../slices/user';
-import contactsReducer from '../slices/contacts';
-import chatlistReducer from '../slices/chatlist';
-import messagesReducer from '../slices/messages';
+import { userReducer, contactsReducer, chatlistReducer, messagesReducer } from '@/data/slices';
 
 const rootReducer = combineReducers({
   chatlist: chatlistReducer,

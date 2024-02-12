@@ -4,12 +4,13 @@ import React, { useEffect, useLayoutEffect, useState, useMemo } from 'react';
 import { GiftedChat, IMessage, InputToolbar, MessageProps, InputToolbarProps, Send, Composer} from 'react-native-gifted-chat';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { Platform, Keyboard, TextStyle, SafeAreaView, Text, StyleSheet, ImageSourcePropType } from 'react-native';
-import MessageUI from '../components/message';
+import { MessageUI } from '@/views/chat';
 import emojiUtils from 'emoji-utils';
-import { User, Message, ChatInfo, RootState, selectMessagesByChatId, getTopicByChatId, getLocalUser, addMessage, sendMessage } from '../../../data';
+import { RootState, getAvatarSource } from '@/data';
+import { User, Message, ChatInfo } from '@/data/types';
+import { selectMessagesByChatId, getTopicByChatId, getLocalUser, addMessage } from '@/data/slices';
+import { sendMessage } from '@/data/server';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAvatarSource } from '../../../data/data/funx';
-
 
 type RenderMessageProps = MessageProps<IMessage>;
 type RenderToolbarProps = InputToolbarProps<IMessage>;
@@ -36,15 +37,9 @@ const Chat: React.FC = () => {
   const localMessages = useMemo(() => {
     return messages.map((msg: Message) => {
 
-      console.log("profiles");
-      console.log(chatInfo.profiles);
       let profiles = chatInfo.profiles || [];
-      console.log("msg");
-      console.log(msg);
-      let sender = profiles.find((p) => p.userid == msg.sender) || { userid: '', username: '', avatar: '' };
 
-      console.log("sender")
-      console.log(sender)
+      let sender = profiles.find((p) => p.userid == msg.sender) || { userid: '', username: '', avatar: '' };
 
       return {
         _id: msg.timestamp,
@@ -105,6 +100,10 @@ const Chat: React.FC = () => {
   const renderMessage = (props: RenderMessageProps) => {
 
     const { currentMessage } = props;
+    if (!currentMessage) {
+      return null;
+    }
+
     const currText = currentMessage?.text;
 
     let messageTextStyle: TextStyle | undefined;
@@ -118,11 +117,13 @@ const Chat: React.FC = () => {
       };
     }
 
-    return <MessageUI {...props} 
-              messageTextStyle={messageTextStyle} 
-              user={localUser} 
-              position={localUser._id == currentMessage?.user._id ? 'right' : 'left'}
-            />;
+    return <MessageUI 
+      {...props} 
+      currentMessage={currentMessage}
+      messageTextStyle={messageTextStyle} 
+      user={localUser} 
+      position={localUser._id == currentMessage?.user._id ? 'right' : 'left'}
+    />;
   };
 
   const renderInputToolbar = (props: RenderToolbarProps) => {

@@ -9,11 +9,13 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 ### Todos
 In progress:
 - Hook up frontend
+- Frontend chat and 
 - Create new message, select AIs
 
 Next up:
 - Build more discussion protocols
 - Enable fast chats - ie. if you message a string of messages the server should wait, adjust and not double respond
+- Loading indicator that timesout after 30sec
 
 Experimental:
 - Build web demo on maya url

@@ -1,13 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User, RootState } from '../../data'
+import { RootState } from '@/data'
+import { User } from '@/data/types'
 
 interface ContactsState {
   users: User[];
+  bots: User[];
 }
 
 // Initial state for the contacts slice
 const initialState: ContactsState = {
   users: [],
+  bots: [],
 };
 
 const contactsSlice = createSlice({
@@ -32,6 +35,9 @@ const contactsSlice = createSlice({
       if (index !== -1) {
         state.users[index] = action.payload;
       }
+    },
+    updateBots: (state, action: PayloadAction<User[]>) => {
+      state.bots=action.payload;
     },
   },
 });

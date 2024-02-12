@@ -5,13 +5,13 @@ export function hashPhoneNumber(phoneNumber: string): string {
   return phoneHash;
 }
 
-export const defaultAvatar = require('../../assets/img/user.png');
+export const defaultAvatar = require('../../assets/avatars/user.png');
 
 const localAvatars: { [key: string]: any } = {
-  'local://user.png': require('../../assets/img/user.png'),
-  'local://einstein.png': require('../../assets/img/einstein.png'),
-  'local://openai.png': require('../../assets/img/openai.png'),
-  'local://oracle.png': require('../../assets/img/oracle.png'),
+  'local://user.png': require('../../assets/avatars/user.png'),
+  'local://einstein.png': require('../../assets/avatars/einstein.png'),
+  'local://openai.png': require('../../assets/avatars/openai.png'),
+  'local://oracle.png': require('../../assets/avatars/oracle.png'),
   // Add other local avatars as needed
 };
 export const getAvatarSource = (avatar: string) => {

@@ -1,14 +1,16 @@
-import { store } from '../data/store';
-import { sendRequest, socket } from './server';
-import { MayaRequest, RefreshRequest, ChatRequest, UserRequest, MessageRequest } from '../data/types';
-import { Message } from '../data/types';
+import { store } from '@/data';
+import { sendRequest, socket } from '@/data/server';
+import { MayaRequest, RefreshRequest, ChatRequest, UserRequest, MessageRequest } from '@/data/types';
+import { Message, Auth } from '@/data/types';
+
+const test_token = 'f2e5c9'
 
 export const refreshChatlist = () => {
   console.log('refresh');
   const state = store.getState();
   let request: RefreshRequest = { 
     userid: state.user.currentUser?.userid || '+16504305130',
-    token: '623a12', //state.user.token,
+    token: test_token, //state.user.token,
     command: 'refresh',
     data: {
       time: state.chatlist.lastRefresh
@@ -21,9 +23,13 @@ export const sendMessage = (message: Message) => {
   const state = store.getState();
   let request: MessageRequest = { 
     userid: state.user.currentUser?.userid || '+16504305130',
-    token: '623a12', //state.user.token,
+    token: test_token, //state.user.token,
     command: 'message',
     data: message,
   }
   sendRequest(socket, request);
+}
+
+export const verifyUser = (auth: Auth) => {
+
 }

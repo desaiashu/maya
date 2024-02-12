@@ -22,6 +22,13 @@ export interface User {
   userid: string;
   username: string;
   avatar?: string;
+  contacts?: string[];
+  bot?: boolean;
+}
+export interface ChatInfoUpdate {
+  data: ChatInfo;
+  update?: string;
+  background?: boolean;
 }
 export interface ChatRequest {
   userid: string;
@@ -34,11 +41,11 @@ export interface Chunk {
   sender: string;
   time: number;
   chunk: string;
-  end: boolean;
 }
 export interface ChunkUpdate {
-  update: string;
   data: Chunk;
+  update?: string;
+  background?: boolean;
 }
 export interface Context {
   chatid: string;
@@ -50,8 +57,9 @@ export interface Context {
   timestamp: number;
 }
 export interface ErrorUpdate {
-  update: string;
   data: string;
+  update?: string;
+  background?: boolean;
 }
 export interface JsonableModel {}
 export interface LastRefresh {
@@ -64,8 +72,9 @@ export interface MayaRequest {
   data?: unknown;
 }
 export interface MayaUpdate {
-  update: string;
   data?: unknown;
+  update: string;
+  background?: boolean;
 }
 export interface Message {
   chatid: string;
@@ -80,14 +89,17 @@ export interface MessageRequest {
   data: Message;
 }
 export interface MessageUpdate {
-  update: string;
   data: Message;
+  update?: string;
+  background?: boolean;
 }
 export interface MongoModel {}
 export interface RefreshData {
   chatlist: ChatInfo[];
   messages: Message[];
   protocols: string[];
+  contacts: User[];
+  bots: User[];
 }
 export interface RefreshRequest {
   userid: string;
@@ -96,12 +108,14 @@ export interface RefreshRequest {
   data: LastRefresh;
 }
 export interface RefreshUpdate {
-  update: string;
   data: RefreshData;
+  update?: string;
+  background?: boolean;
 }
 export interface SuccessUpdate {
-  update: string;
   data: string;
+  update?: string;
+  background?: boolean;
 }
 export interface UserRequest {
   userid: string;
