@@ -10,44 +10,61 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { MessageImage, MessageText, Time, utils, IMessage, MessageProps } from 'react-native-gifted-chat';
-import { GiftedChatContext, IGiftedChatContext, useChatContext } from 'react-native-gifted-chat/lib/GiftedChatContext';
+import {
+  MessageImage,
+  MessageText,
+  Time,
+  utils,
+  IMessage,
+} from 'react-native-gifted-chat';
+import { GiftedChatContext } from 'react-native-gifted-chat/lib/GiftedChatContext';
 import { Theme, useTheme } from '@/ui/theme';
 
 const { isSameUser, isSameDay } = utils;
 
 interface BubbleProps {
-  touchableProps?: object,
-  onLongPress?: (context: any, message: any) => void,
-  renderMessageImage?: (messageImageProps: { textStyle?: StyleProp<TextStyle> }) => JSX.Element,
-  renderMessageText?: (messageTextProps: { textStyle?: StyleProp<TextStyle>}) => JSX.Element,
-  renderCustomView?: (props: BubbleProps) => JSX.Element,
-  renderTime?: (timeProps: { textStyle?: StyleProp<TextStyle>}) => JSX.Element,
-  renderUsername?: (usernameProps: any) => JSX.Element,
-  renderTicks?: (currentMessage: IMessage) => JSX.Element,
-  currentMessage: IMessage,
-  previousMessage?: IMessage,
-  nextMessage?: IMessage,
-  user: { _id: string | number },
-  containerStyle?: StyleProp<ViewStyle>,
-  wrapperStyle?: StyleProp<ViewStyle>,
-  messageTextStyle?: StyleProp<TextStyle>,
-  usernameStyle?: StyleProp<TextStyle>,
-  tickStyle?: StyleProp<TextStyle>,
-  containerToNextStyle?: StyleProp<ViewStyle>,
-  containerToPreviousStyle?: StyleProp<ViewStyle>,
-  position: 'left' | 'right',
+  touchableProps?: object;
+  onLongPress?: (context: any, message: any) => void;
+  renderMessageImage?: (messageImageProps: {
+    textStyle?: StyleProp<TextStyle>;
+  }) => JSX.Element;
+  renderMessageText?: (messageTextProps: {
+    textStyle?: StyleProp<TextStyle>;
+  }) => JSX.Element;
+  renderCustomView?: (props: BubbleProps) => JSX.Element;
+  renderTime?: (timeProps: { textStyle?: StyleProp<TextStyle> }) => JSX.Element;
+  renderUsername?: (usernameProps: any) => JSX.Element;
+  renderTicks?: (currentMessage: IMessage) => JSX.Element;
+  currentMessage: IMessage;
+  previousMessage?: IMessage;
+  nextMessage?: IMessage;
+  user: { _id: string | number };
+  containerStyle?: StyleProp<ViewStyle>;
+  wrapperStyle?: StyleProp<ViewStyle>;
+  messageTextStyle?: StyleProp<TextStyle>;
+  usernameStyle?: StyleProp<TextStyle>;
+  tickStyle?: StyleProp<TextStyle>;
+  containerToNextStyle?: StyleProp<ViewStyle>;
+  containerToPreviousStyle?: StyleProp<ViewStyle>;
+  position: 'left' | 'right';
 }
 
-export const Bubble: React.FC<BubbleProps> = (props) => {
+export const Bubble: React.FC<BubbleProps> = props => {
   const context = useContext(GiftedChatContext);
-  const { currentMessage, previousMessage, containerStyle, wrapperStyle, touchableProps, position } = props;
-  
+  const {
+    currentMessage,
+    previousMessage,
+    containerStyle,
+    wrapperStyle,
+    touchableProps,
+    position,
+  } = props;
+
   const theme = useTheme();
   const styles = getStyles(theme);
 
   const handleLongPress = () => {
-    const { onLongPress, currentMessage } = props;
+    const { onLongPress } = props;
     if (onLongPress) {
       onLongPress(context, currentMessage);
     } else if (currentMessage.text) {
@@ -66,16 +83,10 @@ export const Bubble: React.FC<BubbleProps> = (props) => {
       );
     }
   };
-  
+
   const renderMessageText = () => {
     if (props.currentMessage.text) {
-      const {
-        containerStyle,
-        wrapperStyle,
-        messageTextStyle,
-        position,
-        ...messageTextProps
-      } = props
+      const { messageTextStyle, ...messageTextProps } = props;
       return (
         <MessageText
           {...messageTextProps}
@@ -93,57 +104,63 @@ export const Bubble: React.FC<BubbleProps> = (props) => {
               messageTextStyle,
             ],
           }}
+          containerStyle={{}}
         />
-      )
+      );
     }
-    return null
-  }
-  
+    return null;
+  };
+
   const renderMessageImage = () => {
-    const { currentMessage, renderMessageImage, position } = props;
     if (currentMessage.image) {
       const { ...messageImageProps } = props;
       return (
-          <MessageImage
-            {...messageImageProps}
-            imageStyle={[styles.base.image]}
-          />);
+        <MessageImage {...messageImageProps} imageStyle={[styles.base.image]} />
+      );
     }
     return null;
-  }
-  
+  };
+
   const renderTicks = () => {
-    const { currentMessage, position } = props
     if (currentMessage.user._id !== props.user._id) {
-      return null
+      return null;
     }
     if (currentMessage.sent || currentMessage.received) {
       return (
         <View style={[styles[position].headerItem, styles.base.tickView]}>
           {currentMessage.sent && (
             <Text
-              style={[theme.fonts.small, styles.base.primaryText, styles.base.tick, props.tickStyle]}
+              style={[
+                theme.fonts.small,
+                styles.base.primaryText,
+                styles.base.tick,
+                props.tickStyle,
+              ]}
             >
               ✓
             </Text>
           )}
           {currentMessage.received && (
             <Text
-              style={[theme.fonts.small, styles.base.primaryText, styles.base.tick, props.tickStyle]}
+              style={[
+                theme.fonts.small,
+                styles.base.primaryText,
+                styles.base.tick,
+                props.tickStyle,
+              ]}
             >
               ✓
             </Text>
           )}
         </View>
-      )
+      );
     }
-    return null
-  }
-  
+    return null;
+  };
+
   const renderUsername = () => {
-    const username = props.currentMessage.user.name
+    const username = props.currentMessage.user.name;
     if (username) {
-      const { containerStyle, wrapperStyle, position, ...usernameProps } = props
       return (
         <Text
           style={[
@@ -156,20 +173,20 @@ export const Bubble: React.FC<BubbleProps> = (props) => {
         >
           {username}
         </Text>
-      )
+      );
     }
-    return null
-  }
-  
+    return null;
+  };
+
   const renderTime = () => {
     if (props.currentMessage.createdAt) {
-      const { containerStyle, wrapperStyle, position, ...timeProps } = props
+      const { ...timeProps } = props;
       return (
         <Time
           {...timeProps}
-          containerStyle={{ 
+          containerStyle={{
             left: [styles.base.timeContainer],
-            right: [styles.base.timeContainer] 
+            right: [styles.base.timeContainer],
           }}
           timeTextStyle={{
             left: [
@@ -188,63 +205,61 @@ export const Bubble: React.FC<BubbleProps> = (props) => {
             ],
           }}
         />
-      )
+      );
     }
-    return null
-  }
-  
-  const isSameThread = isSameUser(currentMessage, previousMessage) &&
-      isSameDay(currentMessage, previousMessage);
+    return null;
+  };
+
+  const isSameThread =
+    isSameUser(currentMessage, previousMessage) &&
+    isSameDay(currentMessage, previousMessage);
 
   const messageHeader = isSameThread ? null : (
-      <View style={[
-        styles.base.headerView,
-        styles[position].headerView, 
-        ]}>
-
-      
+    <View style={[styles.base.headerView, styles[position].headerView]}>
       {props.position === 'left' ? renderUsername() : null}
       {renderTime()}
       {props.position === 'right' ? renderUsername() : null}
 
-      {/* {this.renderTicks()} */}
-      </View>
+      {renderTicks()}
+    </View>
   );
 
   return (
-      <View>
-        <View style={[
+    <View>
+      <View
+        style={[
           styles.base.container,
-          styles[position].container, 
-          containerStyle
-          ]}>
-          <View style={[
-            styles.base.header,
-            styles[position].header,
-            wrapperStyle]}>
-            {messageHeader}
-          </View>
-        </View>
-        <View style={[
-          styles.base.container,
-          styles[position].container, 
-          containerStyle
-          ]}>
-          <TouchableOpacity
-              onLongPress={handleLongPress}
-              accessibilityRole='text'
-              {...touchableProps}
-          >
-            <View style={[styles[position].wrapper, wrapperStyle]}>
-              {renderMessageImage()}
-              {renderMessageText()}
-            </View>
-          </TouchableOpacity>
+          styles[position].container,
+          containerStyle,
+        ]}
+      >
+        <View
+          style={[styles.base.header, styles[position].header, wrapperStyle]}
+        >
+          {messageHeader}
         </View>
       </View>
+      <View
+        style={[
+          styles.base.container,
+          styles[position].container,
+          containerStyle,
+        ]}
+      >
+        <TouchableOpacity
+          onLongPress={handleLongPress}
+          accessibilityRole="text"
+          {...touchableProps}
+        >
+          <View style={[styles[position].wrapper, wrapperStyle]}>
+            {renderMessageImage()}
+            {renderMessageText()}
+          </View>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
-}
-
+};
 
 const getStyles = (theme: Theme) => ({
   base: StyleSheet.create({
@@ -286,7 +301,7 @@ const getStyles = (theme: Theme) => ({
     headerView: {
       marginTop: Platform.OS === 'android' ? -2 : 0,
       flexDirection: 'row',
-    }
+    },
   }),
   left: StyleSheet.create({
     container: {
@@ -307,7 +322,7 @@ const getStyles = (theme: Theme) => ({
     },
     time: {
       paddingBottom: 0.5,
-      marginLeft: -2
+      marginLeft: -2,
     },
     headerItem: {
       marginRight: 10,
@@ -336,7 +351,7 @@ const getStyles = (theme: Theme) => ({
     },
     time: {
       paddingBottom: 2,
-      marginRight: -2
+      marginRight: -2,
     },
     headerItem: {
       marginLeft: 10,
@@ -346,7 +361,6 @@ const getStyles = (theme: Theme) => ({
       justifyContent: 'flex-end',
     },
   }),
-  
 });
 
 export default Bubble;

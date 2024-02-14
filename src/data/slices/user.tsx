@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User } from '@/data/types'
+import { User } from '@/data/types';
 import { RootState } from '@/data';
 
 interface UserState {
@@ -12,7 +12,7 @@ const initialState: UserState = {
   currentUser: {
     userid: '+16504305130',
     username: 'ashu',
-    avatar: 'local://user.png'
+    avatar: 'local://user.png',
   },
   isAuthenticated: false,
   token: '',
@@ -39,9 +39,9 @@ export const { setUser, clearUser } = userSlice.actions;
 export const getLocalUser = (state: RootState) => {
   let user = state.user.currentUser;
   if (user === null) {
-    user = { userid: 'error', username: 'error', avatar: ''}
+    user = { userid: 'error', username: 'error', avatar: '' };
   }
   return user;
-}
+};
 
 export default userSlice.reducer;

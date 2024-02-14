@@ -3,11 +3,11 @@ import { Text, StyleSheet, StyleProp, TextStyle } from 'react-native';
 import { useTheme, Theme, FontTag } from '@/ui/theme';
 
 interface WordsProps {
-    tag: FontTag;
-    children: React.ReactNode;
-    style?: StyleProp<TextStyle>;
-    alt?: boolean;
-  }
+  tag: FontTag;
+  children: React.ReactNode;
+  style?: StyleProp<TextStyle>;
+  alt?: boolean;
+}
 
 const Words: React.FC<WordsProps> = ({ tag, children, style, alt }) => {
   const theme = useTheme();
@@ -17,9 +17,7 @@ const Words: React.FC<WordsProps> = ({ tag, children, style, alt }) => {
 
   const styles = getStyles(theme, tag, alt);
 
-  return (
-    <Text style={[styles.textColor, styles.font, style]}>{children}</Text>
-  );
+  return <Text style={[styles.textColor, styles.font, style]}>{children}</Text>;
 };
 
 const getColor = (theme: Theme, tag: FontTag, alt: boolean): string => {
@@ -28,13 +26,14 @@ const getColor = (theme: Theme, tag: FontTag, alt: boolean): string => {
   } else {
     return alt ? theme.colors.text.contrast : theme.colors.text.primary;
   }
-}
+};
 
-const getStyles = (theme: Theme, tag: WordsProps['tag'], alt: boolean) => StyleSheet.create({
-  textColor: {
-    color: getColor(theme, tag, alt),
-  },
-  font: theme.fonts[tag],
-});
+const getStyles = (theme: Theme, tag: WordsProps['tag'], alt: boolean) =>
+  StyleSheet.create({
+    textColor: {
+      color: getColor(theme, tag, alt),
+    },
+    font: theme.fonts[tag],
+  });
 
 export default Words;

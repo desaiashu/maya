@@ -5,16 +5,19 @@ import { localAvatars } from '@/data';
 
 const icons = Object.keys(localAvatars);
 interface AvatarSelectProps {
-    selectedIndex: string;
+  selectedIndex: string;
 }
 
-const AvatarSelect: React.FC<AvatarSelectProps> = (selectedIndex) => {
-
-    const [selectedIcon, setSelectedIcon] = useState(selectedIndex);
+const AvatarSelect: React.FC<AvatarSelectProps> = selectedIndex => {
+  const [selectedIcon, setSelectedIcon] = useState(selectedIndex);
 
   const renderItem = ({ item }: { item: string }) => (
     <View style={styles.item}>
-        <IconButton icon={item} style={styles.icon} onPress={() => setSelectedIcon(item)}/>
+      <IconButton
+        icon={item}
+        style={styles.icon}
+        onPress={() => setSelectedIcon(item)}
+      />
     </View>
   );
 
@@ -22,7 +25,7 @@ const AvatarSelect: React.FC<AvatarSelectProps> = (selectedIndex) => {
     <FlatList
       data={icons}
       renderItem={renderItem}
-      keyExtractor={(item) => item}
+      keyExtractor={item => item}
       numColumns={3}
       contentContainerStyle={styles.container}
     />
@@ -30,18 +33,16 @@ const AvatarSelect: React.FC<AvatarSelectProps> = (selectedIndex) => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        padding: 10,
-    },
-    item: {
-        padding: 10,
-    },
-    selectedItem: {
-
-    },
-    icon: {
-        margin: 10,
-    },
+  container: {
+    padding: 10,
+  },
+  item: {
+    padding: 10,
+  },
+  selectedItem: {},
+  icon: {
+    margin: 10,
+  },
 });
 
 export default AvatarSelect;

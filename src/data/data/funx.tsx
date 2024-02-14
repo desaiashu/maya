@@ -1,5 +1,5 @@
 import CryptoJS from 'crypto-js';
-import { ColorSchemeName } from 'react-native'
+import { ColorSchemeName } from 'react-native';
 
 export function hashPhoneNumber(phoneNumber: string): string {
   const phoneHash = CryptoJS.SHA256(phoneNumber).toString(CryptoJS.enc.Hex);
@@ -8,10 +8,10 @@ export function hashPhoneNumber(phoneNumber: string): string {
 
 interface RequireConverter {
   [key: string]: {
-    light: any,
-    dark: any,
-  }
-};
+    light: any;
+    dark: any;
+  };
+}
 
 const defaultAvatar = 'local://user.png';
 export const localAvatars: RequireConverter = {
@@ -30,7 +30,7 @@ export const localAvatars: RequireConverter = {
   'local://oracle.png': {
     light: require('%/avatars/light/oracle.png'),
     dark: require('%/avatars/dark/oracle.png'),
-  }
+  },
 };
 
 const icons: RequireConverter = {
@@ -49,11 +49,13 @@ const icons: RequireConverter = {
   edit: {
     light: require('%/icons/light/edit.png'),
     dark: require('%/icons/dark/edit.png'),
-  }
+  },
 };
 
 export const getAvatarSource = (avatar: string, color: ColorSchemeName) => {
-  if (!color) { return null; }
+  if (!color) {
+    return null;
+  }
   if (avatar?.startsWith('https')) {
     return { uri: avatar };
   } else if (avatar?.startsWith('local')) {
@@ -65,9 +67,11 @@ export const getAvatarSource = (avatar: string, color: ColorSchemeName) => {
 
 export const getDefaultAvatar = (theme: ColorSchemeName) => {
   return getAvatarSource(defaultAvatar, theme);
-}
+};
 
 export const getIconSource = (icon: string, color: ColorSchemeName) => {
-  if (!color) { return null; }
+  if (!color) {
+    return null;
+  }
   return icons[icon][color];
 };

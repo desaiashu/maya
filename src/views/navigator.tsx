@@ -1,13 +1,31 @@
 // ChatUI.tsx
 
 import React from 'react';
-import { TouchableOpacity, Image, Text, StyleSheet, View, TextStyle, StyleProp } from 'react-native';
-import { NavigationContainer, NavigationProp, useNavigation} from '@react-navigation/native';
-import { createNativeStackNavigator, NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import { Chat, chatOptions, ChatList, chatListOptions, NewChat, newChatOptions } from '@/views/chat';
-import { Profile, profileOptions, Auth, authOptions, Verify, verifyOptions, Settings, settingsOptions } from '@/views/setup';
+import { NavigationContainer } from '@react-navigation/native';
+import {
+  createNativeStackNavigator,
+  NativeStackNavigationOptions,
+} from '@react-navigation/native-stack';
+import {
+  Chat,
+  chatOptions,
+  ChatList,
+  chatListOptions,
+  NewChat,
+  newChatOptions,
+} from '@/views/chat';
+import {
+  Profile,
+  profileOptions,
+  Auth,
+  authOptions,
+  Verify,
+  verifyOptions,
+  Settings,
+  settingsOptions,
+} from '@/views/setup';
 import { ChatInfo } from '@/data/types';
-import {Theme, useTheme}  from '@/ui/theme';
+import { Theme, useTheme } from '@/ui/theme';
 
 export type RootStackParamList = {
   ChatList: undefined;
@@ -32,37 +50,53 @@ const Navigator: React.FC = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={initialRoute} screenOptions={defaultNavigationOptions(theme)}>
-        <Stack.Screen name="ChatList" component={ChatList} 
-          options={({ navigation }) => (chatListOptions(navigation, theme))}
+      <Stack.Navigator
+        initialRouteName={initialRoute}
+        screenOptions={defaultNavigationOptions(theme)}
+      >
+        <Stack.Screen
+          name="ChatList"
+          component={ChatList}
+          options={({ navigation }) => chatListOptions(navigation, theme)}
         />
-        <Stack.Screen name="NewChat" 
-          component={NewChat} 
-          options={({ navigation }) => (newChatOptions(navigation, theme))}
+        <Stack.Screen
+          name="NewChat"
+          component={NewChat}
+          options={({ navigation }) => newChatOptions(navigation, theme)}
         />
-        <Stack.Screen name="Chat"
+        <Stack.Screen
+          name="Chat"
           component={Chat}
-          options={({ route }) => (chatOptions(route, theme))}
+          options={({ route }) => chatOptions(route)}
         />
-        <Stack.Screen name="Profile" 
-          component={Profile} 
-          options={({ navigation }) => (profileOptions(navigation, theme))} />
-        <Stack.Screen name="Settings" 
-          component={Profile} 
-          options={({ navigation }) => (settingsOptions(navigation, theme))} />
-        <Stack.Screen name="Auth"
+        <Stack.Screen
+          name="Profile"
+          component={Profile}
+          options={({ navigation }) => profileOptions(navigation, theme)}
+        />
+        <Stack.Screen
+          name="Settings"
+          component={Settings}
+          options={({ navigation }) => settingsOptions(navigation, theme)}
+        />
+        <Stack.Screen
+          name="Auth"
           component={Auth}
           options={authOptions(theme)}
         />
-        <Stack.Screen name="Verify" 
-          component={Verify} 
-          options={({ navigation }) => (verifyOptions(navigation, theme))} />
+        <Stack.Screen
+          name="Verify"
+          component={Verify}
+          options={({ navigation }) => verifyOptions(navigation, theme)}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
-const defaultNavigationOptions=(theme: Theme): NativeStackNavigationOptions => ({
+const defaultNavigationOptions = (
+  theme: Theme,
+): NativeStackNavigationOptions => ({
   headerStyle: {
     backgroundColor: theme.colors.header, // Your custom background color
   },

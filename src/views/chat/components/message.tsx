@@ -1,35 +1,45 @@
-import React, { ReactNode } from 'react'
-import { View, StyleSheet, ViewStyle, StyleProp, TextStyle, Image, ImageSourcePropType} from 'react-native'
-import { Avatar, Day, utils, IMessage, User, LeftRightStyle, AvatarProps, BubbleProps, DayProps} from 'react-native-gifted-chat'
-import { Bubble } from '@/views/chat'
-import { Theme, useTheme } from '@/ui/theme'
+import React, { ReactNode } from 'react';
+import {
+  View,
+  StyleSheet,
+  ViewStyle,
+  StyleProp,
+  TextStyle,
+} from 'react-native';
+import {
+  Avatar,
+  Day,
+  utils,
+  IMessage,
+  User,
+  LeftRightStyle,
+  AvatarProps,
+  BubbleProps,
+  DayProps,
+} from 'react-native-gifted-chat';
+import { Bubble } from '@/views/chat';
 
 interface MessageProps {
-  renderAvatar?: (props: AvatarProps<IMessage>) => ReactNode,
-  renderBubble?: (props: BubbleProps<IMessage>) => ReactNode,
-  renderDay?: (props: DayProps<IMessage>) => ReactNode,
-  currentMessage: IMessage,
-  nextMessage?: IMessage,
-  previousMessage?: IMessage,
-  user: User,
-  containerStyle?: LeftRightStyle<ViewStyle>,
-  messageTextStyle?: StyleProp<TextStyle>,
-  position: 'left' | 'right',
-  inverted?: boolean,
+  renderAvatar?: (props: AvatarProps<IMessage>) => ReactNode;
+  renderBubble?: (props: BubbleProps<IMessage>) => ReactNode;
+  renderDay?: (props: DayProps<IMessage>) => ReactNode;
+  currentMessage: IMessage;
+  nextMessage?: IMessage;
+  previousMessage?: IMessage;
+  user: User;
+  containerStyle?: LeftRightStyle<ViewStyle>;
+  messageTextStyle?: StyleProp<TextStyle>;
+  position: 'left' | 'right';
+  inverted?: boolean;
 }
 
-const MessageUI: React.FC<MessageProps> = (props) => {
-  const {
-    currentMessage,
-    nextMessage,
-    position,
-    containerStyle,
-  } = props
+const MessageUI: React.FC<MessageProps> = props => {
+  const { currentMessage, nextMessage, position, containerStyle } = props;
 
-  const styles = getStyles(useTheme());
+  const styles = getStyles();
 
   const { isSameUser } = utils;
-  const sameUser = isSameUser(currentMessage, nextMessage!)
+  const sameUser = isSameUser(currentMessage, nextMessage!);
 
   const renderAvatar = () => {
     return (
@@ -40,14 +50,14 @@ const MessageUI: React.FC<MessageProps> = (props) => {
           right: [styles[props.position].slackAvatar],
         }}
       />
-    )
-  }
+    );
+  };
 
   return (
     <View style={styles.base.messageContainer}>
-      {props.currentMessage.createdAt 
-        && <Day {...props} containerStyle={styles.base.day} />
-      }
+      {props.currentMessage.createdAt && (
+        <Day {...props} containerStyle={styles.base.day} />
+      )}
       <View
         style={[
           styles[position].container,
@@ -61,10 +71,10 @@ const MessageUI: React.FC<MessageProps> = (props) => {
         {props.position === 'right' ? renderAvatar() : null}
       </View>
     </View>
-  )
-}
+  );
+};
 
-const getStyles = (theme: Theme) => ({
+const getStyles = () => ({
   base: StyleSheet.create({
     messageContainer: {
       marginTop: 20,

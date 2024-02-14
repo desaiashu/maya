@@ -1,49 +1,49 @@
 import { Font, fonts } from './font';
 
 export const lightTheme = {
-    colors: {
-        background: '#f2f2f2',
-        button: 'black',
-        outline: '#999',
-        header: 'white',
-        text: {
-            primary: 'black',
-            secondary: 'grey',
-            contrast: 'white',
-        },
+  colors: {
+    background: '#f2f2f2',
+    button: 'black',
+    outline: '#999',
+    header: 'white',
+    text: {
+      primary: 'black',
+      secondary: 'grey',
+      contrast: 'white',
     },
-    fonts,
+  },
+  fonts,
 };
 
 export const darkTheme = {
-    colors: {
-        background: '#121212',
-        button: 'white',
-        outline: '#777',
-        header: '#222',
-        text: {
-            primary: 'white',
-            secondary: 'grey',
-            contrast: 'black',
-        },
+  colors: {
+    background: '#121212',
+    button: 'white',
+    outline: '#777',
+    header: '#222',
+    text: {
+      primary: 'white',
+      secondary: 'grey',
+      contrast: 'black',
     },
-    fonts,
+  },
+  fonts,
 };
 
 ///////////////////////////////
 /////// Type definition ///////
 
 export type Theme = {
-    colors: {
-        background: string;
-        button: string;
-        outline: string;
-        header: string;
-        text: {
-            primary: string;
-            secondary: string;
-            contrast: string;
-        };
+  colors: {
+    background: string;
+    button: string;
+    outline: string;
+    header: string;
+    text: {
+      primary: string;
+      secondary: string;
+      contrast: string;
     };
-    fonts: Font;
+  };
+  fonts: Font;
 };

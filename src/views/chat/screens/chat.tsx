@@ -1,14 +1,35 @@
 // Chat.tsx
 
 import React, { useEffect, useLayoutEffect, useState, useMemo } from 'react';
-import { GiftedChat, IMessage, InputToolbar, MessageProps, InputToolbarProps, Send, Composer} from 'react-native-gifted-chat';
+import {
+  GiftedChat,
+  IMessage,
+  InputToolbar,
+  MessageProps,
+  InputToolbarProps,
+  Send,
+  Composer,
+} from 'react-native-gifted-chat';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { Platform, Keyboard, TextStyle, SafeAreaView, Text, StyleSheet, ImageSourcePropType, useColorScheme } from 'react-native';
+import {
+  Platform,
+  Keyboard,
+  TextStyle,
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  useColorScheme,
+} from 'react-native';
 import { MessageUI } from '@/views/chat';
 import emojiUtils from 'emoji-utils';
 import { RootState, getAvatarSource } from '@/data';
-import { User, Message, ChatInfo } from '@/data/types';
-import { selectMessagesByChatId, getTopicByChatId, getLocalUser, addMessage } from '@/data/slices';
+import { Message, ChatInfo } from '@/data/types';
+import {
+  selectMessagesByChatId,
+  getTopicByChatId,
+  getLocalUser,
+  addMessage,
+} from '@/data/slices';
 import { sendMessage } from '@/data/server';
 import { useSelector, useDispatch } from 'react-redux';
 import { Theme, useTheme } from '@/ui/theme';
@@ -19,23 +40,28 @@ import { RootStackParamList } from '@/views/navigator';
 type RenderMessageProps = MessageProps<IMessage>;
 type RenderToolbarProps = InputToolbarProps<IMessage>;
 
-export const chatOptions = (route: RouteProp<RootStackParamList, 'Chat'>, theme: Theme): NativeStackNavigationOptions => {
-  const styles = getStyles(theme);
-    return ({
-      title: `${route.params.topic}`,
-  })};
+export const chatOptions = (
+  route: RouteProp<RootStackParamList, 'Chat'>,
+): NativeStackNavigationOptions => {
+  return {
+    title: `${route.params.topic}`,
+  };
+};
 
 const Chat: React.FC = () => {
-
   const theme = useTheme();
   const styles = getStyles(theme);
   const route = useRoute();
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const chatInfo = route.params as ChatInfo;
-  
-  const topic = useSelector((state: RootState) => getTopicByChatId(state, chatInfo.chatid));
-  const messages = useSelector((state: RootState) => selectMessagesByChatId(state, chatInfo.chatid));
+
+  const topic = useSelector((state: RootState) =>
+    getTopicByChatId(state, chatInfo.chatid),
+  );
+  const messages = useSelector((state: RootState) =>
+    selectMessagesByChatId(state, chatInfo.chatid),
+  );
   const user = useSelector((state: RootState) => getLocalUser(state));
 
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -45,29 +71,36 @@ const Chat: React.FC = () => {
     name: user.username,
     avatar: user.avatar,
   };
-  
+
   const colorScheme = useColorScheme();
 
   const localMessages = useMemo(() => {
-    return messages.map((msg: Message) => {
+    return messages
+      .map((msg: Message) => {
+        let profiles = chatInfo.profiles || [];
 
-      let profiles = chatInfo.profiles || [];
+        let sender = profiles.find(p => p.userid == msg.sender) || {
+          userid: '',
+          username: '',
+          avatar: '',
+        };
 
-      let sender = profiles.find((p) => p.userid == msg.sender) || { userid: '', username: '', avatar: '' };
-
-      return {
-        _id: msg.timestamp,
-        text: msg.content,
-        createdAt: new Date(msg.timestamp),
-        user: {
-          _id: sender.userid,
-          name: sender.username,
-          avatar: getAvatarSource(sender?.avatar || 'local://user.png', colorScheme),
-        },
-      };
-    }).reverse();
+        return {
+          _id: msg.timestamp,
+          text: msg.content,
+          createdAt: new Date(msg.timestamp),
+          user: {
+            _id: sender.userid,
+            name: sender.username,
+            avatar: getAvatarSource(
+              sender?.avatar || 'local://user.png',
+              colorScheme,
+            ),
+          },
+        };
+      })
+      .reverse();
   }, [messages, chatInfo.profiles, colorScheme]); // Only recompute if messages or profiles change
-
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -80,13 +113,13 @@ const Chat: React.FC = () => {
       'keyboardWillShow',
       () => {
         setKeyboardVisible(true);
-      }
+      },
     );
     const keyboardWillHideListener = Keyboard.addListener(
       'keyboardWillHide',
       () => {
         setKeyboardVisible(false);
-      }
+      },
     );
 
     return () => {
@@ -96,9 +129,10 @@ const Chat: React.FC = () => {
   }, []);
 
   const onSend = (newMessages: IMessage[] = []) => {
-    let epochtime = newMessages[0].createdAt instanceof Date
-    ? newMessages[0].createdAt.getTime()
-    : newMessages[0].createdAt;
+    let epochtime =
+      newMessages[0].createdAt instanceof Date
+        ? newMessages[0].createdAt.getTime()
+        : newMessages[0].createdAt;
 
     let newMessage: Message = {
       chatid: chatInfo.chatid,
@@ -112,7 +146,6 @@ const Chat: React.FC = () => {
   };
 
   const renderMessage = (props: RenderMessageProps) => {
-
     const { currentMessage } = props;
     if (!currentMessage) {
       return null;
@@ -131,13 +164,15 @@ const Chat: React.FC = () => {
       };
     }
 
-    return <MessageUI 
-      {...props} 
-      currentMessage={currentMessage}
-      messageTextStyle={messageTextStyle} 
-      user={localUser} 
-      position={localUser._id == currentMessage?.user._id ? 'right' : 'left'}
-    />;
+    return (
+      <MessageUI
+        {...props}
+        currentMessage={currentMessage}
+        messageTextStyle={messageTextStyle}
+        user={localUser}
+        position={localUser._id == currentMessage?.user._id ? 'right' : 'left'}
+      />
+    );
   };
 
   const renderInputToolbar = (props: RenderToolbarProps) => {
@@ -149,23 +184,32 @@ const Chat: React.FC = () => {
       <InputToolbar
         {...props}
         containerStyle={customInputToolbarStyles.container}
-        renderComposer={(props) => {
+        renderComposer={composerProps => {
           return (
-            <Composer {...props} textInputStyle={customInputToolbarStyles.textStyle}/>
-          );}}
-        renderSend={(props) => {
+            <Composer
+              {...composerProps}
+              textInputStyle={customInputToolbarStyles.textStyle}
+            />
+          );
+        }}
+        renderSend={sendProps => {
           return (
-            <Send {...props} containerStyle={customSendButtonStyles.container}>
+            <Send
+              {...sendProps}
+              containerStyle={customSendButtonStyles.container}
+            >
               <Text style={customSendButtonStyles.text}>Send</Text>
             </Send>
           );
         }}
       />
     );
-  }
+  };
 
   return (
-    <SafeAreaView style={keyboardVisible ? styles.containerKeyboard : styles.container}>
+    <SafeAreaView
+      style={keyboardVisible ? styles.containerKeyboard : styles.container}
+    >
       <GiftedChat
         messages={localMessages}
         onSend={onSend}
@@ -173,7 +217,11 @@ const Chat: React.FC = () => {
         renderMessage={renderMessage}
         renderInputToolbar={renderInputToolbar}
         alignTop={true}
-        messagesContainerStyle={keyboardVisible ? styles.messagesContainerKeyboard : styles.messagesContainer}
+        messagesContainerStyle={
+          keyboardVisible
+            ? styles.messagesContainerKeyboard
+            : styles.messagesContainer
+        }
       />
     </SafeAreaView>
   );
@@ -199,46 +247,48 @@ const getStyles = (theme: Theme) => ({
   },
 });
 
-const getInputToolbarStyles = (theme: Theme) => StyleSheet.create({
-  container: {
-    margin:15,
-    backgroundColor: theme.colors.header,
-    borderTopWidth: 1,
-    borderColor: theme.colors.outline,
-    borderTopColor: theme.colors.outline,
-    // paddingTop: 8,
-    paddingLeft: 15,
-    borderWidth: 1,
-    borderRadius:30,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  textStyle: {
-    lineHeight: 21,
-    // fontSize: 16,
-    paddingRight: 10,
-    paddingBottom: 2,
-    color: theme.colors.text.primary,
-  }
-});
+const getInputToolbarStyles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      margin: 15,
+      backgroundColor: theme.colors.header,
+      borderTopWidth: 1,
+      borderColor: theme.colors.outline,
+      borderTopColor: theme.colors.outline,
+      // paddingTop: 8,
+      paddingLeft: 15,
+      borderWidth: 1,
+      borderRadius: 30,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    textStyle: {
+      lineHeight: 21,
+      // fontSize: 16,
+      paddingRight: 10,
+      paddingBottom: 2,
+      color: theme.colors.text.primary,
+    },
+  });
 
-const getSendButtonStyles = (theme: Theme) =>  StyleSheet.create({
-  container: {
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    color: theme.colors.text.primary, // iOS message send button color, change as needed
-    fontWeight: '600',
-    fontSize: 17,
-    backgroundColor: 'transparent', // Ensure the background is transparent
-    marginBottom: 0, // Adjust this as needed
-    paddingRight: 20,
-    paddingBottom: 7,
-    paddingTop: 8
-  },
-});
+const getSendButtonStyles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      height: 44,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    text: {
+      color: theme.colors.text.primary, // iOS message send button color, change as needed
+      fontWeight: '600',
+      fontSize: 17,
+      backgroundColor: 'transparent', // Ensure the background is transparent
+      marginBottom: 0, // Adjust this as needed
+      paddingRight: 20,
+      paddingBottom: 7,
+      paddingTop: 8,
+    },
+  });
 
 export default Chat;
