@@ -12,7 +12,7 @@ const initialState: UserState = {
   currentUser: {
     userid: '+16504305130',
     username: 'ashu',
-    avatar: 'local://einstein.png'
+    avatar: 'local://user.png'
   },
   isAuthenticated: false,
   token: '',

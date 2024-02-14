@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/LibreFranklin/LibreFranklin-Italic.ttf",
+      "sha1": "a05809fd393824064cfd8ec4238d826ad75e4f12"
+    },
+    {
+      "path": "assets/fonts/LibreFranklin/LibreFranklin-Roman.ttf",
+      "sha1": "f7c1f4db542a50c1bd73d8ee679271abc59506c7"
+    },
+    {
+      "path": "assets/fonts/Playfair/PlayfairDisplay-Italic.ttf",
+      "sha1": "4308eea3f3cecfec12d6589ec458cb9745d815c5"
+    },
+    {
+      "path": "assets/fonts/Playfair/PlayfairDisplay-Regular.ttf",
+      "sha1": "2fcb048a917b7607887df262ee3742a50264c764"
+    }
+  ]
+}

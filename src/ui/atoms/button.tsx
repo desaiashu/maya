@@ -1,7 +1,8 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import { TouchableOpacity, Image, StyleSheet, StyleProp, ViewStyle, ImageStyle, useColorScheme } from 'react-native';
 import { Words } from '@/ui/atoms';
 import { Theme, useTheme } from '@/ui/theme';
+import { getIconSource } from '@/data';
 
 interface ButtonProps {
     title: string;
@@ -10,7 +11,8 @@ interface ButtonProps {
     outlined?: boolean;
   }
 
-const Button: React.FC<ButtonProps> = ({ title, onPress, outlined }) => {
+const Button: React.FC<ButtonProps> = ({title, onPress, style, outlined }) => {
+    const colorScheme = useColorScheme();
     const theme = useTheme();
     if (outlined === undefined) {
         outlined = false;
@@ -18,14 +20,15 @@ const Button: React.FC<ButtonProps> = ({ title, onPress, outlined }) => {
     const styles = getStyles(theme, outlined);
 
     return (
-        <TouchableOpacity style={styles.button} onPress={onPress} >
+        <TouchableOpacity style={[styles.textButton, style]} onPress={onPress} >
             <Words tag='button' alt={outlined}>{title}</Words>
         </TouchableOpacity>
     );
+
 };
 
 const getStyles = (theme: Theme, outlined: boolean) => StyleSheet.create({
-    button: {
+    textButton: {
         backgroundColor: outlined ? theme.colors.background : theme.colors.button,
         borderWidth: outlined ? 1 : 0,
         borderColor: theme.colors.outline,

@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, FlatList, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, FlatList, Text, TouchableOpacity, StyleSheet, Image, useColorScheme } from 'react-native';
 import { NavigationProp, useNavigation, useFocusEffect } from '@react-navigation/native';
 import { RootStackParamList } from '@/views/navigator';
 import { ChatInfo } from '@/data/types';
-import { RootState,  defaultAvatar } from '@/data';
+import { RootState,  getDefaultAvatar, getAvatarSource } from '@/data';
 import { getAvatarByChatId, getTopicByChatId, getParticipantsByChatId } from '@/data/slices';
 import { refreshChatlist } from '@/data/server';
 import { useSelector, useDispatch } from 'react-redux';
@@ -11,28 +11,21 @@ import { createSelector } from 'reselect';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { Theme, useTheme } from '@/ui/theme';
+import { IconButton, Words } from '@/ui/atoms';
 
 export const chatListOptions = (navigation: StackNavigationProp<RootStackParamList, 'ChatList'>, theme: Theme): NativeStackNavigationOptions => {
   const styles = getStyles(theme);
   return ({
     title: `chats`,
     headerRight: () => (
-      <TouchableOpacity onPress={() => navigation.navigate('NewChat')}>
-        <Image
-          source={require('../../../assets/icons/newchat.png')} // Replace with the actual path to your image
-          style={styles.composeButton} // Adjust the size as needed
-        />
-        </TouchableOpacity>
+      <IconButton icon='compose' 
+        onPress={() => navigation.navigate('NewChat')} 
+        style={styles.composeButton} />
     ), 
     headerLeft: () => (
-      <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-        <View>
-        <Image
-          source={require('../../../assets/icons/profile.png')} // Replace with the actual path to your image
-          style={styles.profileButton} // Adjust the size as needed
-        />
-        </View>
-      </TouchableOpacity>
+      <IconButton icon='profile' 
+        onPress={() => navigation.navigate('Profile')} 
+        style={styles.profileButton} />
     ), 
 })};
 
@@ -63,6 +56,7 @@ const selectTopics = createSelector(
 const ChatList: React.FC = () => {
 
   const styles = getStyles(useTheme());
+  const colorScheme = useColorScheme();
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const chatList = useSelector((state: RootState) => state.chatlist.chats);
@@ -85,6 +79,8 @@ const ChatList: React.FC = () => {
 
     let chatInfo = item;
     let avatar = avatars[chatInfo.chatid];
+    let avatarSource = getAvatarSource(avatar, colorScheme);
+    let defaultAvatar = getDefaultAvatar(colorScheme);
     let topic = topics[chatInfo.chatid];
     let participant = participants[chatInfo.chatid];
     
@@ -94,13 +90,13 @@ const ChatList: React.FC = () => {
       onPress={() => handleSelectChat(chatInfo as ChatInfo)}
     >
       <Image
-      source={avatar}
+      source={avatarSource}
       defaultSource={defaultAvatar} // Default avatar before remote image loads
       style={styles.avatar}
     />
       <View style={styles.textContainer}>
-        <Text style={styles.name}>{participant}</Text>
-        <Text style={styles.topic}>{topic}</Text>
+        <Words tag='h3' style={styles.name}>{participant}</Words>
+        <Words tag='body' style={styles.topic}>{topic}</Words>
       </View>
     </TouchableOpacity>
   )};
@@ -119,15 +115,16 @@ const ChatList: React.FC = () => {
 const getStyles = (theme: Theme) => StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 5,
+    // marginTop: 5,
+    paddingTop: 5,
     backgroundColor: theme.colors.background,
   },
   itemContainer: {
     padding: 20,
     borderTopWidth: 0,
-    borderBottomWidth: 1,
-    borderColor: '#f0f0f0',
-    backgroundColor: 'white',
+    borderBottomWidth: 0,
+    borderColor: theme.colors.outline,
+    backgroundColor: theme.colors.background,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -141,19 +138,19 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     // justifyContent: 'center',
   },
   name: {
-    fontSize: 20,
+    // fontSize: 20,
     marginLeft: 20,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   topic: {
-    fontSize: 16,
+    // fontSize: 16,
     marginLeft: 20,
     marginTop: 3,
   },
   avatar: {
     height: 50,
     width: 50,
-    borderRadius: 3,
+    borderRadius: 5,
   },
   composeButton: {
     width: 35, 
@@ -165,7 +162,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     width: 30, 
     height: 30, 
     marginTop: 0, 
-    marginLeft: 2 ,
+    marginLeft: -2 ,
   },
 });
 

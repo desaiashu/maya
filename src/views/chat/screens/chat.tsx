@@ -3,7 +3,7 @@
 import React, { useEffect, useLayoutEffect, useState, useMemo } from 'react';
 import { GiftedChat, IMessage, InputToolbar, MessageProps, InputToolbarProps, Send, Composer} from 'react-native-gifted-chat';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { Platform, Keyboard, TextStyle, SafeAreaView, Text, StyleSheet, ImageSourcePropType } from 'react-native';
+import { Platform, Keyboard, TextStyle, SafeAreaView, Text, StyleSheet, ImageSourcePropType, useColorScheme } from 'react-native';
 import { MessageUI } from '@/views/chat';
 import emojiUtils from 'emoji-utils';
 import { RootState, getAvatarSource } from '@/data';
@@ -27,7 +27,8 @@ export const chatOptions = (route: RouteProp<RootStackParamList, 'Chat'>, theme:
 
 const Chat: React.FC = () => {
 
-  const styles = getStyles(useTheme());
+  const theme = useTheme();
+  const styles = getStyles(theme);
   const route = useRoute();
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -45,6 +46,8 @@ const Chat: React.FC = () => {
     avatar: user.avatar,
   };
   
+  const colorScheme = useColorScheme();
+
   const localMessages = useMemo(() => {
     return messages.map((msg: Message) => {
 
@@ -59,11 +62,11 @@ const Chat: React.FC = () => {
         user: {
           _id: sender.userid,
           name: sender.username,
-          avatar: getAvatarSource(sender?.avatar || 'local://user.png'),
+          avatar: getAvatarSource(sender?.avatar || 'local://user.png', colorScheme),
         },
       };
     }).reverse();
-  }, [messages, chatInfo.profiles]); // Only recompute if messages or profiles change
+  }, [messages, chatInfo.profiles, colorScheme]); // Only recompute if messages or profiles change
 
 
   useLayoutEffect(() => {
@@ -139,6 +142,8 @@ const Chat: React.FC = () => {
 
   const renderInputToolbar = (props: RenderToolbarProps) => {
     // Add your custom styles here
+    const customInputToolbarStyles = getInputToolbarStyles(theme);
+    const customSendButtonStyles = getSendButtonStyles(theme);
 
     return (
       <InputToolbar
@@ -194,13 +199,13 @@ const getStyles = (theme: Theme) => ({
   },
 });
 
-const customInputToolbarStyles = StyleSheet.create({
+const getInputToolbarStyles = (theme: Theme) => StyleSheet.create({
   container: {
     margin:15,
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.header,
     borderTopWidth: 1,
-    borderColor: '#eee',
-    borderTopColor: '#eee',
+    borderColor: theme.colors.outline,
+    borderTopColor: theme.colors.outline,
     // paddingTop: 8,
     paddingLeft: 15,
     borderWidth: 1,
@@ -214,17 +219,18 @@ const customInputToolbarStyles = StyleSheet.create({
     // fontSize: 16,
     paddingRight: 10,
     paddingBottom: 2,
+    color: theme.colors.text.primary,
   }
 });
 
-const customSendButtonStyles = StyleSheet.create({
+const getSendButtonStyles = (theme: Theme) =>  StyleSheet.create({
   container: {
     height: 44,
     justifyContent: 'center',
     alignItems: 'center',
   },
   text: {
-    color: '#000', // iOS message send button color, change as needed
+    color: theme.colors.text.primary, // iOS message send button color, change as needed
     fontWeight: '600',
     fontSize: 17,
     backgroundColor: 'transparent', // Ensure the background is transparent

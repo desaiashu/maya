@@ -5,7 +5,8 @@
     // "allowDeclareFields": true
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "%/*": ["assets/*"],
     }
   },
 }

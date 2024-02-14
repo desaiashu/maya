@@ -43,7 +43,8 @@ export const Bubble: React.FC<BubbleProps> = (props) => {
   const context = useContext(GiftedChatContext);
   const { currentMessage, previousMessage, containerStyle, wrapperStyle, touchableProps, position } = props;
   
-  const styles = getStyles(useTheme());
+  const theme = useTheme();
+  const styles = getStyles(theme);
 
   const handleLongPress = () => {
     const { onLongPress, currentMessage } = props;
@@ -52,7 +53,6 @@ export const Bubble: React.FC<BubbleProps> = (props) => {
     } else if (currentMessage.text) {
       const options = ['Copy Text', 'Cancel'];
       const cancelButtonIndex = options.length - 1;
-      console.log(context);
       context.actionSheet().showActionSheetWithOptions(
         {
           options,
@@ -81,13 +81,15 @@ export const Bubble: React.FC<BubbleProps> = (props) => {
           {...messageTextProps}
           textStyle={{
             left: [
-              styles[position].standardFont,
-              styles[position].slackMessageText,
+              theme.fonts.small,
+              styles.base.primaryText,
+              styles.base.messageText,
               messageTextStyle,
             ],
             right: [
-              styles[position].standardFont,
-              styles[position].slackMessageText,
+              theme.fonts.small,
+              styles.base.primaryText,
+              styles.base.messageText,
               messageTextStyle,
             ],
           }}
@@ -104,7 +106,7 @@ export const Bubble: React.FC<BubbleProps> = (props) => {
       return (
           <MessageImage
             {...messageImageProps}
-            imageStyle={[styles[position].slackImage]}
+            imageStyle={[styles.base.image]}
           />);
     }
     return null;
@@ -117,17 +119,17 @@ export const Bubble: React.FC<BubbleProps> = (props) => {
     }
     if (currentMessage.sent || currentMessage.received) {
       return (
-        <View style={[styles[position].headerItem, styles[position].tickView]}>
+        <View style={[styles[position].headerItem, styles.base.tickView]}>
           {currentMessage.sent && (
             <Text
-              style={[styles[position].standardFont, styles[position].tick, props.tickStyle]}
+              style={[theme.fonts.small, styles.base.primaryText, styles.base.tick, props.tickStyle]}
             >
               ✓
             </Text>
           )}
           {currentMessage.received && (
             <Text
-              style={[styles[position].standardFont, styles[position].tick, props.tickStyle]}
+              style={[theme.fonts.small, styles.base.primaryText, styles.base.tick, props.tickStyle]}
             >
               ✓
             </Text>
@@ -145,9 +147,10 @@ export const Bubble: React.FC<BubbleProps> = (props) => {
       return (
         <Text
           style={[
-            styles[position].standardFont,
+            theme.fonts.h4,
+            styles.base.primaryText,
             styles[position].headerItem,
-            styles[position].username,
+            styles[position].textAlign,
             props.usernameStyle,
           ]}
         >
@@ -165,19 +168,23 @@ export const Bubble: React.FC<BubbleProps> = (props) => {
         <Time
           {...timeProps}
           containerStyle={{ 
-            left: [styles[position].timeContainer],
-            right: [styles[position].timeContainer] 
+            left: [styles.base.timeContainer],
+            right: [styles.base.timeContainer] 
           }}
           timeTextStyle={{
             left: [
-              styles[position].standardFont,
+              theme.fonts.tiny,
+              styles.base.altText,
               styles[position].headerItem,
               styles[position].time,
+              styles[position].textAlign,
             ],
             right: [
-              styles[position].standardFont,
+              theme.fonts.tiny,
+              styles.base.altText,
               styles[position].headerItem,
               styles[position].time,
+              styles[position].textAlign,
             ],
           }}
         />
@@ -190,7 +197,10 @@ export const Bubble: React.FC<BubbleProps> = (props) => {
       isSameDay(currentMessage, previousMessage);
 
   const messageHeader = isSameThread ? null : (
-      <View style={styles[position].headerView}>
+      <View style={[
+        styles.base.headerView,
+        styles[position].headerView, 
+        ]}>
 
       
       {props.position === 'left' ? renderUsername() : null}
@@ -203,12 +213,23 @@ export const Bubble: React.FC<BubbleProps> = (props) => {
 
   return (
       <View>
-        <View style={[styles[position].container, containerStyle]}>
-          <View style={[styles[position].header, wrapperStyle]}>
+        <View style={[
+          styles.base.container,
+          styles[position].container, 
+          containerStyle
+          ]}>
+          <View style={[
+            styles.base.header,
+            styles[position].header,
+            wrapperStyle]}>
             {messageHeader}
           </View>
         </View>
-        <View style={[styles[position].container, containerStyle]}>
+        <View style={[
+          styles.base.container,
+          styles[position].container, 
+          containerStyle
+          ]}>
           <TouchableOpacity
               onLongPress={handleLongPress}
               accessibilityRole='text'
@@ -226,11 +247,49 @@ export const Bubble: React.FC<BubbleProps> = (props) => {
 
 
 const getStyles = (theme: Theme) => ({
-  left: StyleSheet.create({
+  base: StyleSheet.create({
     container: {
       flex: 1,
       flexDirection: 'row',
       alignItems: 'flex-end',
+    },
+    header: {
+      justifyContent: 'flex-end',
+    },
+    primaryText: {
+      color: theme.colors.text.primary,
+    },
+    altText: {
+      color: theme.colors.text.secondary,
+    },
+    messageText: {
+      marginLeft: 0,
+      marginRight: 0,
+    },
+    image: {
+      borderRadius: 3,
+      marginLeft: 0,
+      marginRight: 0,
+    },
+    timeContainer: {
+      marginLeft: 0,
+      marginRight: 0,
+      marginBottom: 0,
+    },
+    tick: {
+      backgroundColor: 'transparent',
+      color: 'white',
+    },
+    tickView: {
+      flexDirection: 'row',
+    },
+    headerView: {
+      marginTop: Platform.OS === 'android' ? -2 : 0,
+      flexDirection: 'row',
+    }
+  }),
+  left: StyleSheet.create({
+    container: {
       justifyContent: 'flex-start',
       marginLeft: 8,
       marginRight: 60,
@@ -242,123 +301,49 @@ const getStyles = (theme: Theme) => ({
     },
     header: {
       marginRight: 60,
-      justifyContent: 'flex-end',
     },
-    standardFont: {
-      fontSize: 15,
-    },
-    slackMessageText: {
-      marginLeft: 0,
-      marginRight: 0,
-    },
-    username: {
-      fontWeight: 'bold',
+    textAlign: {
+      textAlign: 'left',
     },
     time: {
-      textAlign: 'left',
-      fontSize: 8,
       paddingBottom: 0.5,
       marginLeft: -2
-    },
-    timeContainer: {
-      marginLeft: 0,
-      marginRight: 0,
-      marginBottom: 0,
     },
     headerItem: {
       marginRight: 10,
     },
     headerView: {
-      marginTop: Platform.OS === 'android' ? -2 : 0,
-      flexDirection: 'row',
       alignItems: 'baseline',
-    },
-    tick: {
-      backgroundColor: 'transparent',
-      color: 'white',
-    },
-    tickView: {
-      flexDirection: 'row',
-    },
-    slackImage: {
-      borderRadius: 3,
-      marginLeft: 0,
-      marginRight: 0,
     },
   }),
   right: StyleSheet.create({
     container: {
-      flex: 1,
-      flexDirection: 'row',
-      alignItems: 'flex-end',
       justifyContent: 'flex-end',
       marginLeft: 60,
       marginRight: 8,
-    },
-    header: {
-      // marginLeft: 60,
-      minHeight: 5,
-      justifyContent: 'flex-end',
     },
     wrapper: {
       marginLeft: 60,
       minHeight: 20,
       justifyContent: 'flex-end',
     },
-    containerToNext: {
-      borderBottomRightRadius: 3,
+    header: {
+      // marginLeft: 60,
+      minHeight: 5,
     },
-    containerToPrevious: {
-      borderTopRightRadius: 3,
-    },
-    bottom: {
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
-    },
-    standardFont: {
-      fontSize: 15,
-      textAlign: 'right',
-    },
-    slackMessageText: {
-      marginLeft: 0,
-      marginRight: 0,
-      textAlign: 'left'
-    },
-    username: {
-      fontWeight: 'bold',
+    textAlign: {
       textAlign: 'right',
     },
     time: {
-      textAlign: 'right',
-      fontSize: 8,
       paddingBottom: 2,
       marginRight: -2
-    },
-    timeContainer: {
-      marginLeft: 0,
-      marginRight: 0,
-      marginBottom: 0,
     },
     headerItem: {
       marginLeft: 10,
     },
     headerView: {
-      marginTop: Platform.OS === 'android' ? -2 : 0,
-      flexDirection: 'row',
       alignItems: 'flex-end',
       justifyContent: 'flex-end',
-    },
-    tick: {
-      backgroundColor: 'transparent',
-      color: 'white',
-    },
-    tickView: {
-      flexDirection: 'row',
-    },
-    slackImage: {
-      borderRadius: 3,
-      marginLeft: 0,
-      marginRight: 0,
     },
   }),
   

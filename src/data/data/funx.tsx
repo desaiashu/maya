@@ -1,25 +1,73 @@
 import CryptoJS from 'crypto-js';
+import { ColorSchemeName } from 'react-native'
 
 export function hashPhoneNumber(phoneNumber: string): string {
   const phoneHash = CryptoJS.SHA256(phoneNumber).toString(CryptoJS.enc.Hex);
   return phoneHash;
 }
 
-export const defaultAvatar = require('../../assets/avatars/user.png');
-
-const localAvatars: { [key: string]: any } = {
-  'local://user.png': require('../../assets/avatars/user.png'),
-  'local://einstein.png': require('../../assets/avatars/einstein.png'),
-  'local://openai.png': require('../../assets/avatars/openai.png'),
-  'local://oracle.png': require('../../assets/avatars/oracle.png'),
-  // Add other local avatars as needed
+interface RequireConverter {
+  [key: string]: {
+    light: any,
+    dark: any,
+  }
 };
-export const getAvatarSource = (avatar: string) => {
+
+const defaultAvatar = 'local://user.png';
+export const localAvatars: RequireConverter = {
+  'local://user.png': {
+    light: require('%/avatars/light/user.png'),
+    dark: require('%/avatars/dark/user.png'),
+  },
+  'local://einstein.png': {
+    light: require('%/avatars/light/einstein.png'),
+    dark: require('%/avatars/dark/einstein.png'),
+  },
+  'local://openai.png': {
+    light: require('%/avatars/light/openai.png'),
+    dark: require('%/avatars/dark/openai.png'),
+  },
+  'local://oracle.png': {
+    light: require('%/avatars/light/oracle.png'),
+    dark: require('%/avatars/dark/oracle.png'),
+  }
+};
+
+const icons: RequireConverter = {
+  compose: {
+    light: require('%/icons/light/compose.png'),
+    dark: require('%/icons/dark/compose.png'),
+  },
+  profile: {
+    light: require('%/icons/light/profile.png'),
+    dark: require('%/icons/dark/profile.png'),
+  },
+  close: {
+    light: require('%/icons/light/close.png'),
+    dark: require('%/icons/dark/close.png'),
+  },
+  edit: {
+    light: require('%/icons/light/edit.png'),
+    dark: require('%/icons/dark/edit.png'),
+  }
+};
+
+export const getAvatarSource = (avatar: string, color: ColorSchemeName) => {
+  if (!color) { return null; }
   if (avatar?.startsWith('https')) {
     return { uri: avatar };
   } else if (avatar?.startsWith('local')) {
-    return localAvatars[avatar] || defaultAvatar;
+    return localAvatars[avatar][color] || localAvatars[defaultAvatar][color];
   } else {
-    return defaultAvatar;
+    return localAvatars[defaultAvatar][color];
   }
+};
+
+export const getDefaultAvatar = (theme: ColorSchemeName) => {
+  return getAvatarSource(defaultAvatar, theme);
+}
+
+export const getIconSource = (icon: string, color: ColorSchemeName) => {
+  if (!color) { return null; }
+  return icons[icon][color];
 };

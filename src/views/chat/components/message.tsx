@@ -44,9 +44,9 @@ const MessageUI: React.FC<MessageProps> = (props) => {
   }
 
   return (
-    <View>
+    <View style={styles.base.messageContainer}>
       {props.currentMessage.createdAt 
-        && <Day {...props} containerStyle={{}} />
+        && <Day {...props} containerStyle={styles.base.day} />
       }
       <View
         style={[
@@ -65,6 +65,15 @@ const MessageUI: React.FC<MessageProps> = (props) => {
 }
 
 const getStyles = (theme: Theme) => ({
+  base: StyleSheet.create({
+    messageContainer: {
+      marginTop: 20,
+    },
+    day: {
+      marginTop: 15,
+      marginBottom: 20,
+    },
+  }),
   left: StyleSheet.create({
     container: {
       flexDirection: 'row',

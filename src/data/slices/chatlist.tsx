@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ChatInfo } from '@/data/types'
 import { RootState, getAvatarSource } from '@/data';
+import { Theme } from '@/ui/theme';
 
 interface ChatState {
   chats: ChatInfo[];
@@ -46,7 +47,7 @@ export const getAvatarByChatId = (state: RootState, chatid: string) => {
   const currentUser = state.user.currentUser; // Assuming you have a currentUser in your state
   const nonCurrentUserProfile = chatInfo?.profiles?.find(profile => profile.userid != currentUser?.userid);
   let avatarString = nonCurrentUserProfile?.avatar || 'local://user.png';
-  return getAvatarSource(avatarString);
+  return avatarString;
 }
 
 export default chatlistSlice.reducer;

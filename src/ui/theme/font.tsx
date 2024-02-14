@@ -3,45 +3,59 @@ import { TextStyle } from 'react-native';
 export type FontTag = 
 'h1' | 
 'h2' | 
-'h3' | 
+'h3' |
+'h4' | 
 'body' | 
+'small' |
+'tiny' |
 'secondary' | 
 'button' | 
 'input';
 
 export const fonts: Font = {
     h1: {
-        fontFamily: 'roboto',
-        fontWeight: 'bold',
+        fontFamily: 'LibreFranklinRoman-ExtraBold',
         fontSize: 32,
     },
     h2: {
-        fontFamily: 'roboto',
-        fontWeight: 'bold',
+        fontFamily: 'LibreFranklinRoman-ExtraBold',
         fontSize: 24,
     },
     h3: {
-        fontFamily: 'roboto',
-        fontWeight: 'bold',
-        fontSize: 20,
+        fontFamily: 'LibreFranklinRoman-ExtraBold',
+        fontSize: 18,
+    },
+    h4: {
+        fontFamily: 'LibreFranklinRoman-ExtraBold',
+        fontSize: 14,
     },
     body: {
-        fontFamily: 'roboto',
+        fontFamily: 'LibreFranklinRoman-Medium',
         fontWeight: 'normal',
-        fontSize: 16,
+        fontSize: 14,
+    },
+    small: {
+        fontFamily: 'LibreFranklinRoman-Medium',
+        fontWeight: 'normal',
+        fontSize: 13,
+    },
+    tiny: {
+        fontFamily: 'LibreFranklinRoman-Medium',
+        fontWeight: 'normal',
+        fontSize: 10,
     },
     secondary: {
-        fontFamily: 'roboto',
+        fontFamily: 'LibreFranklinRoman-Medium',
         fontWeight: 'normal',
         fontSize: 16,
     },
     button: {
-        fontFamily: 'roboto',
+        fontFamily: 'LibreFranklinRoman-Medium',
         fontWeight: 'normal',
         fontSize: 16,
     },
     input: {
-        fontFamily: 'roboto',
+        fontFamily: 'LibreFranklinRoman-Medium',
         fontWeight: 'normal',
         fontSize: 16,
     },

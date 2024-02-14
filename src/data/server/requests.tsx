@@ -3,10 +3,9 @@ import { sendRequest, socket } from '@/data/server';
 import { MayaRequest, RefreshRequest, ChatRequest, UserRequest, MessageRequest } from '@/data/types';
 import { Message, Auth } from '@/data/types';
 
-const test_token = 'f2e5c9'
+const test_token = '6068bf'
 
 export const refreshChatlist = () => {
-  console.log('refresh');
   const state = store.getState();
   let request: RefreshRequest = { 
     userid: state.user.currentUser?.userid || '+16504305130',

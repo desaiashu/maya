@@ -5,7 +5,7 @@ import { TouchableOpacity, Image, Text, StyleSheet, View, TextStyle, StyleProp }
 import { NavigationContainer, NavigationProp, useNavigation} from '@react-navigation/native';
 import { createNativeStackNavigator, NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { Chat, chatOptions, ChatList, chatListOptions, NewChat, newChatOptions } from '@/views/chat';
-import { Profile, profileOptions, Auth, authOptions, Verify, verifyOptions } from '@/views/setup';
+import { Profile, profileOptions, Auth, authOptions, Verify, verifyOptions, Settings, settingsOptions } from '@/views/setup';
 import { ChatInfo } from '@/data/types';
 import {Theme, useTheme}  from '@/ui/theme';
 
@@ -16,6 +16,7 @@ export type RootStackParamList = {
   Profile: undefined;
   Auth: undefined;
   Verify: { phoneNumber: string };
+  Settings: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -39,13 +40,16 @@ const Navigator: React.FC = () => {
           component={NewChat} 
           options={({ navigation }) => (newChatOptions(navigation, theme))}
         />
-        <Stack.Screen name="Profile" 
-          component={Profile} 
-          options={({ navigation }) => (profileOptions(navigation, theme))} />
         <Stack.Screen name="Chat"
           component={Chat}
           options={({ route }) => (chatOptions(route, theme))}
         />
+        <Stack.Screen name="Profile" 
+          component={Profile} 
+          options={({ navigation }) => (profileOptions(navigation, theme))} />
+        <Stack.Screen name="Settings" 
+          component={Profile} 
+          options={({ navigation }) => (settingsOptions(navigation, theme))} />
         <Stack.Screen name="Auth"
           component={Auth}
           options={authOptions(theme)}

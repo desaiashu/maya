@@ -8,9 +8,10 @@ module.exports = {
     [
       "module-resolver",
       {
-        "root": [__dirname + "/src"],
+        "root": [__dirname],
         "alias": {
-          "@": "./src"
+          "@": "./src",
+          "%": "./assets",
         }
       }
     ]
