@@ -18,6 +18,7 @@ import {
   DayProps,
 } from 'react-native-gifted-chat';
 import { Bubble } from '@/views/chat';
+import { Theme, useTheme } from '@/ui/theme';
 
 interface MessageProps {
   renderAvatar?: (props: AvatarProps<IMessage>) => ReactNode;
@@ -36,7 +37,7 @@ interface MessageProps {
 const MessageUI: React.FC<MessageProps> = props => {
   const { currentMessage, nextMessage, position, containerStyle } = props;
 
-  const styles = getStyles();
+  const styles = getStyles(useTheme());
 
   const { isSameUser } = utils;
   const sameUser = isSameUser(currentMessage, nextMessage!);
@@ -74,7 +75,7 @@ const MessageUI: React.FC<MessageProps> = props => {
   );
 };
 
-const getStyles = () => ({
+const getStyles = (theme: Theme) => ({
   base: StyleSheet.create({
     messageContainer: {
       marginTop: 20,
@@ -82,6 +83,7 @@ const getStyles = () => ({
     day: {
       marginTop: 15,
       marginBottom: 20,
+      color: theme.colors.text.secondary,
     },
     propsInverted: {
       marginBottom: 2,

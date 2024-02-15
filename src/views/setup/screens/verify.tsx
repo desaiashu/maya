@@ -72,13 +72,24 @@ const Verify: React.FC = () => {
     <View style={styles.container}>
       <View>
         <Words style={styles.text} tag="h3">
-          we texted you a token
+          we sent a verification
+        </Words>
+        <Words style={styles.text} tag="h3">
+          code on whatsapp
         </Words>
         <View style={styles.form}>
-          <Input value={token} onChangeText={setToken} />
+          <Input value={token} caps={true} onChangeText={setToken} />
           <Button title="verify" onPress={handleValidateToken} />
         </View>
-        <Button title="text again" onPress={sendAgain} outlined />
+
+        <View style={styles.sendAgain}>
+          <Button
+            title="send it again"
+            tag="small"
+            onPress={sendAgain}
+            outlined
+          />
+        </View>
       </View>
     </View>
   );
@@ -95,6 +106,11 @@ const getStyles = (theme: Theme) =>
     text: {
       // alignSelf: 'flex-start',
       marginLeft: 10,
+      marginTop: 3,
+    },
+    sendAgain: {
+      alignSelf: 'flex-start',
+      marginTop: 40,
     },
     form: {
       flexDirection: 'row',

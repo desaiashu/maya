@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import { useNavigation, RouteProp } from '@react-navigation/native';
+import {
+  useNavigation,
+  NavigationProp,
+  RouteProp,
+  useRoute,
+  CommonActions,
+} from '@react-navigation/native';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
 import { Button, IconButton, Input, Words } from '@/ui/atoms';
@@ -36,7 +42,9 @@ const Settings: React.FC = () => {
   const styles = getStyles(useTheme());
   const user = useSelector((state: RootState) => state.user.currentUser);
   const dispatch = useDispatch();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const route = useRoute();
+  const { params } = route;
 
   const [username, setUsername] = useState(user.username);
   const [avatar, setAvatar] = useState(user.avatar);
@@ -54,7 +62,16 @@ const Settings: React.FC = () => {
     dispatch(setUserProfile(newUser));
     dispatch(updateUserChats(newUser));
     updateUserProfile(newUser);
-    navigation.goBack();
+    if (params) {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'ChatList' }],
+        }),
+      );
+    } else {
+      navigation.goBack();
+    }
   };
 
   return (

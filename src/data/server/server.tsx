@@ -8,6 +8,7 @@ import {
   handleMessageUpdate,
   handleSuccessUpdate,
   handleErrorUpdate,
+  handleUserUpdate,
 } from './updates';
 
 const WS_URL = 'ws://localhost:5001/maya/';
@@ -19,6 +20,7 @@ const updateHandlers: { [key: string]: (data: any) => void } = {
   chunk: handleChunkUpdate,
   message: handleMessageUpdate,
   chatinfo: handleChatInfoUpdate,
+  user: handleUserUpdate,
   // Add more mappings for other update types
 };
 
@@ -33,6 +35,7 @@ export const initializeWebSocket = (): WebSocket => {
 
   socket.onmessage = event => {
     const update: MayaUpdate = JSON.parse(event.data);
+    console.log('WebSocket message:', update);
     const handler = updateHandlers[update.update];
     if (handler) {
       handler(update.data);
@@ -79,11 +82,25 @@ function waitForSocketOpen(socket: WebSocket, timeout = 5000): Promise<void> {
   });
 }
 
+export const reinitalizeWebSocket = () => {
+  console.log('Reinitializing WebSocket with user hash...');
+  try {
+    // Close the previous socket if it's not in a CLOSED state
+    if (socket.readyState !== WebSocket.CLOSED) {
+      socket.close();
+    }
+    // Reinitialize the WebSocket connection
+    const newSocket = initializeWebSocket();
+    waitForSocketOpen(newSocket);
+    socket = newSocket;
+  } catch (error) {
+    console.error('WebSocket reconnection error:', error);
+    throw error;
+  }
+};
+
 // Function to send a message through the WebSocket
-export const sendRequest = async (
-  socket: WebSocket,
-  message: MayaRequest,
-): Promise<void> => {
+export const sendRequest = async (message: MayaRequest): Promise<void> => {
   if (socket.readyState === WebSocket.OPEN) {
     socket.send(JSON.stringify(message));
   } else if (socket.readyState === WebSocket.CONNECTING) {
@@ -113,4 +130,4 @@ export const sendRequest = async (
   }
 };
 
-export const socket = initializeWebSocket();
+export let socket = initializeWebSocket();

@@ -25,6 +25,9 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    setPhone(state, action: PayloadAction<string>) {
+      state.currentUser.userid = action.payload;
+    },
     updateToken(state, action: PayloadAction<string>) {
       state.token = action.payload;
     },
@@ -66,6 +69,7 @@ export const {
   setUserProfile,
   clearUser,
   updateContacts,
+  setPhone,
 } = userSlice.actions;
 
 export default userSlice.reducer;

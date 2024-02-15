@@ -7,9 +7,10 @@ interface InputProps {
   value: string;
   onChangeText?: (text: string) => void;
   style?: StyleProp<TextStyle>;
+  caps?: boolean;
 }
 
-const Input: React.FC<InputProps> = ({ phone, value, onChangeText }) => {
+const Input: React.FC<InputProps> = ({ phone, value, onChangeText, caps }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
 
@@ -30,6 +31,7 @@ const Input: React.FC<InputProps> = ({ phone, value, onChangeText }) => {
       style={styles.input}
       value={value}
       onChangeText={handleTextChange}
+      autoCapitalize={caps ? 'characters' : 'sentences'}
     />
   );
 };

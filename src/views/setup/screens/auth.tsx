@@ -5,7 +5,9 @@ import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { Input, Button, Words } from '@/ui/atoms';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
-import { authUser } from '@/data/server';
+import { authUser, reinitalizeWebSocket } from '@/data/server';
+import { setPhone } from '@/data/slices';
+import { useDispatch } from 'react-redux';
 
 export const authOptions = (): NativeStackNavigationOptions => ({
   title: 'auth',
@@ -14,11 +16,15 @@ export const authOptions = (): NativeStackNavigationOptions => ({
 
 const Auth: React.FC = () => {
   const styles = getStyles(useTheme());
+  const dispatch = useDispatch();
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [phoneNumber, setPhoneNumber] = useState('+');
 
   const sendToken = () => {
+    dispatch(setPhone(phoneNumber));
+    console.log('sending token');
+    reinitalizeWebSocket();
     authUser(phoneNumber);
     navigation.navigate('Verify', { phoneNumber });
   };
