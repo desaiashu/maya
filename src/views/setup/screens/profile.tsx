@@ -26,7 +26,7 @@ export const profileOptions = (
     headerRight: () => (
       <IconButton
         icon="edit"
-        onPress={() => console.log('Edit profile')}
+        onPress={() => navigation.navigate('Settings')}
         style={styles.edit}
       />
     ),
@@ -47,7 +47,7 @@ const Profile: React.FC = () => {
     <View style={styles.container}>
       <View style={styles.profileInfo}>
         <Image
-          source={getAvatarSource(user.avatar || defaultAvatar, colorScheme)}
+          source={getAvatarSource(user.avatar, colorScheme)}
           defaultSource={defaultAvatar} // Default avatar before remote image loads
           style={styles.avatar}
         />

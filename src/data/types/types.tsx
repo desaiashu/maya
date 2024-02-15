@@ -14,16 +14,14 @@ export interface ChatInfo {
   chatid: string;
   creator: string;
   participants: string[];
-  profiles?: User[];
+  profiles?: Profile[];
   topic?: string;
   protocol: string;
 }
-export interface User {
+export interface Profile {
   userid: string;
   username: string;
-  avatar?: string;
-  contacts?: string[];
-  bot?: boolean;
+  avatar: string;
 }
 export interface ChatInfoUpdate {
   data: ChatInfo;
@@ -101,6 +99,13 @@ export interface RefreshData {
   contacts: User[];
   bots: User[];
 }
+export interface User {
+  userid: string;
+  username: string;
+  avatar: string;
+  contacts: string[];
+  bot: boolean;
+}
 export interface RefreshRequest {
   userid: string;
   token: string;
@@ -122,4 +127,9 @@ export interface UserRequest {
   token: string;
   command: string;
   data: User;
+}
+export interface UserUpdate {
+  data?: User;
+  update?: string;
+  background?: boolean;
 }

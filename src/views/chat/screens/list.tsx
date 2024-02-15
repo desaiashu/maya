@@ -102,9 +102,9 @@ const ChatList: React.FC = () => {
 
   const renderChatItem = ({ item }: { item: ChatInfo }) => {
     let chatInfo = item;
-    let avatar = avatars[chatInfo.chatid];
-    let avatarSource = getAvatarSource(avatar, colorScheme);
     let defaultAvatar = getDefaultAvatar(colorScheme);
+    let avatar = avatars[chatInfo.chatid] || defaultAvatar;
+    let avatarSource = getAvatarSource(avatar, colorScheme);
     let topic = topics[chatInfo.chatid];
     let participant = participants[chatInfo.chatid];
 

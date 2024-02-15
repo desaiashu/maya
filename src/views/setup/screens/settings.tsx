@@ -1,21 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import { useNavigation, RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
-import { IconButton, Words } from '@/ui/atoms';
-import { useSelector } from 'react-redux';
+import { Button, IconButton, Input, Words } from '@/ui/atoms';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/data';
+import { Profile } from '@/data/types';
+import { setUserProfile, updateUserChats } from '@/data/slices';
+import { AvatarSelect } from '@/ui/molecules';
+import { updateUserProfile } from '@/data/server';
 
 export const settingsOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'Settings'>,
+  route: RouteProp<RootStackParamList, 'Settings'>,
   theme: Theme,
 ): NativeStackNavigationOptions => {
   const styles = getStyles(theme);
   return {
     title: 'settings',
-    presentation: 'card',
+    presentation: route.params?.presentation || 'modal',
     headerLeft: () => (
       <IconButton
         icon="close"
@@ -29,26 +35,48 @@ export const settingsOptions = (
 const Settings: React.FC = () => {
   const styles = getStyles(useTheme());
   const user = useSelector((state: RootState) => state.user.currentUser);
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  const [username, setUsername] = useState(user.username);
+  const [avatar, setAvatar] = useState(user.avatar);
 
   if (user === null) {
     return null;
   }
 
+  const save = () => {
+    const newUser: Profile = {
+      userid: user.userid,
+      username: username,
+      avatar: avatar,
+    };
+    dispatch(setUserProfile(newUser));
+    dispatch(updateUserChats(newUser));
+    updateUserProfile(newUser);
+    navigation.goBack();
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.profileInfo}>
         <Words tag="h4" style={styles.info}>
-          Phone Number:
+          select avatar:
         </Words>
-        <Words tag="body" style={styles.phoneNumber}>
-          {user.userid}
-        </Words>
+        <AvatarSelect
+          style={styles.avatar}
+          selectedIndex={avatar}
+          onSelect={setAvatar}
+        />
         <Words tag="h4" style={styles.info}>
-          Username:
+          edit username:
         </Words>
-        <Words tag="body" style={styles.phoneNumber}>
-          {user.username}
-        </Words>
+        <Input
+          style={styles.username}
+          value={username}
+          onChangeText={setUsername}
+        />
+        <Button title="Save" style={styles.save} onPress={save} />
       </View>
     </View>
   );
@@ -64,13 +92,10 @@ const getStyles = (theme: Theme) =>
     },
     text: {},
     info: {
-      marginTop: 50,
+      marginTop: 20,
     },
     avatar: {
-      width: 100,
-      height: 100,
-      borderRadius: 20,
-      marginTop: 20,
+      marginTop: 10,
     },
     close: {
       marginLeft: -10,
@@ -79,15 +104,15 @@ const getStyles = (theme: Theme) =>
     profileInfo: {
       justifyContent: 'center',
       alignItems: 'center',
-      marginBottom: 150,
+      marginBottom: 0,
     },
     username: {
       marginTop: 10,
-      fontSize: 20,
+      marginBottom: 40,
     },
-    phoneNumber: {
-      marginTop: 10,
-      fontSize: 20,
+    save: {
+      marginTop: 40,
+      marginBottom: 30,
     },
   });
 

@@ -26,6 +26,8 @@ import {
 } from '@/views/setup';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/data';
 
 export type RootStackParamList = {
   ChatList: undefined;
@@ -34,7 +36,7 @@ export type RootStackParamList = {
   Profile: undefined;
   Auth: undefined;
   Verify: { phoneNumber: string };
-  Settings: undefined;
+  Settings: { presentation: 'card' } | undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -44,14 +46,14 @@ const Navigator: React.FC = () => {
 
   const theme = useTheme();
 
-  // If logged in, navigate to ChatList
-  // Else navigate to Auth
-  const initialRoute = 'ChatList';
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.user.isAuthenticated,
+  );
 
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={initialRoute}
+        initialRouteName={isAuthenticated ? 'ChatList' : 'Auth'}
         screenOptions={defaultNavigationOptions(theme)}
       >
         <Stack.Screen
@@ -77,13 +79,11 @@ const Navigator: React.FC = () => {
         <Stack.Screen
           name="Settings"
           component={Settings}
-          options={({ navigation }) => settingsOptions(navigation, theme)}
+          options={({ navigation, route }) =>
+            settingsOptions(navigation, route, theme)
+          }
         />
-        <Stack.Screen
-          name="Auth"
-          component={Auth}
-          options={authOptions(theme)}
-        />
+        <Stack.Screen name="Auth" component={Auth} options={authOptions()} />
         <Stack.Screen
           name="Verify"
           component={Verify}

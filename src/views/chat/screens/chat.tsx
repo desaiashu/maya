@@ -27,7 +27,6 @@ import { Message, ChatInfo } from '@/data/types';
 import {
   selectMessagesByChatId,
   getTopicByChatId,
-  getLocalUser,
   addMessage,
 } from '@/data/slices';
 import { sendMessage } from '@/data/server';
@@ -62,7 +61,7 @@ const Chat: React.FC = () => {
   const messages = useSelector((state: RootState) =>
     selectMessagesByChatId(state, chatInfo.chatid),
   );
-  const user = useSelector((state: RootState) => getLocalUser(state));
+  const user = useSelector((state: RootState) => state.user.currentUser);
 
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
@@ -79,7 +78,7 @@ const Chat: React.FC = () => {
       .map((msg: Message) => {
         let profiles = chatInfo.profiles || [];
 
-        let sender = profiles.find(p => p.userid == msg.sender) || {
+        let sender = profiles.find(p => p.userid === msg.sender) || {
           userid: '',
           username: '',
           avatar: '',
@@ -92,10 +91,7 @@ const Chat: React.FC = () => {
           user: {
             _id: sender.userid,
             name: sender.username,
-            avatar: getAvatarSource(
-              sender?.avatar || 'local://user.png',
-              colorScheme,
-            ),
+            avatar: getAvatarSource(sender.avatar, colorScheme),
           },
         };
       })
@@ -170,7 +166,7 @@ const Chat: React.FC = () => {
         currentMessage={currentMessage}
         messageTextStyle={messageTextStyle}
         user={localUser}
-        position={localUser._id == currentMessage?.user._id ? 'right' : 'left'}
+        position={localUser._id === currentMessage?.user._id ? 'right' : 'left'}
       />
     );
   };

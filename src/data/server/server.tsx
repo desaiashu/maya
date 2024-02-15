@@ -1,17 +1,24 @@
 import { store } from '@/data';
-import { MayaRequest, MayaUpdate} from '@/data/types';
+import { MayaRequest, MayaUpdate } from '@/data/types';
 import { hashPhoneNumber } from '@/data';
-import { handleRefreshUpdate, handleChatInfoUpdate, handleChunkUpdate, handleMessageUpdate, handleSuccessUpdate, handleErrorUpdate,} from './updates';
+import {
+  handleRefreshUpdate,
+  handleChatInfoUpdate,
+  handleChunkUpdate,
+  handleMessageUpdate,
+  handleSuccessUpdate,
+  handleErrorUpdate,
+} from './updates';
 
 const WS_URL = 'ws://localhost:5001/maya/';
 
 const updateHandlers: { [key: string]: (data: any) => void } = {
-  'refresh': handleRefreshUpdate,
-  'success': handleSuccessUpdate,
-  'error': handleErrorUpdate,
-  'chunk': handleChunkUpdate,
-  'message': handleMessageUpdate,
-  'chatinfo': handleChatInfoUpdate,
+  refresh: handleRefreshUpdate,
+  success: handleSuccessUpdate,
+  error: handleErrorUpdate,
+  chunk: handleChunkUpdate,
+  message: handleMessageUpdate,
+  chatinfo: handleChatInfoUpdate,
   // Add more mappings for other update types
 };
 
@@ -21,10 +28,10 @@ export const initializeWebSocket = (): WebSocket => {
   //TODO: if user is not logged in, we need to snag the phone# first
   //Might want to use HTTP for first auth...
   //Or close and reopen the socket when the user logs in
-  const phone_hash = hashPhoneNumber(state.user.currentUser?.userid || '+16504305130');
-  const socket = new WebSocket(WS_URL+phone_hash);
+  const phone_hash = hashPhoneNumber(state.user.currentUser.userid);
+  const socket = new WebSocket(WS_URL + phone_hash);
 
-  socket.onmessage = (event) => {
+  socket.onmessage = event => {
     const update: MayaUpdate = JSON.parse(event.data);
     const handler = updateHandlers[update.update];
     if (handler) {
@@ -34,13 +41,12 @@ export const initializeWebSocket = (): WebSocket => {
     }
   };
 
-  socket.onerror = (event) => {
+  socket.onerror = event => {
     console.error('WebSocket error:', event);
   };
 
-  socket.onclose = (event) => {
+  socket.onclose = event => {
     console.log('WebSocket connection closed:', event);
-
   };
 
   console.log('WebSocket initialized');
@@ -59,20 +65,25 @@ function waitForSocketOpen(socket: WebSocket, timeout = 5000): Promise<void> {
     });
 
     // Optional: handle errors and closure
-    socket.addEventListener('error', (event) => {
+    socket.addEventListener('error', event => {
       clearTimeout(maxTimeout);
       reject(new Error('WebSocket connection error'));
+      console.error('WebSocket error:', event);
     });
 
-    socket.addEventListener('close', (event) => {
+    socket.addEventListener('close', event => {
       clearTimeout(maxTimeout);
       reject(new Error('WebSocket was closed'));
+      console.log('WebSocket closed:', event);
     });
   });
 }
 
 // Function to send a message through the WebSocket
-export const sendRequest = async (socket: WebSocket, message: MayaRequest): Promise<void> => {
+export const sendRequest = async (
+  socket: WebSocket,
+  message: MayaRequest,
+): Promise<void> => {
   if (socket.readyState === WebSocket.OPEN) {
     socket.send(JSON.stringify(message));
   } else if (socket.readyState === WebSocket.CONNECTING) {
@@ -103,4 +114,3 @@ export const sendRequest = async (socket: WebSocket, message: MayaRequest): Prom
 };
 
 export const socket = initializeWebSocket();
-

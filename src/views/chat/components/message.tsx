@@ -61,8 +61,8 @@ const MessageUI: React.FC<MessageProps> = props => {
       <View
         style={[
           styles[position].container,
-          { marginBottom: sameUser ? 0 : 10 },
-          !props.inverted && { marginBottom: 2 },
+          !sameUser && styles.base.swap,
+          !props.inverted && styles.base.propsInverted,
           containerStyle && containerStyle[position],
         ]}
       >
@@ -82,6 +82,12 @@ const getStyles = () => ({
     day: {
       marginTop: 15,
       marginBottom: 20,
+    },
+    propsInverted: {
+      marginBottom: 2,
+    },
+    swap: {
+      marginBottom: 10,
     },
   }),
   left: StyleSheet.create({

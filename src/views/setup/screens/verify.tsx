@@ -1,62 +1,91 @@
 // TokenVerificationScreen.js
-import React, { useState } from 'react';
-import { TouchableOpacity, Text, View, TextInput, StyleSheet } from 'react-native';
-import { verifyUser } from '@/data/server';
+import React, { useEffect, useState } from 'react';
+import { TouchableOpacity, View, StyleSheet } from 'react-native';
+import { verifyUser, authUser } from '@/data/server';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import {
+  useNavigation,
+  NavigationProp,
+  useRoute,
+  RouteProp,
+} from '@react-navigation/native';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
 import { Words, Input, Button } from '@/ui/atoms';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateToken } from '@/data/slices';
+import { RootState } from '@/data';
 
-export const verifyOptions = (navigation: StackNavigationProp<RootStackParamList, 'Verify'>, theme: Theme): NativeStackNavigationOptions => {
-    // const theme = useTheme();
-    return {
-        title: 'verify',
-        headerStyle: {
-            backgroundColor: theme.colors.background//"#F2F2F2",
-        },
-        headerTransparent: true,
-        headerLeft: () => (
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Words tag='body'>back</Words>
-        </TouchableOpacity>
-        ),
-    };
+export const verifyOptions = (
+  navigation: StackNavigationProp<RootStackParamList, 'Verify'>,
+  theme: Theme,
+): NativeStackNavigationOptions => {
+  // const theme = useTheme();
+  return {
+    title: 'verify',
+    headerStyle: {
+      backgroundColor: theme.colors.background, //"#F2F2F2",
+    },
+    headerTransparent: true,
+    headerLeft: () => (
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Words tag="body">back</Words>
+      </TouchableOpacity>
+    ),
   };
-
-const Verify: React.FC = () => {
-    const styles = getStyles(useTheme());
-    const navigation = useNavigation();
-    const [token, setToken] = useState('');
-
-    const route = useRoute<RouteProp<RootStackParamList, 'Verify'>>();
-    const { phoneNumber } = route.params;
-
-    const handleValidateToken = async () => {
-        // verifyUser(phoneNumber, token);
-        // if (isValidToken) {
-        // navigation.navigate('ChatList');
-        // } else {
-        // alert('Invalid token. Please try again.');
-        // }
-    };
-
-    return (
-        <View style={styles.container}>
-        <View>
-            <Words style={styles.text} tag='h3'>we texted you a token</Words>
-            <View style={styles.form}>
-            <Input value={phoneNumber}/>
-            <Button title="verify" onPress={handleValidateToken} />
-            </View>
-            <Button title="text again" onPress={handleValidateToken} outlined />
-        </View>
-        </View>
-    );
 };
 
-const getStyles = (theme: Theme) => StyleSheet.create({
+const Verify: React.FC = () => {
+  const styles = getStyles(useTheme());
+  const [token, setToken] = useState('');
+  const dispatch = useDispatch();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
+  const route = useRoute<RouteProp<RootStackParamList, 'Verify'>>();
+  const { phoneNumber } = route.params;
+
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.user.isAuthenticated,
+  );
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigation.navigate('Settings', { presentation: 'card' });
+    }
+  }, [navigation, isAuthenticated]);
+
+  const handleValidateToken = () => {
+    verifyUser({
+      userid: phoneNumber,
+      token: token,
+      timestamp: new Date().getTime(),
+    });
+    dispatch(updateToken(token));
+  };
+
+  const sendAgain = () => {
+    authUser(phoneNumber);
+  };
+
+  return (
+    <View style={styles.container}>
+      <View>
+        <Words style={styles.text} tag="h3">
+          we texted you a token
+        </Words>
+        <View style={styles.form}>
+          <Input value={token} onChangeText={setToken} />
+          <Button title="verify" onPress={handleValidateToken} />
+        </View>
+        <Button title="text again" onPress={sendAgain} outlined />
+      </View>
+    </View>
+  );
+};
+
+const getStyles = (theme: Theme) =>
+  StyleSheet.create({
     container: {
       flex: 1,
       justifyContent: 'center',

@@ -1,48 +1,67 @@
-import React, { useState } from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import React from 'react';
+import { FlatList, View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { IconButton } from '@/ui/atoms';
-import { localAvatars } from '@/data';
+import { humanAvatars } from '@/data';
+import { Theme, useTheme } from '@/ui/theme';
 
-const icons = Object.keys(localAvatars);
+const icons = Object.keys(humanAvatars);
 interface AvatarSelectProps {
   selectedIndex: string;
+  style: StyleProp<ViewStyle>;
+  onSelect: (text: string) => void;
 }
 
-const AvatarSelect: React.FC<AvatarSelectProps> = selectedIndex => {
-  const [selectedIcon, setSelectedIcon] = useState(selectedIndex);
+const AvatarSelect: React.FC<AvatarSelectProps> = ({
+  selectedIndex,
+  onSelect,
+  style,
+}) => {
+  const theme = useTheme();
+  const styles = getStyles(theme);
 
-  const renderItem = ({ item }: { item: string }) => (
-    <View style={styles.item}>
-      <IconButton
-        icon={item}
-        style={styles.icon}
-        onPress={() => setSelectedIcon(item)}
+  const renderItem = ({ item }: { item: string }) => {
+    return (
+      <View style={item === selectedIndex ? styles.selectedItem : styles.item}>
+        <IconButton
+          icon={item}
+          style={[styles.icon]}
+          onPress={() => onSelect(item)}
+        />
+      </View>
+    );
+  };
+
+  return (
+    <View style={[styles.container, style]}>
+      <FlatList
+        data={icons}
+        renderItem={renderItem}
+        keyExtractor={item => item}
+        numColumns={4}
       />
     </View>
   );
-
-  return (
-    <FlatList
-      data={icons}
-      renderItem={renderItem}
-      keyExtractor={item => item}
-      numColumns={3}
-      contentContainerStyle={styles.container}
-    />
-  );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-  },
-  item: {
-    padding: 10,
-  },
-  selectedItem: {},
-  icon: {
-    margin: 10,
-  },
-});
+const getStyles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      padding: 0,
+      marginTop: 0,
+      marginBottom: 0,
+      height: 350,
+    },
+    item: {
+      padding: 10,
+    },
+    selectedItem: {
+      padding: 8,
+      borderWidth: 2,
+      borderColor: theme.colors.outline,
+    },
+    icon: {
+      margin: 10,
+    },
+  });
 
 export default AvatarSelect;

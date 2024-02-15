@@ -7,7 +7,7 @@ import {
   ImageStyle,
   useColorScheme,
 } from 'react-native';
-import { getIconSource } from '@/data';
+import { getImageSource } from '@/data';
 
 interface IconButtonProps {
   icon: string;
@@ -22,7 +22,7 @@ const IconButton: React.FC<IconButtonProps> = ({ icon, onPress, style }) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <Image
-        source={getIconSource(icon, colorScheme)} // Replace with the actual path to your image
+        source={getImageSource(icon, colorScheme)} // Replace with the actual path to your image
         style={[styles.iconButton, style]} // Adjust the size as needed
       />
     </TouchableOpacity>
