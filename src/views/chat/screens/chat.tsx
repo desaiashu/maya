@@ -224,7 +224,7 @@ const Chat: React.FC = () => {
 const getStyles = (theme: Theme) => ({
   container: {
     flex: 1,
-    marginBottom: -25,
+    marginBottom: 0,
     backgroundColor: theme.colors.background,
     marginTop: -40,
     paddingTop: 70,
