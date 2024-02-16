@@ -10,17 +10,12 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {
-  MessageImage,
-  MessageText,
-  Time,
-  utils,
-  IMessage,
-} from 'react-native-gifted-chat';
+import { Time } from 'react-native-gifted-chat';
+import { isSameDay, isSameUser } from '@/data';
+import { Message } from '@/data/types';
 import { GiftedChatContext } from 'react-native-gifted-chat/lib/GiftedChatContext';
 import { Theme, useTheme } from '@/ui/theme';
-
-const { isSameUser, isSameDay } = utils;
+import { Words } from '@/ui/atoms';
 
 interface BubbleProps {
   touchableProps?: object;
@@ -34,10 +29,10 @@ interface BubbleProps {
   renderCustomView?: (props: BubbleProps) => JSX.Element;
   renderTime?: (timeProps: { textStyle?: StyleProp<TextStyle> }) => JSX.Element;
   renderUsername?: (usernameProps: any) => JSX.Element;
-  renderTicks?: (currentMessage: IMessage) => JSX.Element;
-  currentMessage: IMessage;
-  previousMessage?: IMessage;
-  nextMessage?: IMessage;
+  renderTicks?: (currentMessage: Message) => JSX.Element;
+  currentMessage: Message;
+  previousMessage?: Message;
+  nextMessage?: Message;
   user: { _id: string | number };
   containerStyle?: StyleProp<ViewStyle>;
   wrapperStyle?: StyleProp<ViewStyle>;
@@ -67,7 +62,7 @@ export const Bubble: React.FC<BubbleProps> = props => {
     const { onLongPress } = props;
     if (onLongPress) {
       onLongPress(context, currentMessage);
-    } else if (currentMessage.text) {
+    } else if (currentMessage.content) {
       const options = ['Copy Text', 'Cancel'];
       const cancelButtonIndex = options.length - 1;
       context.actionSheet().showActionSheetWithOptions(
@@ -77,7 +72,7 @@ export const Bubble: React.FC<BubbleProps> = props => {
         },
         (buttonIndex: number) => {
           if (buttonIndex === 0) {
-            Clipboard.setString(currentMessage.text);
+            Clipboard.setString(currentMessage.content);
           }
         },
       );
@@ -85,81 +80,26 @@ export const Bubble: React.FC<BubbleProps> = props => {
   };
 
   const renderMessageText = () => {
-    if (props.currentMessage.text) {
-      const { messageTextStyle, ...messageTextProps } = props;
+    if (currentMessage.content) {
       return (
-        <MessageText
-          {...messageTextProps}
-          textStyle={{
-            left: [
-              theme.fonts.small,
-              styles.base.primaryText,
-              styles.base.messageText,
-              messageTextStyle,
-            ],
-            right: [
-              theme.fonts.small,
-              styles.base.primaryText,
-              styles.base.messageText,
-              messageTextStyle,
-            ],
-          }}
-          containerStyle={{}}
-        />
-      );
-    }
-    return null;
-  };
-
-  const renderMessageImage = () => {
-    if (currentMessage.image) {
-      const { ...messageImageProps } = props;
-      return (
-        <MessageImage {...messageImageProps} imageStyle={[styles.base.image]} />
-      );
-    }
-    return null;
-  };
-
-  const renderTicks = () => {
-    if (currentMessage.user._id !== props.user._id) {
-      return null;
-    }
-    if (currentMessage.sent || currentMessage.received) {
-      return (
-        <View style={[styles[position].headerItem, styles.base.tickView]}>
-          {currentMessage.sent && (
-            <Text
-              style={[
-                theme.fonts.small,
-                styles.base.primaryText,
-                styles.base.tick,
-                props.tickStyle,
-              ]}
-            >
-              ✓
-            </Text>
-          )}
-          {currentMessage.received && (
-            <Text
-              style={[
-                theme.fonts.small,
-                styles.base.primaryText,
-                styles.base.tick,
-                props.tickStyle,
-              ]}
-            >
-              ✓
-            </Text>
-          )}
-        </View>
+        <Words
+          tag="body"
+          style={[
+            styles.base.primaryText,
+            theme.fonts.small,
+            styles.base.primaryText,
+            styles.base.messageText,
+          ]}
+        >
+          {currentMessage.content}
+        </Words>
       );
     }
     return null;
   };
 
   const renderUsername = () => {
-    const username = props.currentMessage.user.name;
+    const username = currentMessage.sender;
     if (username) {
       return (
         <Text
@@ -179,11 +119,9 @@ export const Bubble: React.FC<BubbleProps> = props => {
   };
 
   const renderTime = () => {
-    if (props.currentMessage.createdAt) {
-      const { ...timeProps } = props;
+    if (currentMessage.timestamp) {
       return (
         <Time
-          {...timeProps}
           containerStyle={{
             left: [styles.base.timeContainer],
             right: [styles.base.timeContainer],
@@ -219,8 +157,6 @@ export const Bubble: React.FC<BubbleProps> = props => {
       {props.position === 'left' ? renderUsername() : null}
       {renderTime()}
       {props.position === 'right' ? renderUsername() : null}
-
-      {renderTicks()}
     </View>
   );
 
@@ -252,7 +188,6 @@ export const Bubble: React.FC<BubbleProps> = props => {
           {...touchableProps}
         >
           <View style={[styles[position].wrapper, wrapperStyle]}>
-            {renderMessageImage()}
             {renderMessageText()}
           </View>
         </TouchableOpacity>

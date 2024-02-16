@@ -4,7 +4,6 @@ import React, { useEffect, useState, useMemo } from 'react';
 import {
   GiftedChat,
   IMessage,
-  InputToolbar,
   MessageProps,
   InputToolbarProps,
   Send,
@@ -19,9 +18,11 @@ import {
   StyleSheet,
   useColorScheme,
   KeyboardAvoidingView,
+  FlatList,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { MessageUI } from '@/views/chat';
+import { MessageUI, InputToolbar } from '@/views/chat';
 import emojiUtils from 'emoji-utils';
 import { State, defaultAvatar, getAvatarSource } from '@/data';
 import { Message, ChatInfo } from '@/data/types';
@@ -73,31 +74,6 @@ const Chat: React.FC = () => {
 
   const colorScheme = useColorScheme();
 
-  const localMessages = useMemo(() => {
-    return messages
-      .map((msg: Message) => {
-        let profiles = chatInfo.profiles || [];
-
-        let sender = profiles.find(p => p.userid === msg.sender) || {
-          userid: '',
-          username: '',
-          avatar: defaultAvatar,
-        };
-
-        return {
-          _id: msg.timestamp,
-          text: msg.content,
-          createdAt: new Date(msg.timestamp),
-          user: {
-            _id: sender.userid,
-            name: sender.username,
-            avatar: getAvatarSource(sender.avatar, colorScheme),
-          },
-        };
-      })
-      .reverse();
-  }, [messages, chatInfo.profiles, colorScheme]); // Only recompute if messages or profiles change
-
   useEffect(() => {
     const keyboardWillShowListener = Keyboard.addListener(
       'keyboardWillShow',
@@ -135,13 +111,12 @@ const Chat: React.FC = () => {
     server.sendMessage(newMessage);
   };
 
-  const renderMessage = (props: RenderMessageProps) => {
-    const { currentMessage } = props;
+  const renderMessage = (currentMessage: Message) => {
     if (!currentMessage) {
       return null;
     }
 
-    const currText = currentMessage?.text;
+    const currText = currentMessage?.content;
 
     let messageTextStyle: TextStyle | undefined;
 
@@ -156,11 +131,10 @@ const Chat: React.FC = () => {
 
     return (
       <MessageUI
-        {...props}
         currentMessage={currentMessage}
         messageTextStyle={messageTextStyle}
         user={localUser}
-        position={localUser._id === currentMessage?.user._id ? 'right' : 'left'}
+        position={localUser._id === currentMessage?.sender ? 'right' : 'left'}
       />
     );
   };
@@ -200,22 +174,15 @@ const Chat: React.FC = () => {
     <SafeAreaView edges={['top']} style={styles.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={-250}
+        keyboardVerticalOffset={0}
         style={styles.container}
       >
-        <GiftedChat
-          messages={localMessages}
-          onSend={onSend}
-          user={localUser}
-          renderMessage={renderMessage}
-          renderInputToolbar={renderInputToolbar}
-          alignTop={true}
-          messagesContainerStyle={
-            keyboardVisible
-              ? styles.messagesContainerKeyboard
-              : styles.messagesContainer
-          }
+        <FlatList
+          data={messages}
+          renderItem={({ item }) => renderMessage(item)}
+          keyExtractor={item => item.timestamp.toString()}
         />
+        <InputToolbar onSend={() => {}} />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -224,10 +191,10 @@ const Chat: React.FC = () => {
 const getStyles = (theme: Theme) => ({
   container: {
     flex: 1,
-    marginBottom: -25,
+    marginBottom: 0,
     backgroundColor: theme.colors.background,
-    marginTop: -40,
-    paddingTop: 70,
+    // marginTop: -40,
+    // paddingTop: 70,
   },
   containerKeyboard: {
     flex: 1,
@@ -243,46 +210,5 @@ const getStyles = (theme: Theme) => ({
     paddingBottom: 0,
   },
 });
-
-const getInputToolbarStyles = (theme: Theme) =>
-  StyleSheet.create({
-    container: {
-      margin: 15,
-      backgroundColor: theme.colors.header,
-      borderTopWidth: 1,
-      borderColor: theme.colors.outline,
-      borderTopColor: theme.colors.outline,
-      paddingLeft: 15,
-      borderWidth: 1,
-      borderRadius: 30,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    textStyle: {
-      lineHeight: 21,
-      paddingRight: 10,
-      paddingBottom: 2,
-      color: theme.colors.text.primary,
-    },
-  });
-
-const getSendButtonStyles = (theme: Theme) =>
-  StyleSheet.create({
-    container: {
-      height: 44,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    text: {
-      color: theme.colors.text.primary,
-      fontWeight: '600',
-      fontSize: 17,
-      marginBottom: 0,
-      paddingRight: 20,
-      paddingBottom: 7,
-      paddingTop: 8,
-    },
-  });
 
 export default Chat;

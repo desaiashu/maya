@@ -8,15 +8,14 @@ import {
 } from 'react-native';
 import {
   Avatar,
-  Day,
-  utils,
-  IMessage,
   User,
   LeftRightStyle,
   AvatarProps,
   BubbleProps,
   DayProps,
+  IMessage,
 } from 'react-native-gifted-chat';
+import { Message } from '@/data/types';
 import { Bubble } from '@/views/chat';
 import { Theme, useTheme } from '@/ui/theme';
 
@@ -24,9 +23,9 @@ interface MessageProps {
   renderAvatar?: (props: AvatarProps<IMessage>) => ReactNode;
   renderBubble?: (props: BubbleProps<IMessage>) => ReactNode;
   renderDay?: (props: DayProps<IMessage>) => ReactNode;
-  currentMessage: IMessage;
-  nextMessage?: IMessage;
-  previousMessage?: IMessage;
+  currentMessage: Message;
+  nextMessage?: Message;
+  previousMessage?: Message;
   user: User;
   containerStyle?: LeftRightStyle<ViewStyle>;
   messageTextStyle?: StyleProp<TextStyle>;
@@ -39,13 +38,11 @@ const MessageUI: React.FC<MessageProps> = props => {
 
   const styles = getStyles(useTheme());
 
-  const { isSameUser } = utils;
-  const sameUser = isSameUser(currentMessage, nextMessage!);
+  const sameUser = currentMessage?.sender === nextMessage?.sender;
 
   const renderAvatar = () => {
     return (
       <Avatar
-        {...props}
         imageStyle={{
           left: [styles.base.avatar, styles[props.position].avatar],
           right: [styles.base.avatar, styles[props.position].avatar],
@@ -56,9 +53,9 @@ const MessageUI: React.FC<MessageProps> = props => {
 
   return (
     <View style={styles.base.messageContainer}>
-      {props.currentMessage.createdAt && (
+      {/* {props.currentMessage.createdAt && (
         <Day {...props} containerStyle={styles.base.day} />
-      )}
+      )} */}
       <View
         style={[
           styles[position].container,
