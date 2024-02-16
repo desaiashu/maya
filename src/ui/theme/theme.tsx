@@ -3,6 +3,7 @@ import { Font, fonts } from './font';
 export const lightTheme = {
   colors: {
     background: '#f2f2f2',
+    transparent: 'rgba(0, 0, 0, 0)',
     button: 'black',
     outline: '#999',
     header: 'white',
@@ -18,6 +19,7 @@ export const lightTheme = {
 export const darkTheme = {
   colors: {
     background: '#121212',
+    transparent: 'rgba(0, 0, 0, 0)',
     button: 'white',
     outline: '#777',
     header: '#222',
@@ -36,6 +38,7 @@ export const darkTheme = {
 export type Theme = {
   colors: {
     background: string;
+    transparent: string;
     button: string;
     outline: string;
     header: string;

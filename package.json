@@ -20,6 +20,7 @@
     "emoji-utils": "^1.0.1",
     "json-schema-to-typescript": "^13.1.2",
     "react": "18.2.0",
+    "react-devtools": "^5.0.0",
     "react-native": "0.73.2",
     "react-native-gifted-chat": "^2.4.0",
     "react-native-mmkv": "^2.12.1",

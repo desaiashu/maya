@@ -15,11 +15,12 @@ import {
   Platform,
   Keyboard,
   TextStyle,
-  SafeAreaView,
   Text,
   StyleSheet,
   useColorScheme,
+  KeyboardAvoidingView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { MessageUI } from '@/views/chat';
 import emojiUtils from 'emoji-utils';
 import { State, defaultAvatar, getAvatarSource } from '@/data';
@@ -42,7 +43,7 @@ export const chatOptions = (
     title: '',
     headerTransparent: true,
     headerStyle: {
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.transparent,
     },
     headerLeft: () => (
       <Button bare title="◁   " onPress={() => navigation.goBack()} />
@@ -196,22 +197,26 @@ const Chat: React.FC = () => {
   };
 
   return (
-    <SafeAreaView
-      style={keyboardVisible ? styles.containerKeyboard : styles.container}
-    >
-      <GiftedChat
-        messages={localMessages}
-        onSend={onSend}
-        user={localUser}
-        renderMessage={renderMessage}
-        renderInputToolbar={renderInputToolbar}
-        alignTop={true}
-        messagesContainerStyle={
-          keyboardVisible
-            ? styles.messagesContainerKeyboard
-            : styles.messagesContainer
-        }
-      />
+    <SafeAreaView edges={['top']} style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={-250}
+        style={styles.container}
+      >
+        <GiftedChat
+          messages={localMessages}
+          onSend={onSend}
+          user={localUser}
+          renderMessage={renderMessage}
+          renderInputToolbar={renderInputToolbar}
+          alignTop={true}
+          messagesContainerStyle={
+            keyboardVisible
+              ? styles.messagesContainerKeyboard
+              : styles.messagesContainer
+          }
+        />
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -221,10 +226,15 @@ const getStyles = (theme: Theme) => ({
     flex: 1,
     marginBottom: -25,
     backgroundColor: theme.colors.background,
+    marginTop: -40,
+    paddingTop: 70,
   },
   containerKeyboard: {
     flex: 1,
     backgroundColor: theme.colors.background,
+  },
+  keyboardAvoid: {
+    flex: 1,
   },
   messagesContainer: {
     paddingBottom: 20,

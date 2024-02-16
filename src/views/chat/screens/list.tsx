@@ -30,7 +30,7 @@ export const chatListOptions = (
     title: 'chats',
     headerTransparent: true,
     headerStyle: {
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.transparent,
     },
     headerRight: () => (
       <IconButton
@@ -130,7 +130,7 @@ const getStyles = (theme: Theme) =>
       backgroundColor: theme.colors.background,
     },
     content: {
-      marginTop: 100,
+      paddingTop: 100,
     },
     itemContainer: {
       padding: 20,
