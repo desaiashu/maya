@@ -12,12 +12,9 @@ import {
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
 import { Button, IconButton, Input, Words } from '@/ui/atoms';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '@/data';
+import { State, getState, server } from '@/data';
 import { Profile } from '@/data/types';
-import { setUserProfile, updateUserChats } from '@/data/slices';
 import { AvatarSelect } from '@/ui/molecules';
-import { updateUserProfile } from '@/data/server';
 
 export const settingsOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'Settings'>,
@@ -43,11 +40,16 @@ export const settingsOptions = (
 
 const Settings: React.FC = () => {
   const styles = getStyles(useTheme());
-  const user = useSelector((state: RootState) => state.user.currentUser);
-  const dispatch = useDispatch();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const route = useRoute();
   const { params } = route;
+  const { user, updateUserChats, setUserProfile } = getState(
+    (state: State) => ({
+      user: state.currentUser,
+      updateUserChats: state.updateUserChats,
+      setUserProfile: state.setUserProfile,
+    }),
+  );
 
   const [username, setUsername] = useState(user.username);
   const [avatar, setAvatar] = useState(user.avatar);
@@ -66,9 +68,9 @@ const Settings: React.FC = () => {
       username: username,
       avatar: avatar,
     };
-    dispatch(setUserProfile(newUser));
-    dispatch(updateUserChats(newUser));
-    updateUserProfile(newUser);
+    setUserProfile(newUser);
+    updateUserChats(newUser);
+    server.updateUserProfile(newUser);
     if (!params) {
       navigation.dispatch(
         CommonActions.reset({

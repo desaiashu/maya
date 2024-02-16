@@ -14,15 +14,8 @@ import {
 } from '@react-navigation/native';
 import { RootStackParamList } from '@/views/navigator';
 import { ChatInfo } from '@/data/types';
-import { RootState, getDefaultAvatar, getAvatarSource } from '@/data';
-import {
-  getAvatarByChatId,
-  getTopicByChatId,
-  getParticipantsByChatId,
-} from '@/data/slices';
-import { refreshChatlist } from '@/data/server';
-import { useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
+import { State, getDefaultAvatar, getAvatarSource } from '@/data';
+import { server, getState } from '@/data';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { Theme, useTheme } from '@/ui/theme';
@@ -52,43 +45,20 @@ export const chatListOptions = (
   };
 };
 
-// Memoized selectors for Avatars and Topics to display in the chat list
-const selectChatList = (state: RootState) => state.chatlist.chats;
-const selectAvatars = createSelector(
-  [selectChatList, (state: RootState) => state],
-  (chatList, state) =>
-    chatList.reduce((acc, chatInfo) => {
-      acc[chatInfo.chatid] = getAvatarByChatId(state, chatInfo.chatid);
-      return acc;
-    }, {} as Record<string, ReturnType<typeof getAvatarByChatId>>),
-);
-const selectParticipants = createSelector(
-  [selectChatList, (state: RootState) => state],
-  (chatList, state) =>
-    chatList.reduce((acc, chatInfo) => {
-      acc[chatInfo.chatid] = getParticipantsByChatId(state, chatInfo.chatid);
-      return acc;
-    }, {} as Record<string, ReturnType<typeof getTopicByChatId>>),
-);
-const selectTopics = createSelector(
-  [selectChatList, (state: RootState) => state],
-  (chatList, state) =>
-    chatList.reduce((acc, chatInfo) => {
-      acc[chatInfo.chatid] = getTopicByChatId(state, chatInfo.chatid);
-      return acc;
-    }, {} as Record<string, ReturnType<typeof getTopicByChatId>>),
-);
-
 const ChatList: React.FC = () => {
   const styles = getStyles(useTheme());
   const colorScheme = useColorScheme();
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const chatList = useSelector((state: RootState) => state.chatlist.chats);
 
-  const avatars = useSelector(selectAvatars);
-  const topics = useSelector(selectTopics);
-  const participants = useSelector(selectParticipants);
+  const { chatList, avatars, topics, participants } = getState(
+    (state: State) => ({
+      chatList: state.chats,
+      avatars: state.getAvatars(),
+      topics: state.getTopics(),
+      participants: state.getParticipants(),
+    }),
+  );
 
   const handleSelectChat = (chatInfo: ChatInfo) => {
     navigation.navigate('Chat', chatInfo);
@@ -96,7 +66,7 @@ const ChatList: React.FC = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      refreshChatlist();
+      server.refreshChatlist();
     }, []),
   );
 

@@ -1,7 +1,7 @@
 // TokenVerificationScreen.js
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { verifyUser, authUser } from '@/data/server';
+import { server } from '@/data';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
   useNavigation,
@@ -14,9 +14,7 @@ import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
 import { Words, Input, Button } from '@/ui/atoms';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateToken } from '@/data/slices';
-import { RootState } from '@/data';
+import { State, getState } from '@/data';
 
 export const verifyOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'Verify'>,
@@ -37,17 +35,17 @@ export const verifyOptions = (
 const Verify: React.FC = () => {
   const styles = getStyles(useTheme());
   const [token, setToken] = useState('');
-  const dispatch = useDispatch();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const route = useRoute<RouteProp<RootStackParamList, 'Verify'>>();
   const { phoneNumber } = route.params;
 
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.user.isAuthenticated,
-  );
-  const userCreated = useSelector(
-    (state: RootState) => state.user.currentUser.username !== '',
+  const { isAuthenticated, userCreated, updateToken } = getState(
+    (state: State) => ({
+      isAuthenticated: state.isAuthenticated,
+      userCreated: state.currentUser.username !== '',
+      updateToken: state.updateToken,
+    }),
   );
 
   useEffect(() => {
@@ -64,16 +62,16 @@ const Verify: React.FC = () => {
   }, [navigation, isAuthenticated, userCreated]);
 
   const handleValidateToken = () => {
-    verifyUser({
+    server.verifyUser({
       userid: phoneNumber,
       token: token,
       timestamp: new Date().getTime(),
     });
-    dispatch(updateToken(token));
+    updateToken(token);
   };
 
   const sendAgain = () => {
-    authUser(phoneNumber);
+    server.authUser(phoneNumber);
   };
 
   return (

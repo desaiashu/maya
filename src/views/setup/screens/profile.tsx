@@ -5,8 +5,7 @@ import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
 import { IconButton, Words } from '@/ui/atoms';
-import { useSelector } from 'react-redux';
-import { RootState, getAvatarSource, getDefaultAvatar } from '@/data';
+import { State, getState, getAvatarSource, getDefaultAvatar } from '@/data';
 
 export const profileOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'Profile'>,
@@ -37,7 +36,7 @@ export const profileOptions = (
 
 const Profile: React.FC = () => {
   const styles = getStyles(useTheme());
-  const user = useSelector((state: RootState) => state.user.currentUser);
+  const user = getState((state: State) => state.currentUser);
   const colorScheme = useColorScheme();
 
   if (user === null) {

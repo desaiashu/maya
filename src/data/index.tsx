@@ -1,3 +1,4 @@
 export * from './data/funx';
-export * from './data/store';
+export * from './data/state';
 export * from './data/images';
+export { server } from './server';

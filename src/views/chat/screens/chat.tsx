@@ -22,15 +22,9 @@ import {
 } from 'react-native';
 import { MessageUI } from '@/views/chat';
 import emojiUtils from 'emoji-utils';
-import { RootState, getAvatarSource } from '@/data';
+import { State, getAvatarSource } from '@/data';
 import { Message, ChatInfo } from '@/data/types';
-import {
-  selectMessagesByChatId,
-  getTopicByChatId,
-  addMessage,
-} from '@/data/slices';
-import { sendMessage } from '@/data/server';
-import { useSelector, useDispatch } from 'react-redux';
+import { server, getState } from '@/data';
 import { Theme, useTheme } from '@/ui/theme';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -58,16 +52,14 @@ const Chat: React.FC = () => {
   const styles = getStyles(theme);
   const route = useRoute();
   const navigation = useNavigation();
-  const dispatch = useDispatch();
   const chatInfo = route.params as ChatInfo;
 
-  const topic = useSelector((state: RootState) =>
-    getTopicByChatId(state, chatInfo.chatid),
-  );
-  const messages = useSelector((state: RootState) =>
-    selectMessagesByChatId(state, chatInfo.chatid),
-  );
-  const user = useSelector((state: RootState) => state.user.currentUser);
+  const { user, topic, messages, addMessage } = getState((state: State) => ({
+    user: state.currentUser,
+    topic: state.getTopicByChatId(chatInfo.chatid),
+    messages: state.selectMessagesByChatId(chatInfo.chatid),
+    addMessage: state.addMessage,
+  }));
 
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
@@ -143,8 +135,8 @@ const Chat: React.FC = () => {
       timestamp: epochtime,
     };
 
-    dispatch(addMessage(newMessage));
-    sendMessage(newMessage);
+    addMessage(newMessage);
+    server.sendMessage(newMessage);
   };
 
   const renderMessage = (props: RenderMessageProps) => {

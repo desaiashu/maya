@@ -26,8 +26,7 @@ import {
 } from '@/views/setup';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/data';
+import { State, getState } from '@/data';
 
 export type RootStackParamList = {
   ChatList: undefined;
@@ -42,18 +41,16 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const Navigator: React.FC = () => {
-  //const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
   const theme = useTheme();
 
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.user.isAuthenticated,
-  );
-  const userCreated = useSelector(
-    (state: RootState) => state.user.currentUser.username !== '',
-  );
+  const { isAuthenticated, username } = getState((state: State) => ({
+    isAuthenticated: state.isAuthenticated,
+    username: state.currentUser.username,
+  }));
 
-  let initialRoute: keyof RootStackParamList;
+  const userCreated = username !== '';
+
+  let initialRoute: keyof RootStackParamList = 'Auth';
 
   if (isAuthenticated && userCreated) {
     initialRoute = 'ChatList';
