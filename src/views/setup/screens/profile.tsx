@@ -26,7 +26,9 @@ export const profileOptions = (
     headerRight: () => (
       <IconButton
         icon="edit"
-        onPress={() => navigation.navigate('Settings')}
+        onPress={() =>
+          navigation.navigate('Settings', { presentation: 'modal' })
+        }
         style={styles.edit}
       />
     ),

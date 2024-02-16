@@ -1,6 +1,6 @@
 // TokenVerificationScreen.js
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { verifyUser, authUser } from '@/data/server';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
@@ -8,6 +8,7 @@ import {
   NavigationProp,
   useRoute,
   RouteProp,
+  CommonActions,
 } from '@react-navigation/native';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/views/navigator';
@@ -21,17 +22,14 @@ export const verifyOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'Verify'>,
   theme: Theme,
 ): NativeStackNavigationOptions => {
-  // const theme = useTheme();
   return {
-    title: 'verify',
+    title: '',
     headerStyle: {
-      backgroundColor: theme.colors.background, //"#F2F2F2",
+      backgroundColor: theme.colors.background,
     },
     headerTransparent: true,
     headerLeft: () => (
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Words tag="body">back</Words>
-      </TouchableOpacity>
+      <Button bare title="◁ back" onPress={() => navigation.goBack()} />
     ),
   };
 };
@@ -48,12 +46,22 @@ const Verify: React.FC = () => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated,
   );
+  const userCreated = useSelector(
+    (state: RootState) => state.user.currentUser.username !== '',
+  );
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigation.navigate('Settings', { presentation: 'card' });
+    if (isAuthenticated && !userCreated) {
+      navigation.navigate('Settings');
+    } else if (isAuthenticated) {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'ChatList' }],
+        }),
+      );
     }
-  }, [navigation, isAuthenticated]);
+  }, [navigation, isAuthenticated, userCreated]);
 
   const handleValidateToken = () => {
     verifyUser({

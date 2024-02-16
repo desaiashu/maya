@@ -36,7 +36,7 @@ export type RootStackParamList = {
   Profile: undefined;
   Auth: undefined;
   Verify: { phoneNumber: string };
-  Settings: { presentation: 'card' } | undefined;
+  Settings: { presentation: 'modal' } | undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -49,11 +49,24 @@ const Navigator: React.FC = () => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated,
   );
+  const userCreated = useSelector(
+    (state: RootState) => state.user.currentUser.username !== '',
+  );
+
+  let initialRoute: keyof RootStackParamList;
+
+  if (isAuthenticated && userCreated) {
+    initialRoute = 'ChatList';
+  } else if (isAuthenticated && !userCreated) {
+    initialRoute = 'Settings';
+  } else {
+    initialRoute = 'Auth';
+  }
 
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={isAuthenticated ? 'ChatList' : 'Auth'}
+        initialRouteName={initialRoute}
         screenOptions={defaultNavigationOptions(theme)}
       >
         <Stack.Screen
@@ -69,7 +82,7 @@ const Navigator: React.FC = () => {
         <Stack.Screen
           name="Chat"
           component={Chat}
-          options={({ route }) => chatOptions(route)}
+          options={({ navigation, route }) => chatOptions(navigation, route)}
         />
         <Stack.Screen
           name="Profile"

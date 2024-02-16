@@ -33,17 +33,23 @@ import { sendMessage } from '@/data/server';
 import { useSelector, useDispatch } from 'react-redux';
 import { Theme, useTheme } from '@/ui/theme';
 import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/views/navigator';
+import { Button } from '@/ui/atoms';
 
 type RenderMessageProps = MessageProps<IMessage>;
 type RenderToolbarProps = InputToolbarProps<IMessage>;
 
 export const chatOptions = (
+  navigation: StackNavigationProp<RootStackParamList, 'Chat'>,
   route: RouteProp<RootStackParamList, 'Chat'>,
 ): NativeStackNavigationOptions => {
   return {
     title: `${route.params.topic}`,
+    headerLeft: () => (
+      <Button bare title="◁ back" onPress={() => navigation.goBack()} />
+    ),
   };
 };
 

@@ -10,22 +10,29 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 
 In progress:
 
-- Hook up frontend
-- Frontend chat and
 - Create new message, select AIs
 - LLM streaming
 
 Next up:
 
 - Build more discussion protocols
-- Enable fast chats - ie. if you message a string of messages the server should wait, adjust and not double respond
-- Loading indicator that timesout after 30sec
-- Success message for profile updated
-- Figure out how to handle contacts
+- Handle rapid chats - ie. if you message a string of messages the server should wait, adjust and not double respond
 
 Pre-launch:
 
+- Hash/encrypt phone numbers
+- Ensure websocket isn't created before userid exists on client
+- Create default "welcome" message for user
+- Loading indicator that timesout after 30sec
+- Success message for profile updated
 - OTA updates
+- Background data updates
+- Update "last-refresh"
+
+Multi-user chats
+
+- Test real time
+- Figure out how to handle contacts
 
 Experimental:
 
@@ -55,6 +62,8 @@ Done
 - Set chat topic
 - Build out discussion protocol, to allow other devs to implement a different framework
 - Build out discussion on server w/ multiple LLMs
+- Hook up frontend
+- Frontend chat and
 
 ---
 

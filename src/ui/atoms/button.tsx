@@ -14,6 +14,7 @@ interface ButtonProps {
   style?: StyleProp<ViewStyle>;
   outlined?: boolean;
   tag?: FontTag;
+  bare?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -22,6 +23,7 @@ const Button: React.FC<ButtonProps> = ({
   style,
   outlined,
   tag,
+  bare,
 }) => {
   const theme = useTheme();
   if (outlined === undefined) {
@@ -34,13 +36,13 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <TouchableOpacity
       style={[
-        styles.button,
-        tag === 'small' ? styles.small : styles.normal,
+        bare ? null : styles.button,
+        bare ? null : tag === 'small' ? styles.small : styles.normal,
         style,
       ]}
       onPress={onPress}
     >
-      <Words tag={fontTag} alt={outlined} button={true}>
+      <Words tag={fontTag} alt={outlined || bare} button={true}>
         {title}
       </Words>
     </TouchableOpacity>

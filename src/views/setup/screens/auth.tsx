@@ -10,7 +10,7 @@ import { setPhone } from '@/data/slices';
 import { useDispatch } from 'react-redux';
 
 export const authOptions = (): NativeStackNavigationOptions => ({
-  title: 'auth',
+  title: '',
   headerShown: false,
 });
 

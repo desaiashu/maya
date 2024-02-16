@@ -27,14 +27,17 @@ export const settingsOptions = (
   const styles = getStyles(theme);
   return {
     title: 'settings',
-    presentation: route.params?.presentation || 'modal',
-    headerLeft: () => (
-      <IconButton
-        icon="close"
-        onPress={() => navigation.goBack()}
-        style={styles.close}
-      />
-    ),
+    presentation: route.params?.presentation || 'card',
+    headerShown: route.params ? true : false,
+    headerLeft: route.params
+      ? () => (
+          <IconButton
+            icon="close"
+            onPress={() => navigation.goBack()}
+            style={styles.close}
+          />
+        )
+      : () => <View />,
   };
 };
 
@@ -54,6 +57,10 @@ const Settings: React.FC = () => {
   }
 
   const save = () => {
+    // check if the username/avatar is empty
+    if (username === '' || avatar === '') {
+      return;
+    }
     const newUser: Profile = {
       userid: user.userid,
       username: username,
@@ -62,7 +69,7 @@ const Settings: React.FC = () => {
     dispatch(setUserProfile(newUser));
     dispatch(updateUserChats(newUser));
     updateUserProfile(newUser);
-    if (params) {
+    if (!params) {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,

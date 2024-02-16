@@ -31,7 +31,7 @@ const Input: React.FC<InputProps> = ({ phone, value, onChangeText, caps }) => {
       style={styles.input}
       value={value}
       onChangeText={handleTextChange}
-      autoCapitalize={caps ? 'characters' : 'sentences'}
+      autoCapitalize={caps ? 'characters' : 'none'}
     />
   );
 };
