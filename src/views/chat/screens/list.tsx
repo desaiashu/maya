@@ -27,7 +27,11 @@ export const chatListOptions = (
 ): NativeStackNavigationOptions => {
   const styles = getStyles(theme);
   return {
-    title: `chats`,
+    title: 'chats',
+    headerTransparent: true,
+    headerStyle: {
+      backgroundColor: theme.colors.background,
+    },
     headerRight: () => (
       <IconButton
         icon="compose"
@@ -51,12 +55,13 @@ const ChatList: React.FC = () => {
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  const userid = getState((state: State) => state.currentUser.userid);
   const { chatList, avatars, topics, participants } = getState(
     (state: State) => ({
       chatList: state.chats,
-      avatars: state.getAvatars(),
+      avatars: state.getAvatars(userid),
       topics: state.getTopics(),
-      participants: state.getParticipants(),
+      participants: state.getParticipants(userid),
     }),
   );
 
@@ -73,7 +78,11 @@ const ChatList: React.FC = () => {
   const renderChatItem = ({ item }: { item: ChatInfo }) => {
     let chatInfo = item;
     let defaultAvatar = getDefaultAvatar(colorScheme);
-    let avatar = avatars[chatInfo.chatid] || defaultAvatar;
+    let avatar = avatars[chatInfo.chatid];
+    if (avatar === '') {
+      avatar = defaultAvatar;
+    }
+
     let avatarSource = getAvatarSource(avatar, colorScheme);
     let topic = topics[chatInfo.chatid];
     let participant = participants[chatInfo.chatid];
@@ -103,6 +112,7 @@ const ChatList: React.FC = () => {
   return (
     <View style={styles.container}>
       <FlatList
+        style={styles.content}
         data={chatList}
         keyExtractor={chat => chat.chatid}
         renderItem={renderChatItem}
@@ -118,6 +128,9 @@ const getStyles = (theme: Theme) =>
       // marginTop: 5,
       paddingTop: 5,
       backgroundColor: theme.colors.background,
+    },
+    content: {
+      marginTop: 100,
     },
     itemContainer: {
       padding: 20,

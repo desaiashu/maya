@@ -1,6 +1,6 @@
 // Chat.tsx
 
-import React, { useEffect, useLayoutEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
   GiftedChat,
   IMessage,
@@ -10,7 +10,7 @@ import {
   Send,
   Composer,
 } from 'react-native-gifted-chat';
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import {
   Platform,
   Keyboard,
@@ -22,11 +22,10 @@ import {
 } from 'react-native';
 import { MessageUI } from '@/views/chat';
 import emojiUtils from 'emoji-utils';
-import { State, getAvatarSource } from '@/data';
+import { State, defaultAvatar, getAvatarSource } from '@/data';
 import { Message, ChatInfo } from '@/data/types';
 import { server, getState } from '@/data';
 import { Theme, useTheme } from '@/ui/theme';
-import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/views/navigator';
@@ -37,12 +36,16 @@ type RenderToolbarProps = InputToolbarProps<IMessage>;
 
 export const chatOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'Chat'>,
-  route: RouteProp<RootStackParamList, 'Chat'>,
+  theme: Theme,
 ): NativeStackNavigationOptions => {
   return {
-    title: `${route.params.topic}`,
+    title: '',
+    headerTransparent: true,
+    headerStyle: {
+      backgroundColor: theme.colors.background,
+    },
     headerLeft: () => (
-      <Button bare title="◁ back" onPress={() => navigation.goBack()} />
+      <Button bare title="◁   " onPress={() => navigation.goBack()} />
     ),
   };
 };
@@ -51,12 +54,10 @@ const Chat: React.FC = () => {
   const theme = useTheme();
   const styles = getStyles(theme);
   const route = useRoute();
-  const navigation = useNavigation();
   const chatInfo = route.params as ChatInfo;
 
-  const { user, topic, messages, addMessage } = getState((state: State) => ({
+  const { user, messages, addMessage } = getState((state: State) => ({
     user: state.currentUser,
-    topic: state.getTopicByChatId(chatInfo.chatid),
     messages: state.selectMessagesByChatId(chatInfo.chatid),
     addMessage: state.addMessage,
   }));
@@ -79,7 +80,7 @@ const Chat: React.FC = () => {
         let sender = profiles.find(p => p.userid === msg.sender) || {
           userid: '',
           username: '',
-          avatar: '',
+          avatar: defaultAvatar,
         };
 
         return {
@@ -95,12 +96,6 @@ const Chat: React.FC = () => {
       })
       .reverse();
   }, [messages, chatInfo.profiles, colorScheme]); // Only recompute if messages or profiles change
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: topic,
-    });
-  }, [navigation, topic]);
 
   useEffect(() => {
     const keyboardWillShowListener = Keyboard.addListener(
@@ -229,14 +224,12 @@ const getStyles = (theme: Theme) => ({
   },
   containerKeyboard: {
     flex: 1,
-    // backgroundColor: 'white',
+    backgroundColor: theme.colors.background,
   },
   messagesContainer: {
-    // flex: 1
     paddingBottom: 20,
   },
   messagesContainerKeyboard: {
-    // flex: 1
     paddingBottom: 0,
   },
 });
@@ -249,7 +242,6 @@ const getInputToolbarStyles = (theme: Theme) =>
       borderTopWidth: 1,
       borderColor: theme.colors.outline,
       borderTopColor: theme.colors.outline,
-      // paddingTop: 8,
       paddingLeft: 15,
       borderWidth: 1,
       borderRadius: 30,
@@ -259,7 +251,6 @@ const getInputToolbarStyles = (theme: Theme) =>
     },
     textStyle: {
       lineHeight: 21,
-      // fontSize: 16,
       paddingRight: 10,
       paddingBottom: 2,
       color: theme.colors.text.primary,
@@ -274,11 +265,10 @@ const getSendButtonStyles = (theme: Theme) =>
       alignItems: 'center',
     },
     text: {
-      color: theme.colors.text.primary, // iOS message send button color, change as needed
+      color: theme.colors.text.primary,
       fontWeight: '600',
       fontSize: 17,
-      backgroundColor: 'transparent', // Ensure the background is transparent
-      marginBottom: 0, // Adjust this as needed
+      marginBottom: 0,
       paddingRight: 20,
       paddingBottom: 7,
       paddingTop: 8,

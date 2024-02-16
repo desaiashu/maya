@@ -79,7 +79,7 @@ const Navigator: React.FC = () => {
         <Stack.Screen
           name="Chat"
           component={Chat}
-          options={({ navigation, route }) => chatOptions(navigation, route)}
+          options={({ navigation }) => chatOptions(navigation, theme)}
         />
         <Stack.Screen
           name="Profile"

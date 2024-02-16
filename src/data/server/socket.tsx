@@ -3,7 +3,7 @@ import { MayaRequest, MayaUpdate } from '@/data/types';
 import { hashPhoneNumber } from '@/data';
 import { client } from '@/data/server/client';
 
-const WS_URL = 'ws://localhost:5001/maya/';
+const WS_URL = 'ws://localhost:8001/maya/';
 
 class Socket {
   private socket: WebSocket;

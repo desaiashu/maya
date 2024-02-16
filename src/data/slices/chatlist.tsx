@@ -1,18 +1,18 @@
 import { ChatInfo, Profile } from '@/data/types';
 import { StateCreator } from 'zustand';
-import { getState } from '@/data';
+import { defaultAvatar } from '@/data';
 
 export interface ChatlistState {
   chats: ChatInfo[];
   lastRefresh: number;
   setChats: (chats: ChatInfo[]) => void;
   updateUserChats: (updatedProfile: Profile) => void;
-  getParticipantsByChatId: (chatid: string) => string;
   getTopicByChatId: (chatid: string) => string;
-  getAvatarByChatId: (chatid: string) => string;
+  getParticipantsByChatId: (chatid: string, userid: string) => string;
+  getAvatarByChatId: (chatid: string, userid: string) => string;
   getTopics: () => Record<string, string>;
-  getParticipants: () => Record<string, string>;
-  getAvatars: () => Record<string, string>;
+  getParticipants: (userid: string) => Record<string, string>;
+  getAvatars: (userid: string) => Record<string, string>;
 }
 
 export const useChatlistState: StateCreator<ChatlistState> = (set, get) => ({
@@ -29,15 +29,6 @@ export const useChatlistState: StateCreator<ChatlistState> = (set, get) => ({
       })),
     }));
   },
-  getParticipantsByChatId: (chatid: string) => {
-    const chatlistState = get();
-    const state = getState();
-    const chatInfo = chatlistState.chats.find(chat => chat.chatid === chatid);
-    const nonUserParticipants = chatInfo?.participants.filter(
-      participant => participant !== state.currentUser.userid,
-    );
-    return nonUserParticipants?.join(', ') || 'Chat';
-  },
   getTopicByChatId: (chatid: string) => {
     const chatlistState = get();
     const chatInfo = chatlistState.chats.find(chat => chat.chatid === chatid);
@@ -47,38 +38,48 @@ export const useChatlistState: StateCreator<ChatlistState> = (set, get) => ({
       return 'new chat';
     }
   },
-  getAvatarByChatId: (chatid: string) => {
+  getParticipantsByChatId: (chatid: string, userid: string) => {
+    const chatlistState = get();
+    const chatInfo = chatlistState.chats.find(chat => chat.chatid === chatid);
+    const nonUserParticipants = chatInfo?.participants.filter(
+      participant => participant !== userid,
+    );
+    return nonUserParticipants?.join(', ') || 'Chat';
+  },
+  getAvatarByChatId: (chatid: string, userid: string) => {
     const state = get();
-    const userState = getState();
     const chatInfo = state.chats.find(chat => chat.chatid === chatid);
     const nonCurrentUserProfile = chatInfo?.profiles?.find(
-      profile => profile.userid !== userState.currentUser.userid,
+      profile => profile.userid !== userid,
     );
     let avatarString = nonCurrentUserProfile?.avatar;
-    return avatarString || '';
+    return avatarString || defaultAvatar;
   },
   getTopics: () => {
     const state = get();
     const topics = state.chats.reduce((acc, chatInfo) => {
       acc[chatInfo.chatid] = state.getTopicByChatId(chatInfo.chatid);
       return acc;
-    }, {} as Record<string, ReturnType<typeof state.getTopicByChatId>>);
+    }, {} as Record<string, string>);
     return topics;
   },
-  getParticipants: () => {
+  getParticipants: (userid: string) => {
     const state = get();
     const participants = state.chats.reduce((acc, chatInfo) => {
-      acc[chatInfo.chatid] = state.getParticipantsByChatId(chatInfo.chatid);
+      acc[chatInfo.chatid] = state.getParticipantsByChatId(
+        chatInfo.chatid,
+        userid,
+      );
       return acc;
-    }, {} as Record<string, ReturnType<typeof state.getParticipantsByChatId>>);
+    }, {} as Record<string, string>);
     return participants;
   },
-  getAvatars: () => {
+  getAvatars: (userid: string) => {
     const state = get();
-    const participants = state.chats.reduce((acc, chatInfo) => {
-      acc[chatInfo.chatid] = state.getAvatarByChatId(chatInfo.chatid);
+    const avatars = state.chats.reduce((acc, chatInfo) => {
+      acc[chatInfo.chatid] = state.getAvatarByChatId(chatInfo.chatid, userid);
       return acc;
-    }, {} as Record<string, ReturnType<typeof state.getAvatarByChatId>>);
-    return participants;
+    }, {} as Record<string, string>);
+    return avatars;
   },
 });

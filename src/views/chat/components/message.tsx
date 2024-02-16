@@ -47,8 +47,8 @@ const MessageUI: React.FC<MessageProps> = props => {
       <Avatar
         {...props}
         imageStyle={{
-          left: [styles[props.position].slackAvatar],
-          right: [styles[props.position].slackAvatar],
+          left: [styles.base.avatar, styles[props.position].avatar],
+          right: [styles.base.avatar, styles[props.position].avatar],
         }}
       />
     );
@@ -78,10 +78,10 @@ const MessageUI: React.FC<MessageProps> = props => {
 const getStyles = (theme: Theme) => ({
   base: StyleSheet.create({
     messageContainer: {
-      marginTop: 20,
+      marginTop: 8,
     },
     day: {
-      marginTop: 15,
+      marginTop: 0,
       marginBottom: 20,
       color: theme.colors.text.secondary,
     },
@@ -89,7 +89,12 @@ const getStyles = (theme: Theme) => ({
       marginBottom: 2,
     },
     swap: {
-      marginBottom: 10,
+      marginBottom: 40,
+    },
+    avatar: {
+      height: 40,
+      width: 40,
+      borderRadius: 3,
     },
   }),
   left: StyleSheet.create({
@@ -100,11 +105,8 @@ const getStyles = (theme: Theme) => ({
       marginLeft: 8,
       marginRight: 0,
     },
-    slackAvatar: {
-      // The bottom should roughly line up with the first line of message text.
-      height: 40,
-      width: 40,
-      borderRadius: 3,
+    avatar: {
+      marginLeft: 8,
     },
   }),
   right: StyleSheet.create({
@@ -115,11 +117,8 @@ const getStyles = (theme: Theme) => ({
       marginLeft: 0,
       marginRight: 8,
     },
-    slackAvatar: {
-      // The bottom should roughly line up with the first line of message text.
-      height: 40,
-      width: 40,
-      borderRadius: 3,
+    avatar: {
+      marginRight: 8,
     },
   }),
 });

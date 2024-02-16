@@ -7,10 +7,13 @@ export function hashPhoneNumber(phoneNumber: string): string {
   return phoneHash;
 }
 
-const defaultAvatar = 'local://user.png';
+export const defaultAvatar = 'local://user.png';
 
 export const getAvatarSource = (avatar: string, color: ColorSchemeName) => {
-  if (avatar?.startsWith('https')) {
+  if (!avatar || avatar === '') {
+    return null;
+  }
+  if (avatar.startsWith('https')) {
     return { uri: avatar };
   } else {
     return getImageSource(avatar, color);

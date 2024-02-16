@@ -14,6 +14,10 @@ export const newChatOptions = (
   return {
     title: 'new chat',
     presentation: 'modal',
+    headerTransparent: true,
+    headerStyle: {
+      backgroundColor: theme.colors.background,
+    },
     headerLeft: () => (
       <IconButton
         icon="close"

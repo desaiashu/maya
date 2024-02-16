@@ -14,6 +14,10 @@ export const profileOptions = (
   const styles = getStyles(theme);
   return {
     title: 'profile',
+    headerTransparent: true,
+    headerStyle: {
+      backgroundColor: 'transparent',
+    },
     presentation: 'modal',
     headerLeft: () => (
       <IconButton

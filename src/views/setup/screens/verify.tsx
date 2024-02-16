@@ -27,7 +27,7 @@ export const verifyOptions = (
     },
     headerTransparent: true,
     headerLeft: () => (
-      <Button bare title="◁ back" onPress={() => navigation.goBack()} />
+      <Button bare title="◁   " onPress={() => navigation.goBack()} />
     ),
   };
 };
