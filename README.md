@@ -10,8 +10,13 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 
 In progress:
 
-- Create new message, select AIs
-- LLM streaming
+- Speeding up streaming
+  - Independent chunk storage rather than pulling from messages
+  - Use independent chunk store that doesn't persist
+  - Create single element that sits at end of flatlist
+- Create new message, select protocol, select AIs
+- Test oracle, upload to dev server
+- Run on actual phone
 
 Next up:
 
@@ -23,6 +28,7 @@ Pre-launch:
 - Hash/encrypt phone numbers
 - Tests for oracle
 - Ensure websocket isn't created before userid exists on client
+- Cancel button to stop stream (also stop stream on server? kill web socket and restart it?)
 - Create default "welcome" message for user
 - Loading indicator that timesout after 30sec
 - Success message for profile updated
@@ -66,6 +72,7 @@ Done
 - Build out discussion on server w/ multiple LLMs
 - Hook up frontend
 - Frontend chat and
+- LLM streaming
 
 ---
 

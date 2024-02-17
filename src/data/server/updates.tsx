@@ -4,8 +4,8 @@ import { LayoutAnimation } from 'react-native';
 
 class ClientUpdate {
   handleRefreshUpdate(data: RefreshData) {
-    const state = getState.getState();
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    const state = getState.getState();
     state.setChats(data.chatlist);
     state.updateMessages(data.messages);
   }
@@ -23,12 +23,16 @@ class ClientUpdate {
   }
 
   handleChunkUpdate(data: Chunk) {
-    console.log('Chunk:', data);
+    const state = getState.getState();
+    LayoutAnimation.configureNext(
+      LayoutAnimation.create(10, 'easeInEaseOut', 'opacity'),
+    );
+    state.updateChunk(data);
   }
 
   handleMessageUpdate(data: Message) {
-    const state = getState.getState();
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    const state = getState.getState();
     state.updateMessages([data]);
   }
 

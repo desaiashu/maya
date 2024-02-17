@@ -1,7 +1,7 @@
 import CryptoJS from 'crypto-js';
 import { ColorSchemeName } from 'react-native';
 import { icons, botAvatars, humanAvatars } from '@/data';
-import { Message } from '@/data/types';
+import { Message, Chunk } from '@/data/types';
 
 export function hashPhoneNumber(phoneNumber: string): string {
   const phoneHash = CryptoJS.SHA256(phoneNumber).toString(CryptoJS.enc.Hex);
@@ -66,4 +66,14 @@ export const getImageSource = (image: string, color: ColorSchemeName) => {
   } else {
     return humanAvatars[defaultAvatar][color];
   }
+};
+
+export const messageFromChunk = (chunk: Chunk): Message => {
+  const message: Message = {
+    chatid: chunk.chatid,
+    content: chunk.content,
+    sender: chunk.sender,
+    timestamp: chunk.timestamp,
+  };
+  return message;
 };
