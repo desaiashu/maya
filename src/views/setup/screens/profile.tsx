@@ -16,7 +16,7 @@ export const profileOptions = (
     title: 'profile',
     headerTransparent: true,
     headerStyle: {
-      backgroundColor: 'transparent',
+      backgroundColor: theme.colors.background,
     },
     presentation: 'modal',
     headerLeft: () => (
