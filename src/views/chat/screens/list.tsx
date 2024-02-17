@@ -32,18 +32,18 @@ export const chatListOptions = (
     headerStyle: {
       backgroundColor: theme.colors.transparent,
     },
-    headerRight: () => (
-      <IconButton
-        icon="compose"
-        onPress={() => navigation.navigate('NewChat')}
-        style={styles.composeButton}
-      />
-    ),
     headerLeft: () => (
       <IconButton
         icon="profile"
         onPress={() => navigation.navigate('Profile')}
         style={styles.profileButton}
+      />
+    ),
+    headerRight: () => (
+      <IconButton
+        icon="compose"
+        onPress={() => navigation.navigate('NewChat')}
+        style={styles.composeButton}
       />
     ),
   };
@@ -166,10 +166,10 @@ const getStyles = (theme: Theme) =>
       borderRadius: 5,
     },
     composeButton: {
-      width: 35,
-      height: 40,
-      marginTop: 0,
-      marginRight: -5,
+      width: 32,
+      height: 32,
+      marginTop: 2,
+      marginRight: -3,
     },
     profileButton: {
       width: 30,

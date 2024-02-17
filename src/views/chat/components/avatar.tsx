@@ -25,13 +25,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 36,
     width: 36,
-    marginBottom: -2,
+    marginBottom: 1,
   },
   left: {
-    marginLeft: 5,
+    marginLeft: 7,
   },
   right: {
-    marginLeft: 5,
+    marginLeft: 3,
   },
 });
 

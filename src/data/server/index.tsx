@@ -1,3 +1,3 @@
-export { server } from './server';
-export { client } from './client';
+export { server } from './requests';
+export { client } from './updates';
 export { socket } from './socket';

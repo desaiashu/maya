@@ -38,16 +38,19 @@ export const fonts: Font = {
     fontFamily: 'LibreFranklinRoman-Medium',
     fontWeight: 'normal',
     fontSize: 14,
+    lineHeight: 21,
   },
   small: {
     fontFamily: 'LibreFranklinRoman-Medium',
     fontWeight: 'normal',
     fontSize: 13,
+    lineHeight: 19,
   },
   tiny: {
     fontFamily: 'LibreFranklinRoman-Medium',
     fontWeight: 'normal',
-    fontSize: 10,
+    fontSize: 7,
+    lineHeight: 10,
   },
   secondary: {
     fontFamily: 'LibreFranklinRoman-Medium',

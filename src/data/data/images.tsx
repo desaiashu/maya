@@ -100,8 +100,8 @@ export const icons: RequireConverter = {
     light: require('%/icons/light/close.png'),
     dark: require('%/icons/dark/close.png'),
   },
-  edit: {
-    light: require('%/icons/light/edit.png'),
-    dark: require('%/icons/dark/edit.png'),
+  settings: {
+    light: require('%/icons/light/settings.png'),
+    dark: require('%/icons/dark/settings.png'),
   },
 };

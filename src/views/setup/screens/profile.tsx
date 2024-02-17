@@ -28,11 +28,11 @@ export const profileOptions = (
     ),
     headerRight: () => (
       <IconButton
-        icon="edit"
+        icon="settings"
         onPress={() =>
           navigation.navigate('Settings', { presentation: 'modal' })
         }
-        style={styles.edit}
+        style={styles.settings}
       />
     ),
   };
@@ -95,10 +95,10 @@ const getStyles = (theme: Theme) =>
       marginLeft: -10,
       marginTop: 1,
     },
-    edit: {
-      width: 35,
-      height: 35,
-      marginTop: 1,
+    settings: {
+      width: 28,
+      height: 28,
+      marginTop: 4,
       marginRight: -3,
     },
     profileInfo: {

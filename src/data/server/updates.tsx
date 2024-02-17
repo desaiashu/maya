@@ -1,9 +1,11 @@
 import { getState } from '@/data';
 import { User, RefreshData, ChatInfo, Message, Chunk } from '@/data/types';
+import { LayoutAnimation } from 'react-native';
 
 class ClientUpdate {
   handleRefreshUpdate(data: RefreshData) {
     const state = getState.getState();
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     state.setChats(data.chatlist);
     state.updateMessages(data.messages);
   }
@@ -26,6 +28,7 @@ class ClientUpdate {
 
   handleMessageUpdate(data: Message) {
     const state = getState.getState();
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     state.updateMessages([data]);
   }
 

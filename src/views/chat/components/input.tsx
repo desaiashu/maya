@@ -33,18 +33,26 @@ const InputToolbar: React.FC<InputToolbarProps> = ({ onSend }) => {
   const theme = useTheme();
   const styles = getStyles(theme);
 
+  const onSendPress = () => {
+    onSend(text);
+    setText('');
+  };
+
   return (
     <View style={[styles.container, keyboardVisible ? styles.keyboard : null]}>
       <View style={styles.primary}>
         <TextInput
-          multiline={true}
+          value={text}
+          onChangeText={setText}
           placeholder={'Type a message...'}
           placeholderTextColor={theme.colors.text.secondary}
+          multiline={true}
           style={[styles.textInput]}
           autoFocus={false}
           enablesReturnKeyAutomatically
-          onChangeText={setText}
           verticalAlign={'top'}
+          cursorColor={theme.colors.text.secondary}
+          selectionColor={theme.colors.text.secondary}
         />
         {text.length > 0 ? (
           <Button
@@ -52,9 +60,7 @@ const InputToolbar: React.FC<InputToolbarProps> = ({ onSend }) => {
             tag="h4"
             style={styles.sendContainer}
             title="Send"
-            onPress={() => {
-              onSend(text);
-            }}
+            onPress={onSendPress}
           />
         ) : null}
       </View>
@@ -65,26 +71,26 @@ const InputToolbar: React.FC<InputToolbarProps> = ({ onSend }) => {
 const getStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
-      // borderTopColor: Color.defaultColor,
-      marginBottom: 25,
       bottom: 0,
       left: 0,
       right: 0,
       margin: 15,
+      marginTop: 0,
+      marginBottom: 25,
+      shadowColor: theme.colors.outline,
+      shadowOpacity: 0.6,
+      shadowOffset: { width: 0, height: 0 },
+      shadowRadius: 1,
       backgroundColor: theme.colors.header,
-      borderTopWidth: 1,
-      borderColor: theme.colors.outline,
-      borderTopColor: theme.colors.outline,
       paddingLeft: 15,
       paddingTop: 0,
-      borderWidth: 1,
       borderRadius: 30,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
     },
     keyboard: {
-      marginBottom: 15,
+      marginBottom: 7,
     },
     primary: {
       flexDirection: 'row',
@@ -100,8 +106,8 @@ const getStyles = (theme: Theme) =>
       color: theme.colors.text.primary,
     },
     textInput: {
-      lineHeight: 21,
-      fontSize: theme.fonts.body.fontSize,
+      lineHeight: theme.fonts.small.lineHeight,
+      fontSize: theme.fonts.small.fontSize,
       paddingRight: 10,
       paddingBottom: 10,
       color: theme.colors.text.primary,

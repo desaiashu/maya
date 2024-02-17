@@ -1,7 +1,7 @@
 import { getState } from '@/data';
 import { MayaRequest, MayaUpdate } from '@/data/types';
 import { hashPhoneNumber } from '@/data';
-import { client } from '@/data/server/client';
+import { client } from '@/data/server/updates';
 
 const WS_URL = 'ws://localhost:8001/maya/';
 

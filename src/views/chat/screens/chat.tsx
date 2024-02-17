@@ -2,7 +2,12 @@
 
 import React from 'react';
 import { useRoute } from '@react-navigation/native';
-import { Platform, KeyboardAvoidingView, FlatList } from 'react-native';
+import {
+  Platform,
+  KeyboardAvoidingView,
+  FlatList,
+  LayoutAnimation,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MessageUI, InputToolbar } from '@/views/chat/components';
 import { State, defaultAvatar } from '@/data';
@@ -18,6 +23,7 @@ export const chatOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'Chat'>,
   theme: Theme,
 ): NativeStackNavigationOptions => {
+  const styles = getStyles(theme);
   return {
     title: '',
     headerTransparent: true,
@@ -25,7 +31,12 @@ export const chatOptions = (
       backgroundColor: theme.colors.transparent,
     },
     headerLeft: () => (
-      <Button bare title="◁   " onPress={() => navigation.goBack()} />
+      <Button
+        bare
+        title="◁   "
+        style={styles.back}
+        onPress={() => navigation.goBack()}
+      />
     ),
   };
 };
@@ -35,6 +46,8 @@ const Chat: React.FC = () => {
   const styles = getStyles(theme);
   const route = useRoute();
   const chatInfo = route.params as ChatInfo;
+
+  const flatListRef = React.useRef<FlatList>(null);
 
   const { user, messages, addMessage } = getState((state: State) => ({
     user: state.currentUser,
@@ -56,7 +69,9 @@ const Chat: React.FC = () => {
       sender: user.userid,
       timestamp: timestamp(),
     };
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     addMessage(newMessage);
+    flatListRef?.current?.scrollToIndex({ index: 0, animated: true });
     server.sendMessage(newMessage);
   };
 
@@ -86,8 +101,7 @@ const Chat: React.FC = () => {
         {/* Note: FlatList doesn't play well with KeyboardAvoidingView
         unless "inverted". Alternately, could mimic Messages behavior 
         of scrolling to bottom of chat with this code:
-        onLayout={() => flatListRef?.current?.scrollToEnd({ animated: true })
-        ref={flatListRef}*/}
+        onLayout={() => flatListRef?.current?.scrollToEnd({ animated: true })*/}
         <FlatList
           data={messages.reverse()}
           renderItem={({ item, index }) =>
@@ -95,6 +109,7 @@ const Chat: React.FC = () => {
           }
           keyExtractor={item => item.timestamp.toString()}
           style={styles.messagesContainer}
+          ref={flatListRef}
           inverted
         />
         <InputToolbar onSend={onSend} />
@@ -113,6 +128,18 @@ const getStyles = (theme: Theme) => ({
   },
   messagesContainer: {
     flex: 1,
+    marginTop: -8,
+    marginBottom: 0,
+  },
+  back: {
+    backgroundColor: theme.colors.background,
+    padding: 10,
+    paddingRight: 2,
+    borderRadius: 20,
+    shadowColor: theme.colors.outline,
+    shadowOpacity: 0.6,
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 1,
   },
 });
 

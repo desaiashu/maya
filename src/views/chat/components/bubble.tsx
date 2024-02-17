@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { Message } from '@/data/types';
@@ -63,16 +57,16 @@ export const Bubble: React.FC<BubbleProps> = props => {
 
   const renderUsername = () => {
     return (
-      <Text
+      <Words
+        tag="h4"
         style={[
-          theme.fonts.h4,
           styles.base.primaryText,
           styles[position].headerItem,
           styles[position].textAlign,
         ]}
       >
         {username}
-      </Text>
+      </Words>
     );
   };
 
@@ -81,7 +75,7 @@ export const Bubble: React.FC<BubbleProps> = props => {
   };
 
   const messageHeader = username ? (
-    <View style={[styles.base.headerView, styles[position].headerView]}>
+    <View style={styles.base.headerView}>
       {props.position === 'left' ? renderUsername() : null}
       {renderTime()}
       {props.position === 'right' ? renderUsername() : null}
@@ -137,6 +131,8 @@ const getStyles = (theme: Theme) => ({
     headerView: {
       marginTop: Platform.OS === 'android' ? -2 : 0,
       flexDirection: 'row',
+      alignItems: 'baseline',
+      marginBottom: 2,
     },
   }),
   left: StyleSheet.create({
@@ -156,9 +152,6 @@ const getStyles = (theme: Theme) => ({
     textAlign: {
       textAlign: 'left',
     },
-    headerView: {
-      alignItems: 'baseline',
-    },
     headerItem: {
       marginRight: 10,
     },
@@ -175,18 +168,13 @@ const getStyles = (theme: Theme) => ({
       justifyContent: 'flex-end',
     },
     header: {
-      // marginLeft: 60,
-      minHeight: 5,
+      // minHeight: 5,
     },
     headerItem: {
       marginLeft: 10,
     },
     textAlign: {
       textAlign: 'right',
-    },
-    headerView: {
-      alignItems: 'flex-end',
-      justifyContent: 'flex-end',
     },
   }),
 });

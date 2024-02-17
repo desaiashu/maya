@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
-import { Theme, useTheme } from '@/ui/theme';
 import * as RNLocalize from 'react-native-localize';
+import Words from '@/ui/atoms/words';
+import { Theme, useTheme } from '@/ui/theme';
 
 const DATE_FORMAT = 'll';
 const TIME_FORMAT = 'LT';
@@ -19,9 +20,9 @@ export const Day: React.FC<DayProps> = ({ timestamp }) => {
   const styles = getStyles(theme);
   return (
     <View style={styles.day.container}>
-      <Text style={[theme.fonts.h5, styles.day.text]}>
+      <Words tag="h5" style={styles.day.text}>
         {dayjs(timestamp).locale(LOCALE).format(DATE_FORMAT)}
-      </Text>
+      </Words>
     </View>
   );
 };
@@ -36,9 +37,9 @@ export const Time: React.FC<TimeProps> = ({ timestamp, position }) => {
   const styles = getStyles(theme);
   return (
     <View style={styles.time.container}>
-      <Text style={[theme.fonts.tiny, styles.time.text, styles.time[position]]}>
+      <Words tag="tiny" style={[styles.time.text, styles.time[position]]}>
         {dayjs(timestamp).locale(LOCALE).format(TIME_FORMAT)}
-      </Text>
+      </Words>
     </View>
   );
 };
@@ -53,7 +54,7 @@ const getStyles = (theme: Theme) => ({
     },
     text: {
       backgroundColor: theme.colors.transparent,
-      color: theme.colors.text.secondary,
+      color: theme.colors.outline,
       marginTop: 0,
       marginBottom: 20,
     },
@@ -64,17 +65,17 @@ const getStyles = (theme: Theme) => ({
     },
     text: {
       backgroundColor: theme.colors.transparent,
-      color: theme.colors.text.secondary,
+      color: theme.colors.outline,
     },
     left: {
       textAlign: 'left',
-      paddingBottom: 0.5,
-      marginLeft: 8,
+      paddingBottom: -1,
+      marginLeft: -4,
     },
     right: {
       textAlign: 'right',
-      paddingBottom: 2,
-      marginRight: 8,
+      paddingBottom: -1,
+      marginRight: -4,
     },
   }),
 });

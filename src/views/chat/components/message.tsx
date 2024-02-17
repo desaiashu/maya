@@ -22,6 +22,8 @@ const MessageUI: React.FC<MessageProps> = props => {
   const hideDay = isSameDay(current, prev);
   const hideHeader = isSameUser(current, prev) && isSameDay(current, prev);
   const swap = !isSameUser(current, next);
+  const first = !prev;
+  const final = !next;
 
   const renderAvatar = () => {
     return (
@@ -32,9 +34,16 @@ const MessageUI: React.FC<MessageProps> = props => {
   };
 
   return (
-    <View style={styles.base.messageContainer}>
+    <View
+      style={[
+        styles.base.messageContainer,
+        first && styles.base.first,
+        swap && styles.base.swap,
+        final && styles.base.final,
+      ]}
+    >
       {!hideDay && <Day timestamp={current.timestamp} />}
-      <View style={[styles[position].container, swap && styles.base.swap]}>
+      <View style={styles[position].container}>
         {position === 'left' ? renderAvatar() : null}
         <Bubble
           message={current}
@@ -53,10 +62,16 @@ const getStyles = () => ({
       marginTop: 8,
     },
     swap: {
-      marginBottom: 40,
+      marginBottom: 23,
+    },
+    first: {
+      marginTop: 50,
+    },
+    final: {
+      marginBottom: 30,
     },
     avatarContainer: {
-      width: 48,
+      width: 46,
     },
   }),
   left: StyleSheet.create({
@@ -64,7 +79,7 @@ const getStyles = () => ({
       flexDirection: 'row',
       alignItems: 'flex-end',
       justifyContent: 'flex-start',
-      marginLeft: 8,
+      marginLeft: 9,
       marginRight: 0,
     },
   }),
@@ -74,7 +89,7 @@ const getStyles = () => ({
       alignItems: 'flex-end',
       justifyContent: 'flex-end',
       marginLeft: 0,
-      marginRight: 8,
+      marginRight: 9,
     },
   }),
 });

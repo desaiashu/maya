@@ -37,8 +37,8 @@ export interface ChatRequest {
 export interface Chunk {
   chatid: string;
   sender: string;
-  time: number;
-  chunk: string;
+  timestamp: number;
+  content: string;
 }
 export interface ChunkUpdate {
   data: Chunk;
@@ -75,8 +75,8 @@ export interface MayaUpdate {
   background?: boolean;
 }
 export interface Message {
-  chatid: string;
   content: string;
+  chatid: string;
   sender: string;
   timestamp: number;
 }

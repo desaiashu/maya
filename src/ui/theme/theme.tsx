@@ -6,7 +6,7 @@ export const lightTheme = {
     transparent: 'rgba(0, 0, 0, 0)',
     button: 'black',
     outline: '#999',
-    header: 'white',
+    header: '#f9f9f9',
     text: {
       primary: 'black',
       secondary: 'grey',

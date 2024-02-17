@@ -26,6 +26,10 @@ export const settingsOptions = (
     title: 'settings',
     presentation: route.params?.presentation || 'card',
     headerShown: route.params ? true : false,
+    headerTransparent: true,
+    headerStyle: {
+      backgroundColor: theme.colors.background,
+    },
     headerLeft: route.params
       ? () => (
           <IconButton

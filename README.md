@@ -21,6 +21,7 @@ Next up:
 Pre-launch:
 
 - Hash/encrypt phone numbers
+- Tests for oracle
 - Ensure websocket isn't created before userid exists on client
 - Create default "welcome" message for user
 - Loading indicator that timesout after 30sec
@@ -28,6 +29,7 @@ Pre-launch:
 - OTA updates
 - Background data updates
 - Update "last-refresh"
+- App Icons
 
 Multi-user chats
 
