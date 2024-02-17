@@ -1,150 +1,38 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import GiftedAvatar from './GiftedAvatar';
-import { StylePropType, isSameUser, isSameDay } from './utils';
+import { StyleSheet, Image, useColorScheme } from 'react-native';
+import { getAvatarSource, getDefaultAvatar } from '@/data';
 
 interface AvatarProps {
-  renderAvatarOnTop: boolean;
-  showAvatarForEveryMessage: boolean;
   position: 'left' | 'right';
-  currentMessage: any;
-  renderAvatar: any;
-  previousMessage: any;
-  nextMessage: any;
-  imageStyle: StylePropType;
-  containerStyle: StylePropType;
-  onPressAvatar: (user: any) => void;
-  onLongPressAvatar: (user: any) => void;
+  avatar: string;
 }
 
-const styles = StyleSheet.create({
-  left: {
-    container: {
-      marginRight: 8,
-    },
-    onTop: {
-      alignSelf: 'flex-start',
-    },
-    onBottom: {},
-    image: {
-      height: 36,
-      width: 36,
-      borderRadius: 18,
-    },
-  },
-  right: {
-    container: {
-      marginLeft: 8,
-    },
-    onTop: {
-      alignSelf: 'flex-start',
-    },
-    onBottom: {},
-    image: {
-      height: 36,
-      width: 36,
-      borderRadius: 18,
-    },
-  },
-});
-
 const Avatar: React.FC<AvatarProps> = props => {
-  const {
-    renderAvatarOnTop,
-    showAvatarForEveryMessage,
-    containerStyle,
-    position,
-    currentMessage,
-    renderAvatar,
-    previousMessage,
-    nextMessage,
-    imageStyle,
-  } = props;
-
-  const messageToCompare = renderAvatarOnTop ? previousMessage : nextMessage;
-  const computedStyle = renderAvatarOnTop ? 'onTop' : 'onBottom';
-
-  if (renderAvatar === null) {
-    return null;
-  }
-
-  if (
-    !showAvatarForEveryMessage &&
-    currentMessage &&
-    messageToCompare &&
-    isSameUser(currentMessage, messageToCompare) &&
-    isSameDay(currentMessage, messageToCompare)
-  ) {
-    return (
-      <View
-        style={[
-          styles[position].container,
-          containerStyle && containerStyle[position],
-        ]}
-      >
-        <GiftedAvatar
-          avatarStyle={[
-            styles[position].image,
-            imageStyle && imageStyle[position],
-          ]}
-        />
-      </View>
-    );
-  }
-
-  const renderAvatarComponent = () => {
-    if (props.renderAvatar) {
-      const { renderAvatar, ...avatarProps } = props;
-      return props.renderAvatar(avatarProps);
-    }
-    if (props.currentMessage) {
-      return (
-        <GiftedAvatar
-          avatarStyle={[
-            styles[props.position].image,
-            props.imageStyle && props.imageStyle[props.position],
-          ]}
-          user={props.currentMessage.user}
-          onPress={() =>
-            props.onPressAvatar &&
-            props.onPressAvatar(props.currentMessage.user)
-          }
-          onLongPress={() =>
-            props.onLongPressAvatar &&
-            props.onLongPressAvatar(props.currentMessage.user)
-          }
-        />
-      );
-    }
-    return null;
-  };
+  const { position, avatar } = props;
+  const colorScheme = useColorScheme();
 
   return (
-    <View
-      style={[
-        styles[position].container,
-        styles[position][computedStyle],
-        containerStyle && containerStyle[position],
-      ]}
-    >
-      {renderAvatarComponent()}
-    </View>
+    <Image
+      source={getAvatarSource(avatar, colorScheme)}
+      defaultSource={getDefaultAvatar(colorScheme)} // Default avatar before remote image loads
+      style={[styles.base, styles[position]]}
+    />
   );
 };
 
-Avatar.defaultProps = {
-  renderAvatarOnTop: false,
-  showAvatarForEveryMessage: false,
-  position: 'left',
-  currentMessage: {
-    user: null,
+const styles = StyleSheet.create({
+  base: {
+    borderRadius: 8,
+    height: 36,
+    width: 36,
+    marginBottom: -2,
   },
-  previousMessage: {},
-  nextMessage: {},
-  containerStyle: {},
-  imageStyle: {},
-  onPressAvatar: () => {},
-  onLongPressAvatar: () => {},
-};
+  left: {
+    marginLeft: 5,
+  },
+  right: {
+    marginLeft: 5,
+  },
+});
 
 export default Avatar;

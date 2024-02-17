@@ -117,6 +117,9 @@ const defaultNavigationOptions = (
     fontWeight: theme.fonts.h3.fontWeight,
   },
   headerShadowVisible: false,
+  contentStyle: {
+    backgroundColor: theme.colors.background,
+  },
 });
 
 export default Navigator;

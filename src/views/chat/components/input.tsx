@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, TextInput, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, TextInput, Platform, Keyboard } from 'react-native';
 import { Button } from '@/ui/atoms';
 import { Theme, useTheme } from '@/ui/theme';
 
@@ -9,30 +9,54 @@ interface InputToolbarProps {
 
 const InputToolbar: React.FC<InputToolbarProps> = ({ onSend }) => {
   const [text, setText] = useState('');
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
 
-  const styles = getStyles(useTheme());
+  useEffect(() => {
+    const keyboardWillShowListener = Keyboard.addListener(
+      'keyboardWillShow',
+      () => {
+        setKeyboardVisible(true);
+      },
+    );
+    const keyboardWillHideListener = Keyboard.addListener(
+      'keyboardWillHide',
+      () => {
+        setKeyboardVisible(false);
+      },
+    );
+    return () => {
+      keyboardWillShowListener.remove();
+      keyboardWillHideListener.remove();
+    };
+  }, []);
+
+  const theme = useTheme();
+  const styles = getStyles(theme);
 
   return (
-    <View style={[styles.container]}>
-      <View style={[styles.primary]}>
+    <View style={[styles.container, keyboardVisible ? styles.keyboard : null]}>
+      <View style={styles.primary}>
         <TextInput
-          accessible
           multiline={true}
+          placeholder={'Type a message...'}
+          placeholderTextColor={theme.colors.text.secondary}
           style={[styles.textInput]}
           autoFocus={false}
           enablesReturnKeyAutomatically
-          underlineColorAndroid="transparent"
           onChangeText={setText}
+          verticalAlign={'top'}
         />
-        <Button
-          bare
-          tag="h4"
-          style={styles.sendContainer}
-          title="Send"
-          onPress={() => {
-            onSend(text);
-          }}
-        />
+        {text.length > 0 ? (
+          <Button
+            bare
+            tag="h4"
+            style={styles.sendContainer}
+            title="Send"
+            onPress={() => {
+              onSend(text);
+            }}
+          />
+        ) : null}
       </View>
     </View>
   );
@@ -42,7 +66,7 @@ const getStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
       // borderTopColor: Color.defaultColor,
-      marginBottom: 30,
+      marginBottom: 25,
       bottom: 0,
       left: 0,
       right: 0,
@@ -52,11 +76,15 @@ const getStyles = (theme: Theme) =>
       borderColor: theme.colors.outline,
       borderTopColor: theme.colors.outline,
       paddingLeft: 15,
+      paddingTop: 0,
       borderWidth: 1,
       borderRadius: 30,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    keyboard: {
+      marginBottom: 15,
     },
     primary: {
       flexDirection: 'row',
@@ -64,35 +92,22 @@ const getStyles = (theme: Theme) =>
     },
     sendContainer: {
       height: 44,
-      // justifyContent: 'flex-end',
       justifyContent: 'center',
-      alignItems: 'center',
-      marginRight: 10,
+      marginRight: 18,
+      marginBottom: 1,
     },
     sendButton: {
-      // color: Color.defaultBlue,
-      // backgroundColor: Color.backgroundTransparent,
-      // marginBottom: 12,
-      marginLeft: 10,
-      marginRight: 10,
       color: theme.colors.text.primary,
-      // fontWeight: '600',
-      // fontSize: 17,
-      marginBottom: 12,
-      paddingRight: 20,
-      paddingBottom: 7,
-      paddingTop: 8,
     },
     textInput: {
       lineHeight: 21,
+      fontSize: theme.fonts.body.fontSize,
       paddingRight: 10,
-      paddingBottom: 2,
+      paddingBottom: 10,
       color: theme.colors.text.primary,
       //my styles above
       flex: 1,
       marginLeft: 10,
-      fontSize: 16,
-      // lineHeight: 16,
       ...Platform.select({
         web: {
           paddingTop: 6,

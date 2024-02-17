@@ -10,6 +10,8 @@ export function hashPhoneNumber(phoneNumber: string): string {
 
 export const defaultAvatar = 'local://user.png';
 
+export const timestamp = () => new Date().getTime();
+
 export const isSameDay = (
   message1: Message | undefined,
   message2: Message | undefined,
