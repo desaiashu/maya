@@ -1,260 +1,106 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import {
-  Clipboard,
   Platform,
-  StyleProp,
   StyleSheet,
   Text,
-  TextStyle,
   TouchableOpacity,
   View,
-  ViewStyle,
 } from 'react-native';
-import {
-  MessageImage,
-  MessageText,
-  Time,
-  utils,
-  IMessage,
-} from 'react-native-gifted-chat';
-import { GiftedChatContext } from 'react-native-gifted-chat/lib/GiftedChatContext';
+import Clipboard from '@react-native-clipboard/clipboard';
+import { useActionSheet } from '@expo/react-native-action-sheet';
+import { Message } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
-
-const { isSameUser, isSameDay } = utils;
+import { Words } from '@/ui/atoms';
+import { Time } from '@/views/chat/components/timestamp';
 
 interface BubbleProps {
-  touchableProps?: object;
   onLongPress?: (context: any, message: any) => void;
-  renderMessageImage?: (messageImageProps: {
-    textStyle?: StyleProp<TextStyle>;
-  }) => JSX.Element;
-  renderMessageText?: (messageTextProps: {
-    textStyle?: StyleProp<TextStyle>;
-  }) => JSX.Element;
-  renderCustomView?: (props: BubbleProps) => JSX.Element;
-  renderTime?: (timeProps: { textStyle?: StyleProp<TextStyle> }) => JSX.Element;
-  renderUsername?: (usernameProps: any) => JSX.Element;
-  renderTicks?: (currentMessage: IMessage) => JSX.Element;
-  currentMessage: IMessage;
-  previousMessage?: IMessage;
-  nextMessage?: IMessage;
-  user: { _id: string | number };
-  containerStyle?: StyleProp<ViewStyle>;
-  wrapperStyle?: StyleProp<ViewStyle>;
-  messageTextStyle?: StyleProp<TextStyle>;
-  usernameStyle?: StyleProp<TextStyle>;
-  tickStyle?: StyleProp<TextStyle>;
-  containerToNextStyle?: StyleProp<ViewStyle>;
-  containerToPreviousStyle?: StyleProp<ViewStyle>;
+  message: Message;
   position: 'left' | 'right';
+  username: string | null;
 }
 
 export const Bubble: React.FC<BubbleProps> = props => {
-  const context = useContext(GiftedChatContext);
-  const {
-    currentMessage,
-    previousMessage,
-    containerStyle,
-    wrapperStyle,
-    touchableProps,
-    position,
-  } = props;
+  const { message, username, position } = props;
 
   const theme = useTheme();
   const styles = getStyles(theme);
 
+  const { showActionSheetWithOptions } = useActionSheet();
+
   const handleLongPress = () => {
-    const { onLongPress } = props;
-    if (onLongPress) {
-      onLongPress(context, currentMessage);
-    } else if (currentMessage.text) {
-      const options = ['Copy Text', 'Cancel'];
-      const cancelButtonIndex = options.length - 1;
-      context.actionSheet().showActionSheetWithOptions(
-        {
-          options,
-          cancelButtonIndex,
-        },
-        (buttonIndex: number) => {
-          if (buttonIndex === 0) {
-            Clipboard.setString(currentMessage.text);
-          }
-        },
-      );
-    }
+    const options = ['Copy Text', 'Cancel'];
+    const cancelButtonIndex = options.length - 1;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+      },
+      (i?: number) => {
+        if (i === 0) {
+          Clipboard.setString(message.content);
+        }
+      },
+    );
   };
 
   const renderMessageText = () => {
-    if (props.currentMessage.text) {
-      const { messageTextStyle, ...messageTextProps } = props;
-      return (
-        <MessageText
-          {...messageTextProps}
-          textStyle={{
-            left: [
-              theme.fonts.small,
-              styles.base.primaryText,
-              styles.base.messageText,
-              messageTextStyle,
-            ],
-            right: [
-              theme.fonts.small,
-              styles.base.primaryText,
-              styles.base.messageText,
-              messageTextStyle,
-            ],
-          }}
-          containerStyle={{}}
-        />
-      );
-    }
-    return null;
-  };
-
-  const renderMessageImage = () => {
-    if (currentMessage.image) {
-      const { ...messageImageProps } = props;
-      return (
-        <MessageImage {...messageImageProps} imageStyle={[styles.base.image]} />
-      );
-    }
-    return null;
-  };
-
-  const renderTicks = () => {
-    if (currentMessage.user._id !== props.user._id) {
-      return null;
-    }
-    if (currentMessage.sent || currentMessage.received) {
-      return (
-        <View style={[styles[position].headerItem, styles.base.tickView]}>
-          {currentMessage.sent && (
-            <Text
-              style={[
-                theme.fonts.small,
-                styles.base.primaryText,
-                styles.base.tick,
-                props.tickStyle,
-              ]}
-            >
-              ✓
-            </Text>
-          )}
-          {currentMessage.received && (
-            <Text
-              style={[
-                theme.fonts.small,
-                styles.base.primaryText,
-                styles.base.tick,
-                props.tickStyle,
-              ]}
-            >
-              ✓
-            </Text>
-          )}
-        </View>
-      );
-    }
-    return null;
+    return (
+      <Words
+        tag="body"
+        style={[
+          styles.base.primaryText,
+          theme.fonts.small,
+          styles.base.primaryText,
+          styles.base.messageText,
+        ]}
+      >
+        {message.content}
+      </Words>
+    );
   };
 
   const renderUsername = () => {
-    const username = props.currentMessage.user.name;
-    if (username) {
-      return (
-        <Text
-          style={[
-            theme.fonts.h4,
-            styles.base.primaryText,
-            styles[position].headerItem,
-            styles[position].textAlign,
-            props.usernameStyle,
-          ]}
-        >
-          {username}
-        </Text>
-      );
-    }
-    return null;
+    return (
+      <Text
+        style={[
+          theme.fonts.h4,
+          styles.base.primaryText,
+          styles[position].headerItem,
+          styles[position].textAlign,
+        ]}
+      >
+        {username}
+      </Text>
+    );
   };
 
   const renderTime = () => {
-    if (props.currentMessage.createdAt) {
-      const { ...timeProps } = props;
-      return (
-        <Time
-          {...timeProps}
-          containerStyle={{
-            left: [styles.base.timeContainer],
-            right: [styles.base.timeContainer],
-          }}
-          timeTextStyle={{
-            left: [
-              theme.fonts.tiny,
-              styles.base.altText,
-              styles[position].headerItem,
-              styles[position].time,
-              styles[position].textAlign,
-            ],
-            right: [
-              theme.fonts.tiny,
-              styles.base.altText,
-              styles[position].headerItem,
-              styles[position].time,
-              styles[position].textAlign,
-            ],
-          }}
-        />
-      );
-    }
-    return null;
+    return <Time timestamp={message.timestamp} position={position} />;
   };
 
-  const isSameThread =
-    isSameUser(currentMessage, previousMessage) &&
-    isSameDay(currentMessage, previousMessage);
-
-  const messageHeader = isSameThread ? null : (
+  const messageHeader = username ? (
     <View style={[styles.base.headerView, styles[position].headerView]}>
       {props.position === 'left' ? renderUsername() : null}
       {renderTime()}
       {props.position === 'right' ? renderUsername() : null}
-
-      {renderTicks()}
     </View>
-  );
+  ) : null;
 
   return (
     <View>
-      <View
-        style={[
-          styles.base.container,
-          styles[position].container,
-          containerStyle,
-        ]}
-      >
-        <View
-          style={[styles.base.header, styles[position].header, wrapperStyle]}
-        >
+      <View style={[styles.base.container, styles[position].container]}>
+        <View style={[styles.base.header, styles[position].header]}>
           {messageHeader}
         </View>
       </View>
-      <View
-        style={[
-          styles.base.container,
-          styles[position].container,
-          containerStyle,
-        ]}
-      >
+      <View style={[styles.base.container, styles[position].container]}>
         <TouchableOpacity
           onLongPress={handleLongPress}
           accessibilityRole="text"
-          {...touchableProps}
         >
-          <View style={[styles[position].wrapper, wrapperStyle]}>
-            {renderMessageImage()}
-            {renderMessageText()}
-          </View>
+          <View style={[styles[position].wrapper]}>{renderMessageText()}</View>
         </TouchableOpacity>
       </View>
     </View>
@@ -274,9 +120,6 @@ const getStyles = (theme: Theme) => ({
     primaryText: {
       color: theme.colors.text.primary,
     },
-    altText: {
-      color: theme.colors.text.secondary,
-    },
     messageText: {
       marginLeft: 0,
       marginRight: 0,
@@ -290,13 +133,6 @@ const getStyles = (theme: Theme) => ({
       marginLeft: 0,
       marginRight: 0,
       marginBottom: 0,
-    },
-    tick: {
-      backgroundColor: 'transparent',
-      color: 'white',
-    },
-    tickView: {
-      flexDirection: 'row',
     },
     headerView: {
       marginTop: Platform.OS === 'android' ? -2 : 0,
@@ -320,15 +156,11 @@ const getStyles = (theme: Theme) => ({
     textAlign: {
       textAlign: 'left',
     },
-    time: {
-      paddingBottom: 0.5,
-      marginLeft: -2,
+    headerView: {
+      alignItems: 'baseline',
     },
     headerItem: {
       marginRight: 10,
-    },
-    headerView: {
-      alignItems: 'baseline',
     },
   }),
   right: StyleSheet.create({
@@ -346,15 +178,11 @@ const getStyles = (theme: Theme) => ({
       // marginLeft: 60,
       minHeight: 5,
     },
-    textAlign: {
-      textAlign: 'right',
-    },
-    time: {
-      paddingBottom: 2,
-      marginRight: -2,
-    },
     headerItem: {
       marginLeft: 10,
+    },
+    textAlign: {
+      textAlign: 'right',
     },
     headerView: {
       alignItems: 'flex-end',

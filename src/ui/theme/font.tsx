@@ -5,6 +5,7 @@ export type FontTag =
   | 'h2'
   | 'h3'
   | 'h4'
+  | 'h5'
   | 'body'
   | 'small'
   | 'tiny'
@@ -28,6 +29,10 @@ export const fonts: Font = {
   h4: {
     fontFamily: 'LibreFranklinRoman-ExtraBold',
     fontSize: 14,
+  },
+  h5: {
+    fontFamily: 'LibreFranklinRoman-ExtraBold',
+    fontSize: 12,
   },
   body: {
     fontFamily: 'LibreFranklinRoman-Medium',

@@ -1,100 +1,62 @@
-import React, { ReactNode } from 'react';
-import {
-  View,
-  StyleSheet,
-  ViewStyle,
-  StyleProp,
-  TextStyle,
-} from 'react-native';
-import {
-  Avatar,
-  Day,
-  utils,
-  IMessage,
-  User,
-  LeftRightStyle,
-  AvatarProps,
-  BubbleProps,
-  DayProps,
-} from 'react-native-gifted-chat';
-import { Bubble } from '@/views/chat';
-import { Theme, useTheme } from '@/ui/theme';
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Message } from '@/data/types';
+import { Bubble, Avatar, Day } from '@/views/chat/components';
+import { isSameUser, isSameDay } from '@/data';
 
 interface MessageProps {
-  renderAvatar?: (props: AvatarProps<IMessage>) => ReactNode;
-  renderBubble?: (props: BubbleProps<IMessage>) => ReactNode;
-  renderDay?: (props: DayProps<IMessage>) => ReactNode;
-  currentMessage: IMessage;
-  nextMessage?: IMessage;
-  previousMessage?: IMessage;
-  user: User;
-  containerStyle?: LeftRightStyle<ViewStyle>;
-  messageTextStyle?: StyleProp<TextStyle>;
+  current: Message;
+  next?: Message;
+  prev?: Message;
+  avatar: string;
+  username: string;
   position: 'left' | 'right';
-  inverted?: boolean;
 }
 
 const MessageUI: React.FC<MessageProps> = props => {
-  const { currentMessage, nextMessage, position, containerStyle } = props;
+  const { current, next, prev, position, avatar, username } = props;
 
-  const styles = getStyles(useTheme());
+  const styles = getStyles();
 
-  const { isSameUser } = utils;
-  const sameUser = isSameUser(currentMessage, nextMessage!);
+  const hideAvatar = isSameUser(current, next) && isSameDay(current, next);
+  const hideDay = isSameDay(current, prev);
+  const hideHeader = isSameUser(current, prev) && isSameDay(current, prev);
+  const swap = !isSameUser(current, next);
 
   const renderAvatar = () => {
     return (
-      <Avatar
-        {...props}
-        imageStyle={{
-          left: [styles.base.avatar, styles[props.position].avatar],
-          right: [styles.base.avatar, styles[props.position].avatar],
-        }}
-      />
+      <View style={styles.base.avatarContainer}>
+        {hideAvatar ? null : <Avatar position={position} avatar={avatar} />}
+      </View>
     );
   };
 
   return (
     <View style={styles.base.messageContainer}>
-      {props.currentMessage.createdAt && (
-        <Day {...props} containerStyle={styles.base.day} />
-      )}
-      <View
-        style={[
-          styles[position].container,
-          !sameUser && styles.base.swap,
-          !props.inverted && styles.base.propsInverted,
-          containerStyle && containerStyle[position],
-        ]}
-      >
-        {props.position === 'left' ? renderAvatar() : null}
-        <Bubble {...props} containerStyle={{}} />
-        {props.position === 'right' ? renderAvatar() : null}
+      {!hideDay && <Day timestamp={current.timestamp} />}
+      <View style={[styles[position].container, swap && styles.base.swap]}>
+        {position === 'left' ? renderAvatar() : null}
+        <Bubble
+          message={current}
+          username={hideHeader ? null : username}
+          position={position}
+        />
+        {position === 'right' ? renderAvatar() : null}
       </View>
     </View>
   );
 };
 
-const getStyles = (theme: Theme) => ({
+const getStyles = () => ({
   base: StyleSheet.create({
     messageContainer: {
       marginTop: 8,
     },
-    day: {
-      marginTop: 0,
-      marginBottom: 20,
-      color: theme.colors.text.secondary,
-    },
-    propsInverted: {
-      marginBottom: 2,
-    },
     swap: {
       marginBottom: 40,
     },
-    avatar: {
-      height: 40,
-      width: 40,
-      borderRadius: 3,
+    avatarContainer: {
+      width: 48,
     },
   }),
   left: StyleSheet.create({
@@ -105,9 +67,6 @@ const getStyles = (theme: Theme) => ({
       marginLeft: 8,
       marginRight: 0,
     },
-    avatar: {
-      marginLeft: 8,
-    },
   }),
   right: StyleSheet.create({
     container: {
@@ -115,9 +74,6 @@ const getStyles = (theme: Theme) => ({
       alignItems: 'flex-end',
       justifyContent: 'flex-end',
       marginLeft: 0,
-      marginRight: 8,
-    },
-    avatar: {
       marginRight: 8,
     },
   }),
