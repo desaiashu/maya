@@ -31,7 +31,6 @@ class Socket {
 
     socket.onmessage = event => {
       const update: MayaUpdate = JSON.parse(event.data);
-      console.log('WebSocket message:', update);
       const handler = this.updateHandlers[update.update];
       if (handler) {
         handler(update.data);

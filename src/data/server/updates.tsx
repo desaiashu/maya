@@ -1,4 +1,4 @@
-import { getState } from '@/data';
+import { getState, getStream } from '@/data';
 import { User, RefreshData, ChatInfo, Message, Chunk } from '@/data/types';
 import { LayoutAnimation } from 'react-native';
 
@@ -23,17 +23,24 @@ class ClientUpdate {
   }
 
   handleChunkUpdate(data: Chunk) {
-    const state = getState.getState();
-    LayoutAnimation.configureNext(
-      LayoutAnimation.create(10, 'easeInEaseOut', 'opacity'),
-    );
-    state.updateChunk(data);
+    const streamState = getStream.getState();
+    streamState.handleChunk(data);
+
+    // LayoutAnimation.configureNext(
+    //   LayoutAnimation.create(10, 'easeInEaseOut', 'opacity'),
+    // );
+    // const state = getState.getState();
+    // state.updateChunk(data);
+    // console.log('Chunk!');
   }
 
   handleMessageUpdate(data: Message) {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     const state = getState.getState();
     state.updateMessages([data]);
+    // Pass message to stream state. If it's relevant, it will be handled
+    const streamState = getStream.getState();
+    streamState.handleMessage(data);
   }
 
   handleSuccessUpdate(data: string) {

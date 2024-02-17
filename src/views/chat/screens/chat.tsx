@@ -9,7 +9,7 @@ import {
   LayoutAnimation,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { MessageUI, InputToolbar } from '@/views/chat/components';
+import { MessageUI, InputToolbar, Stream } from '@/views/chat/components';
 import { State, defaultAvatar } from '@/data';
 import { Message, ChatInfo } from '@/data/types';
 import { server, getState, timestamp } from '@/data';
@@ -75,8 +75,9 @@ const Chat: React.FC = () => {
     server.sendMessage(newMessage);
   };
 
-  const renderMessage = (current: Message, next: Message, prev: Message) => {
-    if (!current) {
+  const renderMessage = (current: Message, next?: Message, prev?: Message) => {
+    if (!current || current.chatid !== chatInfo.chatid) {
+      console.log('null');
       return null;
     }
     return (
@@ -87,6 +88,16 @@ const Chat: React.FC = () => {
         avatar={avatars[current.sender] || defaultAvatar}
         username={usernames[current.sender] || ''}
         position={user.userid === current.sender ? 'right' : 'left'}
+      />
+    );
+  };
+
+  const renderStream = () => {
+    return (
+      <Stream
+        prev={messages[messages.length - 1]}
+        avatars={avatars}
+        usernames={usernames}
       />
     );
   };
@@ -111,6 +122,8 @@ const Chat: React.FC = () => {
           style={styles.messagesContainer}
           ref={flatListRef}
           inverted
+          ListHeaderComponent={renderStream}
+          //Header bc it's inverted lol
         />
         <InputToolbar onSend={onSend} />
       </KeyboardAvoidingView>
