@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, Image, useColorScheme } from 'react-native';
+import { StyleSheet, useColorScheme } from 'react-native';
 import { getAvatarSource, getDefaultAvatar } from '@/data';
+import FastImage from 'react-native-fast-image';
 
 interface AvatarProps {
   position: 'left' | 'right';
@@ -12,7 +13,7 @@ const Avatar: React.FC<AvatarProps> = props => {
   const colorScheme = useColorScheme();
 
   return (
-    <Image
+    <FastImage
       source={getAvatarSource(avatar, colorScheme)}
       defaultSource={getDefaultAvatar(colorScheme)} // Default avatar before remote image loads
       style={[styles.base, styles[position]]}

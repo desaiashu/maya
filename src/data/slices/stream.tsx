@@ -21,60 +21,42 @@ export const dummyMessage: Message = {
 export const getStream = create<StreamState>((set, get) => ({
   chunks: dummyMessage,
   isStreaming: false,
+
   handleChunk: (incoming: Chunk) => {
-    const stream = get();
-    if (stream.isStreaming) {
-      if (
-        stream.chunks.chatid === incoming.chatid &&
-        stream.chunks.timestamp === incoming.timestamp
-      ) {
-        set(state => ({
-          ...state,
-          chunks: {
-            ...state.chunks,
-            content: state.chunks.content + incoming.content,
-          },
-        }));
-      } else {
-        //If stream is stale, reset it
-        //Handles if user exits app or something
-        if (timestamp() - incoming.timestamp > FIVE_MINS) {
-          set(state => ({
-            ...state,
-            chunks: incoming,
-            isStreaming: true,
-          }));
-        }
-      }
-    } else {
+    const s = get();
+    if (!s.isStreaming || isCurrentStream(s, incoming) || isStale(s)) {
       set(state => ({
         ...state,
-        chunks: incoming,
+        chunks: {
+          ...incoming,
+          content: s.chunks.content + incoming.content,
+        },
         isStreaming: true,
       }));
     }
   },
+
+  //Currently expects to receive all messages,
+  //even unrelated to active stream
   handleMessage: (incoming: Message) => {
-    const stream = get();
-    //Currently expects to receive all messages,
-    //even unrelated to active stream
-    if (
-      stream.isStreaming &&
-      stream.chunks.chatid === incoming.chatid &&
-      stream.chunks.timestamp === incoming.timestamp
-    ) {
-      set(state => ({
-        ...state,
-        chunks: dummyMessage,
-        isStreaming: false,
-      }));
+    const s = get();
+    if (isCurrentStream(s, incoming)) {
+      s.resetStream();
     }
   },
-  resetStream: () => {
+
+  resetStream: () =>
     set(state => ({
       ...state,
       chunks: dummyMessage,
       isStreaming: false,
-    }));
-  },
+    })),
 }));
+
+const isCurrentStream = (s: StreamState, message: Message) =>
+  s.isStreaming &&
+  s.chunks.chatid === message.chatid &&
+  s.chunks.timestamp === message.timestamp;
+
+const isStale = (s: StreamState) =>
+  timestamp() - s.chunks.timestamp > FIVE_MINS;

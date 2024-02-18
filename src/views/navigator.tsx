@@ -1,7 +1,10 @@
 // ChatUI.tsx
 
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  createNavigationContainerRef,
+} from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   NativeStackNavigationOptions,
@@ -38,6 +41,7 @@ export type RootStackParamList = {
   Settings: { presentation: 'modal' } | undefined;
 };
 
+export const navigationRef = createNavigationContainerRef();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const Navigator: React.FC = () => {
@@ -61,7 +65,7 @@ const Navigator: React.FC = () => {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         initialRouteName={initialRoute}
         screenOptions={defaultNavigationOptions(theme)}

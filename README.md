@@ -88,13 +88,13 @@ Done
 
 1. the-oracle - split terminal (backend)
 
-- server `heroku local`
+- server `heroku local -f Procfile.local`
 - tests/types `pytest`, `pytest -c populate.ini`, `./scripts/types.sh`
 
 2. maya - split terminal (frontend)
 
 - react `npx react-native start --experimental-debugger`
-- ios `npx run-ios`
+- ios `npx run-ios`, `npx react-native run-ios --device toshphone`
 
 3. the-oracle/maya split terminal (version control)
 

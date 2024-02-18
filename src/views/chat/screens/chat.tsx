@@ -70,8 +70,8 @@ const Chat: React.FC = () => {
       : state.messages.filter(message => message.chatid === chatInfo.chatid),
   }));
 
-  const avatars: { [key: string]: string } = {};
-  const usernames: { [key: string]: string } = {};
+  const avatars: Record<string, string> = {};
+  const usernames: Record<string, string> = {};
   for (let profile of chatInfo.profiles || []) {
     avatars[profile.userid] = profile.avatar;
     usernames[profile.userid] = profile.username;
@@ -126,7 +126,7 @@ const Chat: React.FC = () => {
           ref={flatListRef}
           inverted
         />
-        <InputToolbar onSend={onSend} />
+        <InputToolbar onSend={onSend} chatid={chatInfo.chatid} />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

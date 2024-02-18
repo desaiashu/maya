@@ -1,9 +1,12 @@
 import { MMKV } from 'react-native-mmkv';
 import { StateStorage } from 'zustand/middleware';
+import { RESET_STATE } from '@/data/utils/config';
 
 export const storage = new MMKV({ id: 'state' });
 
-// storage.clearAll();
+if (RESET_STATE) {
+  storage.clearAll();
+}
 
 export const zustandStorage: StateStorage = {
   setItem: (name, value) => {

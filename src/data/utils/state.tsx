@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { zustandStorage } from '@/data/data/storage';
+import { zustandStorage } from '@/data/utils/storage';
 import {
   UserState,
   useUserState,

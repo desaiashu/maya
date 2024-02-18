@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/views/navigator';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
@@ -31,11 +32,20 @@ export const newChatOptions = (
 const NewChat: React.FC = () => {
   const styles = getStyles(useTheme());
 
+  const [selectedValue, setSelectedValue] = useState('option1');
+
   return (
     <View style={styles.container}>
-      <Words tag="h1" style={styles.text}>
-        Create Chat
-      </Words>
+      <Picker
+        selectedValue={selectedValue}
+        onValueChange={(itemValue: string, itemIndex: number) =>
+          setSelectedValue(itemValue)
+        }
+      >
+        <Picker.Item label="Option 1" value="option1" />
+        <Picker.Item label="Option 2" value="option2" />
+        <Picker.Item label="Option 3" value="option3" />
+      </Picker>
     </View>
   );
 };

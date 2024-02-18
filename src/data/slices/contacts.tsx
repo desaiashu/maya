@@ -30,8 +30,6 @@ export const useContactsState: StateCreator<ContactsState> = (set, get) => ({
       ),
     })),
   updateBots: (bots: Profile[]) => set({ bots }),
-  userFromId: (userId: string) => {
-    const state = get();
-    return state.humans.find((user: Profile) => user.userid === userId);
-  },
+  userFromId: (userId: string) =>
+    get().humans.find((user: Profile) => user.userid === userId),
 });

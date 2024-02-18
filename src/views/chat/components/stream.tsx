@@ -7,8 +7,8 @@ import { defaultAvatar } from '@/data';
 
 interface Props {
   prev?: Message;
-  avatars: { [key: string]: string };
-  usernames: { [key: string]: string };
+  avatars: Record<string, string>;
+  usernames: Record<string, string>;
 }
 
 export const Stream: React.FC<Props> = props => {

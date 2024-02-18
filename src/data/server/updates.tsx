@@ -42,6 +42,10 @@ class ClientUpdate {
 
   handleErrorUpdate(data: string) {
     console.error('Error:', data);
+    if (data === 'verification failed') {
+      const state = getState.getState();
+      state.clearUser();
+    }
   }
 }
 

@@ -18,8 +18,10 @@ export interface ChatlistState {
 export const useChatlistState: StateCreator<ChatlistState> = (set, get) => ({
   chats: [],
   lastRefresh: 0,
+
   setChats: (chats: ChatInfo[]) => set({ chats }),
-  updateUserChats: (updatedProfile: Profile) => {
+
+  updateUserChats: (updatedProfile: Profile) =>
     set(state => ({
       chats: state.chats.map(chat => ({
         ...chat,
@@ -27,59 +29,49 @@ export const useChatlistState: StateCreator<ChatlistState> = (set, get) => ({
           profile.userid === updatedProfile.userid ? updatedProfile : profile,
         ),
       })),
-    }));
-  },
-  getTopicByChatId: (chatid: string) => {
-    const chatlistState = get();
-    const chatInfo = chatlistState.chats.find(chat => chat.chatid === chatid);
-    if (chatInfo?.topic) {
-      return chatInfo.topic;
-    } else {
-      return 'new chat';
-    }
-  },
+    })),
+
+  getTopics: () => getItemsByChatId(get, get().getTopicByChatId),
+
+  getParticipants: (userid: string) =>
+    getItemsByChatId(get, chatid =>
+      get().getParticipantsByChatId(chatid, userid),
+    ),
+
+  getAvatars: (userid: string) =>
+    getItemsByChatId(get, chatid => get().getAvatarByChatId(chatid, userid)),
+
+  getTopicByChatId: (chatid: string) =>
+    get().chats.find(chat => chat.chatid === chatid)?.topic ?? 'new chat',
+
   getParticipantsByChatId: (chatid: string, userid: string) => {
-    const chatlistState = get();
-    const chatInfo = chatlistState.chats.find(chat => chat.chatid === chatid);
-    const nonUserParticipants = chatInfo?.participants.filter(
-      participant => participant !== userid,
+    const chatInfo = get().chats.find(chat => chat.chatid === chatid);
+    return (
+      chatInfo?.participants
+        .filter(participant => participant !== userid)
+        .join(', ') ?? 'Chat'
     );
-    return nonUserParticipants?.join(', ') || 'Chat';
   },
+
   getAvatarByChatId: (chatid: string, userid: string) => {
-    const state = get();
-    const chatInfo = state.chats.find(chat => chat.chatid === chatid);
-    const nonCurrentUserProfile = chatInfo?.profiles?.find(
-      profile => profile.userid !== userid,
+    const chatInfo = get().chats.find(chat => chat.chatid === chatid);
+    return (
+      chatInfo?.profiles?.find(profile => profile.userid !== userid)?.avatar ??
+      defaultAvatar
     );
-    let avatarString = nonCurrentUserProfile?.avatar;
-    return avatarString || defaultAvatar;
-  },
-  getTopics: () => {
-    const state = get();
-    const topics = state.chats.reduce((acc, chatInfo) => {
-      acc[chatInfo.chatid] = state.getTopicByChatId(chatInfo.chatid);
-      return acc;
-    }, {} as Record<string, string>);
-    return topics;
-  },
-  getParticipants: (userid: string) => {
-    const state = get();
-    const participants = state.chats.reduce((acc, chatInfo) => {
-      acc[chatInfo.chatid] = state.getParticipantsByChatId(
-        chatInfo.chatid,
-        userid,
-      );
-      return acc;
-    }, {} as Record<string, string>);
-    return participants;
-  },
-  getAvatars: (userid: string) => {
-    const state = get();
-    const avatars = state.chats.reduce((acc, chatInfo) => {
-      acc[chatInfo.chatid] = state.getAvatarByChatId(chatInfo.chatid, userid);
-      return acc;
-    }, {} as Record<string, string>);
-    return avatars;
   },
 });
+
+//Helper function to get items by chatid
+function getItemsByChatId(
+  get: () => ChatlistState,
+  getItem: (chatid: string) => string,
+) {
+  return get().chats.reduce(
+    (acc: Record<string, string>, chatInfo: ChatInfo) => ({
+      ...acc,
+      [chatInfo.chatid]: getItem(chatInfo.chatid),
+    }),
+    {} as Record<string, string>,
+  );
+}

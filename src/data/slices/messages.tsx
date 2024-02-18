@@ -1,70 +1,36 @@
 import { StateCreator } from 'zustand';
-import { Message, Chunk } from '@/data/types';
-import { messageFromChunk } from '@/data';
+import { Message } from '@/data/types';
 
 export interface MessagesState {
   messages: Message[];
+  drafts: Record<string, string>;
   addMessage: (message: Message) => void;
   updateMessages: (messages: Message[]) => void;
   selectMessagesByChatId: (chatId: string) => Message[];
-  updateChunk: (chunk: Chunk) => void;
+  updateDraft: (chatid: string, draft: string) => void;
 }
 
 export const useMessagesState: StateCreator<MessagesState> = (set, get) => ({
   messages: [],
+  drafts: {},
   //Add locally sent message to state
   addMessage: (message: Message) =>
-    set(state => ({ messages: [...state.messages, message] })),
+    set(state => ({
+      messages: [...state.messages, message],
+    })),
   //Add messages from server to state
   updateMessages: (messages: Message[]) =>
     set(state => ({
-      messages: state.messages
-        .map(existingMessage => {
-          const updatedMessage = messages.find(
-            message =>
-              existingMessage.chatid === message.chatid &&
-              existingMessage.timestamp === message.timestamp,
-          );
-          return updatedMessage || existingMessage;
-        })
-        .concat(
-          messages.filter(
-            message =>
-              !state.messages.some(
-                existingMessage =>
-                  existingMessage.chatid === message.chatid &&
-                  existingMessage.timestamp === message.timestamp,
-              ),
-          ),
-        ),
+      messages: messages.reduce((acc: Message[], message: Message) => {
+        const index = acc.findIndex(
+          m => m.chatid === message.chatid && m.timestamp === message.timestamp,
+        );
+        index !== -1 ? (acc[index] = message) : acc.push(message);
+        return acc;
+      }, state.messages),
     })),
-  updateChunk: (chunk: Chunk) =>
-    set(state => ({
-      messages: state.messages
-        .map(message => {
-          if (
-            message.chatid === chunk.chatid &&
-            message.timestamp === chunk.timestamp
-          ) {
-            return {
-              ...message,
-              content: message.content + chunk.content,
-            };
-          }
-          return message;
-        })
-        .concat(
-          state.messages.some(
-            message =>
-              message.chatid === chunk.chatid &&
-              message.timestamp === chunk.timestamp,
-          )
-            ? []
-            : [messageFromChunk(chunk)],
-        ),
-    })),
-  selectMessagesByChatId: (chatId: string) => {
-    const state = get();
-    return state.messages.filter(message => message.chatid === chatId);
-  },
+  selectMessagesByChatId: (chatId: string) =>
+    get().messages.filter(message => message.chatid === chatId),
+  updateDraft: (chatid: string, draft: string) =>
+    set(state => ({ drafts: { ...state.drafts, [chatid]: draft } })),
 });

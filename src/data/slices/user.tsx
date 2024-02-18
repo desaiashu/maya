@@ -1,5 +1,7 @@
 import { StateCreator } from 'zustand';
 import { User, Profile } from '@/data/types';
+import { CommonActions } from '@react-navigation/native';
+import { navigationRef } from '@/views/navigator';
 
 export interface UserState {
   currentUser: User;
@@ -26,11 +28,13 @@ export const useUserState: StateCreator<UserState> = set => ({
   currentUser: emptyUser,
   isAuthenticated: false,
   token: '',
+
   setPhone: (userid: string) =>
     set(state => ({ currentUser: { ...state.currentUser, userid } })),
   updateToken: (token: string) => set({ token }),
   authenticate: () => set({ isAuthenticated: true }),
   setUser: (user: User) => set({ currentUser: user }),
+
   setUserProfile: (profile: Profile) =>
     set(state => ({
       currentUser: {
@@ -40,7 +44,17 @@ export const useUserState: StateCreator<UserState> = set => ({
         avatar: profile.avatar,
       },
     })),
-  clearUser: () => set({ currentUser: emptyUser, isAuthenticated: false }),
+
+  clearUser: () => {
+    set({ currentUser: emptyUser, isAuthenticated: false });
+    navigationRef.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'Auth' }],
+      }),
+    );
+  },
+
   updateContacts: (contacts: string[]) =>
     set(state => ({ currentUser: { ...state.currentUser, contacts } })),
 });

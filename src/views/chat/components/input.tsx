@@ -2,13 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TextInput, Platform, Keyboard } from 'react-native';
 import { Button } from '@/ui/atoms';
 import { Theme, useTheme } from '@/ui/theme';
+import { getState, State } from '@/data';
 
 interface InputToolbarProps {
   onSend: (text: string) => void;
+  chatid: string;
 }
 
-const InputToolbar: React.FC<InputToolbarProps> = ({ onSend }) => {
-  const [text, setText] = useState('');
+const InputToolbar: React.FC<InputToolbarProps> = ({ onSend, chatid }) => {
+  const draft = getState((state: State) => state.drafts[chatid] || '');
+  const updateDraft = getState((state: State) => state.updateDraft);
+  const [text, setText] = useState(draft);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
@@ -32,6 +36,10 @@ const InputToolbar: React.FC<InputToolbarProps> = ({ onSend }) => {
 
   const theme = useTheme();
   const styles = getStyles(theme);
+
+  useEffect(() => {
+    updateDraft(chatid, text);
+  }, [text, chatid, updateDraft]);
 
   const onSendPress = () => {
     onSend(text);
@@ -90,7 +98,8 @@ const getStyles = (theme: Theme) =>
       justifyContent: 'center',
     },
     keyboard: {
-      marginBottom: 7,
+      marginBottom: 15,
+      // marginTop: 10,
     },
     primary: {
       flexDirection: 'row',

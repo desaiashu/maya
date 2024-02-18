@@ -1,7 +1,7 @@
-export * from './data/funx';
-export * from './data/const';
-export * from './data/images';
-export * from './data/state';
+export * from './utils/funx';
+export * from './utils/config';
+export * from './utils/images';
+export * from './utils/state';
 export * from './slices/stream';
-export { storage } from './data/storage';
+export { storage } from './utils/storage';
 export { server } from './server';

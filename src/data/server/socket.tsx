@@ -2,12 +2,11 @@ import { getState } from '@/data';
 import { MayaRequest, MayaUpdate } from '@/data/types';
 import { hashPhoneNumber } from '@/data';
 import { client } from '@/data/server/updates';
-
-const WS_URL = 'ws://localhost:8001/maya/';
+import { WS_URL } from '@/data';
 
 class Socket {
   private socket: WebSocket;
-  private updateHandlers: { [key: string]: (data: any) => void };
+  private updateHandlers: Record<string, (data: any) => void>;
 
   constructor() {
     this.socket = this.initializeWebSocket();
@@ -19,7 +18,6 @@ class Socket {
       message: client.handleMessageUpdate,
       chatinfo: client.handleChatInfoUpdate,
       user: client.handleUserUpdate,
-      // Add more mappings for other update types
     };
   }
 

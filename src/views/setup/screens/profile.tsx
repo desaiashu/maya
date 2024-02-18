@@ -1,11 +1,12 @@
 import React from 'react';
-import { Image, View, StyleSheet, useColorScheme } from 'react-native';
+import { View, StyleSheet, useColorScheme } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
 import { IconButton, Words } from '@/ui/atoms';
 import { State, getState, getAvatarSource, getDefaultAvatar } from '@/data';
+import FastImage from 'react-native-fast-image';
 
 export const profileOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'Profile'>,
@@ -51,7 +52,7 @@ const Profile: React.FC = () => {
   return (
     <View style={styles.container}>
       <View style={styles.profileInfo}>
-        <Image
+        <FastImage
           source={getAvatarSource(user.avatar, colorScheme)}
           defaultSource={defaultAvatar} // Default avatar before remote image loads
           style={styles.avatar}
