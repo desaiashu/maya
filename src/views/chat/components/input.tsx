@@ -47,7 +47,7 @@ const InputToolbar: React.FC<InputToolbarProps> = ({ onSend }) => {
           placeholder={'Type a message...'}
           placeholderTextColor={theme.colors.text.secondary}
           multiline={true}
-          style={[styles.textInput]}
+          style={[theme.fonts.small, styles.textInput]}
           autoFocus={false}
           enablesReturnKeyAutomatically
           verticalAlign={'top'}
@@ -106,8 +106,6 @@ const getStyles = (theme: Theme) =>
       color: theme.colors.text.primary,
     },
     textInput: {
-      lineHeight: theme.fonts.small.lineHeight,
-      fontSize: theme.fonts.small.fontSize,
       paddingRight: 10,
       paddingBottom: 10,
       color: theme.colors.text.primary,

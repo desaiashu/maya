@@ -6,7 +6,7 @@ import { StreamState, getStream } from '@/data';
 import { defaultAvatar } from '@/data';
 
 interface Props {
-  prev: Message;
+  prev?: Message;
   avatars: { [key: string]: string };
   usernames: { [key: string]: string };
 }
@@ -18,16 +18,14 @@ export const Stream: React.FC<Props> = props => {
 
   useEffect(() => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    // LayoutAnimation.configureNext(
-    //   LayoutAnimation.create(10, 'easeInEaseOut', 'opacity'),
-    // );
+    //Intentionally slow down the rendering to be legible
+    const start = Date.now();
+    while (Date.now() - start < 50) {}
   }, [chunks]);
 
-  if (chunks.chatid !== prev.chatid) {
-    console.log('null');
+  if (prev && chunks.chatid !== prev.chatid) {
     return null;
   }
-  console.log('rendering');
   return (
     <MessageUI
       current={chunks}

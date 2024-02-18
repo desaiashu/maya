@@ -11,26 +11,23 @@ export interface StreamState {
   resetStream: () => void;
 }
 
-export const emptyMessage: Message = {
+export const dummyMessage: Message = {
+  chatid: 'stream',
   content: '',
-  chatid: '',
   sender: '',
   timestamp: 0,
 };
 
 export const getStream = create<StreamState>((set, get) => ({
-  chunks: emptyMessage,
+  chunks: dummyMessage,
   isStreaming: false,
   handleChunk: (incoming: Chunk) => {
     const stream = get();
-    console.log('chunk!');
     if (stream.isStreaming) {
-      console.log('streaming!');
       if (
         stream.chunks.chatid === incoming.chatid &&
         stream.chunks.timestamp === incoming.timestamp
       ) {
-        console.log('current!');
         set(state => ({
           ...state,
           chunks: {
@@ -50,7 +47,6 @@ export const getStream = create<StreamState>((set, get) => ({
         }
       }
     } else {
-      console.log('setting!');
       set(state => ({
         ...state,
         chunks: incoming,
@@ -69,7 +65,7 @@ export const getStream = create<StreamState>((set, get) => ({
     ) {
       set(state => ({
         ...state,
-        chunks: emptyMessage,
+        chunks: dummyMessage,
         isStreaming: false,
       }));
     }
@@ -77,7 +73,7 @@ export const getStream = create<StreamState>((set, get) => ({
   resetStream: () => {
     set(state => ({
       ...state,
-      chunks: emptyMessage,
+      chunks: dummyMessage,
       isStreaming: false,
     }));
   },

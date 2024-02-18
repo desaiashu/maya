@@ -25,13 +25,6 @@ class ClientUpdate {
   handleChunkUpdate(data: Chunk) {
     const streamState = getStream.getState();
     streamState.handleChunk(data);
-
-    // LayoutAnimation.configureNext(
-    //   LayoutAnimation.create(10, 'easeInEaseOut', 'opacity'),
-    // );
-    // const state = getState.getState();
-    // state.updateChunk(data);
-    // console.log('Chunk!');
   }
 
   handleMessageUpdate(data: Message) {

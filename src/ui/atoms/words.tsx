@@ -21,7 +21,9 @@ const Words: React.FC<WordsProps> = ({ tag, children, style, alt, button }) => {
 
   const styles = getStyles(theme, tag, alt, button);
 
-  return <Text style={[styles.textColor, styles.font, style]}>{children}</Text>;
+  return (
+    <Text style={[theme.fonts[tag], styles.color, style]}>{children}</Text>
+  );
 };
 
 const getColor = (
@@ -44,10 +46,9 @@ const getStyles = (
   button: boolean,
 ) =>
   StyleSheet.create({
-    textColor: {
+    color: {
       color: getColor(theme, tag, alt, button),
     },
-    font: theme.fonts[tag],
   });
 
 export default Words;

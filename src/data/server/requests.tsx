@@ -56,7 +56,6 @@ class ServerRequest {
       command: 'auth',
     };
     socket.sendRequest(request);
-    console.log('attempting auth');
   }
 
   verifyUser(auth: Auth) {
@@ -66,7 +65,6 @@ class ServerRequest {
       command: 'verify',
     };
     socket.sendRequest(request);
-    console.log('attempting verify');
   }
 }
 

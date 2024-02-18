@@ -43,8 +43,10 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const Navigator: React.FC = () => {
   const theme = useTheme();
 
-  const isAuthenticated = getState((state: State) => state.isAuthenticated);
-  const username = getState((state: State) => state.currentUser.username);
+  const { isAuthenticated, username } = getState((state: State) => ({
+    isAuthenticated: state.isAuthenticated,
+    username: state.currentUser.username,
+  }));
 
   const userCreated = username !== '';
 

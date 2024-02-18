@@ -22,8 +22,6 @@ const Auth: React.FC = () => {
 
   const sendToken = () => {
     setPhone(phoneNumber);
-    console.log('sending token');
-    console.log('server');
     server.reinitialize();
     server.authUser(phoneNumber);
     navigation.navigate('Verify', { phoneNumber });

@@ -1,6 +1,6 @@
 // Chat.tsx
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useRoute } from '@react-navigation/native';
 import {
   Platform,
@@ -18,7 +18,7 @@ import {
   getStream,
   StreamState,
   timestamp,
-  emptyMessage,
+  dummyMessage,
 } from '@/data';
 import { Theme, useTheme } from '@/ui/theme';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -48,22 +48,6 @@ export const chatOptions = (
   };
 };
 
-const useMessages = (chatInfo: ChatInfo) => {
-  const messages = getState((state: State) => state.messages);
-  const isStreaming = getStream((state: StreamState) => state.isStreaming);
-  return useMemo(
-    () => ({
-      messages: isStreaming
-        ? [
-            ...messages.filter(message => message.chatid === chatInfo.chatid),
-            emptyMessage,
-          ]
-        : messages.filter(message => message.chatid === chatInfo.chatid),
-    }),
-    [messages, chatInfo.chatid, isStreaming],
-  );
-};
-
 const Chat: React.FC = () => {
   const theme = useTheme();
   const styles = getStyles(theme);
@@ -72,12 +56,7 @@ const Chat: React.FC = () => {
 
   const flatListRef = React.useRef<FlatList>(null);
 
-  // const user = getState((state: State) => state.currentUser);
-  // const addMessage = getState((state: State) => state.addMessage);
-
   const isStreaming = getStream((state: StreamState) => state.isStreaming);
-
-  // const { messages } = useMessages(chatInfo);
   const { messages, user, addMessage } = getState((state: State) => ({
     user: state.currentUser,
     addMessage: state.addMessage,
@@ -86,7 +65,7 @@ const Chat: React.FC = () => {
           ...state.messages.filter(
             message => message.chatid === chatInfo.chatid,
           ),
-          emptyMessage,
+          dummyMessage,
         ]
       : state.messages.filter(message => message.chatid === chatInfo.chatid),
   }));
@@ -112,12 +91,9 @@ const Chat: React.FC = () => {
   };
 
   const renderMessage = (current: Message, next?: Message, prev?: Message) => {
-    if (!current) {
-      console.log('null');
-      return null;
-    }
-    if (current.chatid !== '') {
-      console.log('rendering flatlist');
+    if (current.chatid === 'stream') {
+      return <Stream prev={prev} avatars={avatars} usernames={usernames} />;
+    } else {
       return (
         <MessageUI
           current={current}
@@ -128,19 +104,7 @@ const Chat: React.FC = () => {
           position={user.userid === current.sender ? 'right' : 'left'}
         />
       );
-    } else {
-      return renderStream();
     }
-  };
-
-  const renderStream = () => {
-    return (
-      <Stream
-        prev={messages[messages.length - 2]}
-        avatars={avatars}
-        usernames={usernames}
-      />
-    );
   };
 
   return (
@@ -151,9 +115,7 @@ const Chat: React.FC = () => {
         style={styles.keyboardAvoid}
       >
         {/* Note: FlatList doesn't play well with KeyboardAvoidingView
-        unless "inverted". Alternately, could mimic Messages behavior 
-        of scrolling to bottom of chat with this code:
-        onLayout={() => flatListRef?.current?.scrollToEnd({ animated: true })*/}
+        unless "inverted" and using messages.reverse().*/}
         <FlatList
           data={messages.reverse()}
           renderItem={({ item, index }) =>
@@ -163,8 +125,6 @@ const Chat: React.FC = () => {
           style={styles.messagesContainer}
           ref={flatListRef}
           inverted
-          // ListHeaderComponent={renderStream}
-          //Header bc it's inverted lol
         />
         <InputToolbar onSend={onSend} />
       </KeyboardAvoidingView>
