@@ -35,7 +35,7 @@ class ClientUpdate {
   }
 
   handleMessageUpdate(data: Message) {
-    // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     const state = getState.getState();
     state.updateMessages([data]);
     // Pass message to stream state. If it's relevant, it will be handled

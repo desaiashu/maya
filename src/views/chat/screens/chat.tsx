@@ -1,6 +1,6 @@
 // Chat.tsx
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useRoute } from '@react-navigation/native';
 import {
   Platform,
@@ -12,7 +12,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MessageUI, InputToolbar, Stream } from '@/views/chat/components';
 import { State, defaultAvatar } from '@/data';
 import { Message, ChatInfo } from '@/data/types';
-import { server, getState, timestamp } from '@/data';
+import {
+  server,
+  getState,
+  getStream,
+  StreamState,
+  timestamp,
+  emptyMessage,
+} from '@/data';
 import { Theme, useTheme } from '@/ui/theme';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
@@ -41,6 +48,22 @@ export const chatOptions = (
   };
 };
 
+const useMessages = (chatInfo: ChatInfo) => {
+  const messages = getState((state: State) => state.messages);
+  const isStreaming = getStream((state: StreamState) => state.isStreaming);
+  return useMemo(
+    () => ({
+      messages: isStreaming
+        ? [
+            ...messages.filter(message => message.chatid === chatInfo.chatid),
+            emptyMessage,
+          ]
+        : messages.filter(message => message.chatid === chatInfo.chatid),
+    }),
+    [messages, chatInfo.chatid, isStreaming],
+  );
+};
+
 const Chat: React.FC = () => {
   const theme = useTheme();
   const styles = getStyles(theme);
@@ -49,10 +72,23 @@ const Chat: React.FC = () => {
 
   const flatListRef = React.useRef<FlatList>(null);
 
-  const { user, messages, addMessage } = getState((state: State) => ({
+  // const user = getState((state: State) => state.currentUser);
+  // const addMessage = getState((state: State) => state.addMessage);
+
+  const isStreaming = getStream((state: StreamState) => state.isStreaming);
+
+  // const { messages } = useMessages(chatInfo);
+  const { messages, user, addMessage } = getState((state: State) => ({
     user: state.currentUser,
-    messages: state.selectMessagesByChatId(chatInfo.chatid),
     addMessage: state.addMessage,
+    messages: isStreaming
+      ? [
+          ...state.messages.filter(
+            message => message.chatid === chatInfo.chatid,
+          ),
+          emptyMessage,
+        ]
+      : state.messages.filter(message => message.chatid === chatInfo.chatid),
   }));
 
   const avatars: { [key: string]: string } = {};
@@ -76,26 +112,31 @@ const Chat: React.FC = () => {
   };
 
   const renderMessage = (current: Message, next?: Message, prev?: Message) => {
-    if (!current || current.chatid !== chatInfo.chatid) {
+    if (!current) {
       console.log('null');
       return null;
     }
-    return (
-      <MessageUI
-        current={current}
-        next={next}
-        prev={prev}
-        avatar={avatars[current.sender] || defaultAvatar}
-        username={usernames[current.sender] || ''}
-        position={user.userid === current.sender ? 'right' : 'left'}
-      />
-    );
+    if (current.chatid !== '') {
+      console.log('rendering flatlist');
+      return (
+        <MessageUI
+          current={current}
+          next={next}
+          prev={prev}
+          avatar={avatars[current.sender] || defaultAvatar}
+          username={usernames[current.sender] || ''}
+          position={user.userid === current.sender ? 'right' : 'left'}
+        />
+      );
+    } else {
+      return renderStream();
+    }
   };
 
   const renderStream = () => {
     return (
       <Stream
-        prev={messages[messages.length - 1]}
+        prev={messages[messages.length - 2]}
         avatars={avatars}
         usernames={usernames}
       />
@@ -122,7 +163,7 @@ const Chat: React.FC = () => {
           style={styles.messagesContainer}
           ref={flatListRef}
           inverted
-          ListHeaderComponent={renderStream}
+          // ListHeaderComponent={renderStream}
           //Header bc it's inverted lol
         />
         <InputToolbar onSend={onSend} />

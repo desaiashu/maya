@@ -18,9 +18,7 @@ const Auth: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [phoneNumber, setPhoneNumber] = useState('+');
 
-  const { setPhone } = getState((state: State) => ({
-    setPhone: state.setPhone,
-  }));
+  const setPhone = getState((state: State) => state.setPhone);
 
   const sendToken = () => {
     setPhone(phoneNumber);

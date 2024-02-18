@@ -11,7 +11,7 @@ export interface StreamState {
   resetStream: () => void;
 }
 
-const emptyMessage: Message = {
+export const emptyMessage: Message = {
   content: '',
   chatid: '',
   sender: '',

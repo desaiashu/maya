@@ -55,13 +55,12 @@ const ChatList: React.FC = () => {
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const userid = getState((state: State) => state.currentUser.userid);
   const { chatList, avatars, topics, participants } = getState(
     (state: State) => ({
       chatList: state.chats,
-      avatars: state.getAvatars(userid),
+      avatars: state.getAvatars(state.currentUser.userid),
       topics: state.getTopics(),
-      participants: state.getParticipants(userid),
+      participants: state.getParticipants(state.currentUser.userid),
     }),
   );
 
