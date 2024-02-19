@@ -44,7 +44,7 @@ const ParticipantSelect: React.FC<ParticipantSelectProps> = props => {
       >
         <View style={styles.left}>
           <Avatar avatar={profile.avatar} size={25} />
-          <Words tag="body" style={styles.name}>
+          <Words tag="large" style={styles.name}>
             {profile.username}
           </Words>
         </View>
@@ -96,8 +96,8 @@ const getStyles = (theme: Theme) =>
       alignItems: 'center',
     },
     name: {
-      marginLeft: 20,
-      fontSize: 16,
+      marginLeft: 13,
+      fontSize: 18,
     },
     check: {
       width: 20,

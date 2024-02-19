@@ -53,7 +53,7 @@ const Profile: React.FC = () => {
         <Words tag="h4" style={styles.info}>
           username
         </Words>
-        <Words tag="body" style={styles.username}>
+        <Words tag="large" style={styles.username}>
           {user.username}
         </Words>
         <Words tag="h4" style={styles.info}>
@@ -100,11 +100,10 @@ const getStyles = (theme: Theme) =>
     },
     username: {
       marginTop: 20,
-      fontSize: 20,
     },
     phoneNumber: {
-      marginTop: 22,
-      fontSize: 20,
+      marginTop: 26,
+      fontSize: 18,
     },
   });
 

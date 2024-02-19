@@ -17,13 +17,14 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
-import { Words, Input, Button } from '@/ui/atoms';
+import { Words, Input, Button, IconButton } from '@/ui/atoms';
 import { State, useStore, server } from '@/data';
 
 export const verifyOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'Verify'>,
   theme: Theme,
 ): NativeStackNavigationOptions => {
+  const styles = getStyles(theme);
   return {
     title: '',
     headerStyle: {
@@ -31,7 +32,12 @@ export const verifyOptions = (
     },
     headerTransparent: true,
     headerLeft: () => (
-      <Button bare title="◁   " onPress={() => navigation.goBack()} />
+      <IconButton
+        icon="back"
+        onPress={() => navigation.goBack()}
+        style={styles.iconBack}
+        containerStyle={styles.iconBackContainer}
+      />
     ),
   };
 };
@@ -123,12 +129,30 @@ const getStyles = (theme: Theme) =>
     sendAgain: {
       alignSelf: 'flex-start',
       marginTop: 20,
+      marginLeft: 1,
     },
     form: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
       marginTop: 20,
+    },
+    iconBack: {
+      width: 20,
+      height: 20,
+    },
+    iconBackContainer: {
+      backgroundColor: theme.colors.background,
+      paddingLeft: 7,
+      paddingTop: 8,
+      paddingBottom: 8,
+      paddingRight: 9,
+      marginLeft: -1,
+      borderRadius: 20,
+      shadowColor: theme.colors.outline,
+      shadowOpacity: 0.6,
+      shadowOffset: { width: 0, height: 0 },
+      shadowRadius: 1,
     },
   });
 

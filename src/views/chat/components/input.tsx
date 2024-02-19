@@ -7,9 +7,14 @@ import { useStore, State } from '@/data';
 interface InputToolbarProps {
   onSend: (text: string) => void;
   chatid: string;
+  onLayout?: (event: any) => void;
 }
 
-const InputToolbar: React.FC<InputToolbarProps> = ({ onSend, chatid }) => {
+const InputToolbar: React.FC<InputToolbarProps> = ({
+  onSend,
+  chatid,
+  onLayout,
+}) => {
   const draft = useStore((state: State) => state.drafts[chatid] || '');
   const updateDraft = useStore((state: State) => state.updateDraft);
   const [text, setText] = useState(draft);
@@ -47,7 +52,10 @@ const InputToolbar: React.FC<InputToolbarProps> = ({ onSend, chatid }) => {
   };
 
   return (
-    <View style={[styles.container, keyboardVisible && styles.keyboard]}>
+    <View
+      style={[styles.container, keyboardVisible && styles.keyboard]}
+      onLayout={onLayout}
+    >
       <View style={styles.primary}>
         <TextInput
           value={text}
@@ -55,7 +63,7 @@ const InputToolbar: React.FC<InputToolbarProps> = ({ onSend, chatid }) => {
           placeholder={'Type a message...'}
           placeholderTextColor={theme.colors.text.secondary}
           multiline={true}
-          style={[theme.fonts.small, styles.textInput]}
+          style={[theme.fonts.body, styles.textInput]}
           autoFocus={false}
           enablesReturnKeyAutomatically
           verticalAlign={'top'}
@@ -85,7 +93,7 @@ const getStyles = (theme: Theme) =>
       right: 0,
       margin: 15,
       marginTop: 0,
-      marginBottom: 25,
+      marginBottom: 30,
       shadowColor: theme.colors.outline,
       shadowOpacity: 0.6,
       shadowOffset: { width: 0, height: 0 },

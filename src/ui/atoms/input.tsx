@@ -10,7 +10,13 @@ interface InputProps {
   caps?: boolean;
 }
 
-const Input: React.FC<InputProps> = ({ phone, value, onChangeText, caps }) => {
+const Input: React.FC<InputProps> = ({
+  phone,
+  value,
+  onChangeText,
+  caps,
+  style,
+}) => {
   const theme = useTheme();
   const styles = getStyles(theme);
 
@@ -28,10 +34,12 @@ const Input: React.FC<InputProps> = ({ phone, value, onChangeText, caps }) => {
   return (
     <TextInput
       keyboardType={phone ? 'numeric' : 'default'}
-      style={styles.input}
+      style={[theme.fonts.input, styles.input, style]}
       value={value}
       onChangeText={handleTextChange}
       autoCapitalize={caps ? 'characters' : 'none'}
+      autoCorrect={false}
+      spellCheck={false}
     />
   );
 };
@@ -46,7 +54,6 @@ const getStyles = (theme: Theme) =>
       minWidth: '50%',
       padding: 15,
       margin: 10,
-      fontSize: theme.fonts.input.fontSize,
       color: theme.colors.text.primary,
     },
   });

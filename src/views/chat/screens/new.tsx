@@ -35,7 +35,8 @@ export const newChatOptions = (
 };
 
 const NewChat: React.FC = () => {
-  const styles = getStyles(useTheme());
+  const theme = useTheme();
+  const styles = getStyles(theme);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   useFocusEffect(
@@ -79,7 +80,7 @@ const NewChat: React.FC = () => {
         selectedValue={protocol}
         onValueChange={itemValue => setProtocol(itemValue)}
         style={styles.picker}
-        itemStyle={styles.pickerItem}
+        itemStyle={[theme.fonts.large, styles.pickerItem]}
       >
         {protocols.map(p => (
           <Picker.Item key={p} label={p} value={p} />
@@ -130,8 +131,6 @@ const getStyles = (theme: Theme) =>
     },
     pickerItem: {
       color: theme.colors.text.primary,
-      fontFamily: theme.fonts.large.fontFamily,
-      fontSize: theme.fonts.large.fontSize,
     },
     save: {
       marginTop: 40,

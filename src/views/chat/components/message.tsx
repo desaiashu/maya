@@ -65,9 +65,10 @@ const getStyles = () => ({
   base: StyleSheet.create({
     messageContainer: {
       marginTop: 8,
+      marginBottom: 20,
     },
     swap: {
-      marginBottom: 23,
+      marginBottom: 30,
     },
     first: {
       marginTop: 50,
@@ -76,13 +77,13 @@ const getStyles = () => ({
       marginBottom: 30,
     },
     avatarContainer: {
-      width: 46,
+      width: 41,
       height: 0,
       overflow: 'visible',
     },
     avatarAbsolute: {
       position: 'absolute',
-      bottom: 0,
+      bottom: 2,
     },
   }),
   left: StyleSheet.create({
@@ -90,7 +91,7 @@ const getStyles = () => ({
       flexDirection: 'row',
       alignItems: 'flex-end',
       justifyContent: 'flex-start',
-      marginLeft: 9,
+      marginLeft: 12,
       marginRight: 0,
     },
   }),

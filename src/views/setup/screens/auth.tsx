@@ -59,13 +59,13 @@ const getStyles = (theme: Theme) =>
     },
     text: {
       // alignSelf: 'flex-start',
-      marginLeft: 10,
+      marginLeft: 20,
     },
     form: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: 20,
+      margin: 20,
     },
   });
 

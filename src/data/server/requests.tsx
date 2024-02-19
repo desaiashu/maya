@@ -76,7 +76,6 @@ class ServerRequest {
       token: auth.token,
       command: 'verify',
     };
-    console.log('Sending verify request:', auth.userid);
     socket.sendRequest(request);
   }
 }

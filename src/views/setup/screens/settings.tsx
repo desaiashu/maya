@@ -201,7 +201,7 @@ const getStyles = (theme: Theme) =>
     },
     username: {
       marginTop: 10,
-      marginBottom: 40,
+      // marginBottom: 40,
     },
     save: {},
   });

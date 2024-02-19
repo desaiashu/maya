@@ -43,12 +43,7 @@ export const Bubble: React.FC<BubbleProps> = props => {
     return (
       <Words
         tag="body"
-        style={[
-          styles.base.primaryText,
-          theme.fonts.small,
-          styles.base.primaryText,
-          styles.base.messageText,
-        ]}
+        style={[styles.base.primaryText, styles.base.messageText]}
       >
         {message.content}
       </Words>
@@ -95,7 +90,7 @@ export const Bubble: React.FC<BubbleProps> = props => {
           activeOpacity={1}
           accessibilityRole="text"
         >
-          <View style={[styles[position].wrapper]}>{renderMessageText()}</View>
+          {renderMessageText()}
         </TouchableOpacity>
       </View>
     </View>
@@ -140,10 +135,10 @@ const getStyles = (theme: Theme) => ({
     container: {
       justifyContent: 'flex-start',
       marginLeft: 8,
-      marginRight: 60,
+      marginRight: 67, //47,
     },
     wrapper: {
-      marginRight: 60,
+      // marginRight: 30, //47,
       minHeight: 20,
       justifyContent: 'flex-end',
     },
@@ -160,11 +155,11 @@ const getStyles = (theme: Theme) => ({
   right: StyleSheet.create({
     container: {
       justifyContent: 'flex-end',
-      marginLeft: 60,
+      marginLeft: 55,
       marginRight: 8,
     },
     wrapper: {
-      marginLeft: 60,
+      marginLeft: 55,
       minHeight: 20,
       justifyContent: 'flex-end',
     },

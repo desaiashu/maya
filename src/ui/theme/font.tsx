@@ -7,6 +7,7 @@ export type FontTag =
   | 'h4'
   | 'h5'
   | 'body'
+  | 'xl'
   | 'large'
   | 'small'
   | 'tiny'
@@ -16,12 +17,12 @@ export type FontTag =
 
 export const fonts: Font = {
   h1: {
-    fontFamily: 'LibreFranklinRoman-ExtraBold',
+    fontFamily: 'LibreFranklinRoman-Bold',
     fontSize: 32,
   },
   h2: {
-    fontFamily: 'LibreFranklinRoman-ExtraBold',
-    fontSize: 24,
+    fontFamily: 'LibreFranklinRoman-Bold',
+    fontSize: 20,
   },
   h3: {
     fontFamily: 'LibreFranklinRoman-Bold',
@@ -29,23 +30,29 @@ export const fonts: Font = {
   },
   h4: {
     fontFamily: 'LibreFranklinRoman-Bold',
-    fontSize: 14,
+    fontSize: 16,
   },
   h5: {
     fontFamily: 'LibreFranklinRoman-Bold',
-    fontSize: 12,
+    fontSize: 13,
+  },
+  xl: {
+    fontFamily: 'LibreFranklinRoman-Medium',
+    fontWeight: 'normal',
+    fontSize: 24,
+    lineHeight: 32,
   },
   large: {
     fontFamily: 'LibreFranklinRoman-Medium',
     fontWeight: 'normal',
-    fontSize: 16,
-    lineHeight: 24,
+    fontSize: 20,
+    lineHeight: 28,
   },
   body: {
     fontFamily: 'LibreFranklinRoman-Medium',
     fontWeight: 'normal',
-    fontSize: 14,
-    lineHeight: 21,
+    fontSize: 16,
+    lineHeight: 24,
   },
   small: {
     fontFamily: 'LibreFranklinRoman-Medium',
@@ -67,12 +74,12 @@ export const fonts: Font = {
   button: {
     fontFamily: 'LibreFranklinRoman-Medium',
     fontWeight: 'normal',
-    fontSize: 16,
+    fontSize: 18,
   },
   input: {
     fontFamily: 'LibreFranklinRoman-Medium',
     fontWeight: 'normal',
-    fontSize: 16,
+    fontSize: 18,
   },
 };
 

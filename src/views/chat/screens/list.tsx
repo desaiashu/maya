@@ -12,6 +12,7 @@ import { State, useStore, server } from '@/data';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
 import { IconButton, Words, Avatar } from '@/ui/atoms';
+import { cancelLayoutAnimation } from '@/data';
 
 export const chatListOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'ChatList'>,
@@ -63,6 +64,7 @@ const ChatList: React.FC = () => {
   }, [chatList]);
 
   const handleSelectChat = (chatInfo: ChatInfo) => {
+    cancelLayoutAnimation();
     navigation.navigate('Chat', chatInfo);
   };
 
@@ -85,10 +87,10 @@ const ChatList: React.FC = () => {
       >
         <Avatar avatar={avatar} size={50} />
         <View style={styles.textContainer}>
-          <Words tag="h3" style={styles.name}>
+          <Words tag="h2" style={styles.name}>
             {participant}
           </Words>
-          <Words tag="body" style={styles.topic}>
+          <Words tag="small" style={styles.topic}>
             {topic}
           </Words>
         </View>
@@ -137,10 +139,10 @@ const getStyles = (theme: Theme) =>
       flexDirection: 'column', // This is actually the default and can be omitted
     },
     name: {
-      marginLeft: 20,
+      marginLeft: 25,
     },
     topic: {
-      marginLeft: 20,
+      marginLeft: 25,
       marginTop: 3,
     },
     composeButton: {

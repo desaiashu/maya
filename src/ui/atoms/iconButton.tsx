@@ -12,15 +12,16 @@ interface IconButtonProps {
   icon: string;
   onPress: () => void;
   style?: StyleProp<ImageStyle>;
+  containerStyle?: StyleProp<ImageStyle>;
 }
 
 const IconButton: React.FC<IconButtonProps> = props => {
-  const { icon, onPress, style } = props;
+  const { icon, onPress, style, containerStyle } = props;
   const colorScheme = useColorScheme();
   const styles = getStyles();
 
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} style={containerStyle}>
       <FastImage
         source={getImageSource(icon, colorScheme)} // Replace with the actual path to your image
         style={[styles.iconButton, style]} // Adjust the size as needed

@@ -1,5 +1,5 @@
 import CryptoJS from 'crypto-js';
-import { ColorSchemeName } from 'react-native';
+import { ColorSchemeName, LayoutAnimation } from 'react-native';
 import { icons, botAvatars, humanAvatars } from '@/data';
 import { Message, Chunk } from '@/data/types';
 
@@ -59,4 +59,23 @@ export const messageFromChunk = (chunk: Chunk): Message => {
     timestamp: chunk.timestamp,
   };
   return message;
+};
+
+export const cancelLayoutAnimation = () => {
+  LayoutAnimation.configureNext({
+    duration: 0,
+    update: {
+      type: LayoutAnimation.Types.easeInEaseOut,
+      property: LayoutAnimation.Properties.opacity,
+    },
+    delete: {
+      type: LayoutAnimation.Types.easeInEaseOut,
+      property: LayoutAnimation.Properties.opacity,
+    },
+    create: {
+      type: LayoutAnimation.Types.easeInEaseOut,
+      property: LayoutAnimation.Properties.opacity,
+    },
+  });
+  // Configure a no-op animation
 };

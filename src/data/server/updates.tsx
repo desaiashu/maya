@@ -4,6 +4,7 @@ import { LayoutAnimation } from 'react-native';
 
 class ClientUpdate {
   handleRefreshUpdate(data: RefreshData) {
+    // Seems to be messing with the navigation stack
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     const state = useStore.getState();
     state.updateChats(data.chatlist);

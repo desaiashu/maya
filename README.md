@@ -10,12 +10,14 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 
 In progress:
 
-- Create new message, select protocol, select AIs
+- Taking a break!
 
 Next up:
 
+- Testflight
 - Build more discussion protocols
-- Adding other users in chat
+- Force participant set for certain protocols
+- Adding other humans in chat
 - Handle rapid chats - ie. if you message a string of messages the server should wait, adjust and not double respond
 
 Pre-launch:
@@ -72,6 +74,7 @@ Done
 - Speeding up streaming
 - Test oracle, upload to dev server
 - Run on actual phone
+- Create new message, select protocol, select AIs
 
 ---
 

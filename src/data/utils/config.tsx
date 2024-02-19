@@ -5,13 +5,13 @@ import { RootStackParamList } from '@/views/navigator';
 // Overrides for development purposes
 
 ///// Environment /////
-export const ENV: Environment = 'toshbook';
+export const ENV: Environment = 'dev';
 
 ///// Overrides nav stack  /////
 export let DEV_SCREEN: Screen;
 
 // Reset local state & storage on app load
-export let RESET_STATE = true;
+export let RESET_STATE = false;
 
 //////////////////////////////////
 
@@ -26,6 +26,7 @@ switch (ENV as Environment) {
     break;
   case 'dev':
     WS_URL = 'ws://dev.txtai.co/maya/';
+    RESET_STATE = false; //safety measure
     DEV_SCREEN = undefined;
     break;
   case 'prod':

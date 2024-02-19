@@ -7,9 +7,6 @@ import {
   KeyboardAvoidingView,
   FlatList,
   LayoutAnimation,
-  Keyboard,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
@@ -28,7 +25,7 @@ import {
 import { Message, ChatInfo } from '@/data/types';
 import { MessageUI, InputToolbar, Stream } from '@/views/chat/components';
 import { Theme, useTheme } from '@/ui/theme';
-import { Button } from '@/ui/atoms';
+import { IconButton } from '@/ui/atoms';
 
 export const chatOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'Chat'>,
@@ -42,11 +39,11 @@ export const chatOptions = (
       backgroundColor: theme.colors.transparent,
     },
     headerLeft: () => (
-      <Button
-        bare
-        title="◁   "
-        style={styles.back}
+      <IconButton
+        icon="back"
         onPress={() => navigation.goBack()}
+        containerStyle={styles.iconBackContainer}
+        style={styles.iconBack}
       />
     ),
   };
@@ -56,14 +53,19 @@ const Chat: React.FC = () => {
   const theme = useTheme();
   const styles = getStyles(theme);
   const route = useRoute();
-  const [chatInfo, setChatInfo] = useState<ChatInfo>(route.params as ChatInfo);
-  let scrollPosition = 0;
+  let [chatInfo, setChatInfo] = useState<ChatInfo>(route.params as ChatInfo);
+  // let scrollPosition = 0;
   const flatListRef = React.useRef<FlatList>(null);
 
+  const chats = useStore((state: State) => state.chats);
+  //Dev screen override won't have route params
+  if (DEV_SCREEN) {
+    chatInfo = chats[0]; //Setting directly to execute before next 2 commands
+  }
+
   const isStreaming = useStream((state: StreamState) => state.isStreaming);
-  const { messages, chats, user, addMessage } = useStore((state: State) => ({
+  const { messages, user, addMessage } = useStore((state: State) => ({
     user: state.currentUser,
-    chats: state.chats,
     addMessage: state.addMessage,
     messages: isStreaming
       ? [
@@ -75,18 +77,11 @@ const Chat: React.FC = () => {
       : state.messages.filter(message => message.chatid === chatInfo.chatid),
   }));
 
-  console.log('------', chatInfo);
-
   const avatars: Record<string, string> = {};
   const usernames: Record<string, string> = {};
   for (let profile of chatInfo.profiles || []) {
     avatars[profile.userid] = profile.avatar;
     usernames[profile.userid] = profile.username;
-  }
-
-  //Dev screen override won't have route params
-  if (DEV_SCREEN) {
-    setChatInfo(chats[0]);
   }
 
   // For new chats, the chatID will be 'new' and requires update
@@ -117,7 +112,6 @@ const Chat: React.FC = () => {
     if (current.chatid === 'stream') {
       return <Stream prev={prev} avatars={avatars} usernames={usernames} />;
     } else {
-      console.log('rendering message', current.sender);
       return (
         <MessageUI
           current={current}
@@ -125,25 +119,16 @@ const Chat: React.FC = () => {
           prev={prev}
           avatar={avatars[current.sender]}
           username={usernames[current.sender] || ''}
-          position={user.userid === current.sender ? 'right' : 'left'}
+          position={'left'} //user.userid === current.sender ? 'right' : 'left'}
         />
       );
     }
   };
 
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const newScrollPosition = event.nativeEvent.contentOffset.y;
-    if (newScrollPosition > scrollPosition) {
-      Keyboard.dismiss();
-    }
-    scrollPosition = newScrollPosition;
-  };
-
   return (
     <SafeAreaView edges={['top']} style={styles.container}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={0}
+        behavior={Platform.OS === 'ios' ? 'height' : 'height'}
         style={styles.keyboardAvoid}
       >
         {/* Note: FlatList doesn't play well with KeyboardAvoidingView
@@ -155,9 +140,8 @@ const Chat: React.FC = () => {
           }
           keyExtractor={item => item.timestamp.toString()}
           style={styles.messagesContainer}
-          keyboardShouldPersistTaps="handled"
-          onScrollBeginDrag={handleScroll}
           ref={flatListRef}
+          scrollIndicatorInsets={{ right: -3 }}
           inverted
         />
         <InputToolbar onSend={onSend} chatid={chatInfo.chatid} />
@@ -181,13 +165,33 @@ const getStyles = (theme: Theme) => ({
   },
   back: {
     backgroundColor: theme.colors.background,
-    padding: 10,
-    paddingRight: 2,
+    paddingLeft: 11,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingRight: 3,
     borderRadius: 20,
     shadowColor: theme.colors.outline,
     shadowOpacity: 0.6,
     shadowOffset: { width: 0, height: 0 },
     shadowRadius: 1,
+    fontWeight: 'bold',
+  },
+  iconBackContainer: {
+    backgroundColor: theme.colors.background,
+    paddingLeft: 7,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingRight: 9,
+    marginLeft: -1,
+    borderRadius: 20,
+    shadowColor: theme.colors.outline,
+    shadowOpacity: 0.6,
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 1,
+  },
+  iconBack: {
+    width: 20,
+    height: 20,
   },
 });
 

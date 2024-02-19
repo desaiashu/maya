@@ -18,7 +18,7 @@ interface AvatarProps {
 }
 
 const defaultAvatar = 'local://user.png';
-const messageSize = 36;
+const messageSize = 30;
 
 const Avatar: React.FC<AvatarProps> = props => {
   const { position, avatar, style } = props;
