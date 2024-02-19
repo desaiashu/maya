@@ -27,10 +27,8 @@ const ParticipantSelect: React.FC<ParticipantSelectProps> = props => {
   const handleSelect = (s: string) => {
     setSelected(prev => {
       if (prev.find(p => p === s)) {
-        console.log('found');
         return prev.filter(p => p !== s);
       } else {
-        console.log('not');
         return [...prev, s];
       }
     });

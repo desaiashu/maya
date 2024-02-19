@@ -53,14 +53,18 @@ const getStyles = (theme: Theme) =>
     },
     item: {
       padding: 10,
+      marginLeft: 5,
+      marginRight: 5,
     },
     selectedItem: {
       padding: 8,
       borderWidth: 2,
       borderColor: theme.colors.outline,
+      marginLeft: 5,
+      marginRight: 5,
     },
     icon: {
-      margin: 10,
+      margin: 5,
     },
   });
 

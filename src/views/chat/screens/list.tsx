@@ -20,7 +20,7 @@ export const chatListOptions = (
   const styles = getStyles(theme);
   return {
     title: 'chats',
-    // headerTransparent: true,
+    headerTransparent: true,
     headerStyle: {
       backgroundColor: theme.colors.background,
     },
@@ -103,6 +103,7 @@ const ChatList: React.FC = () => {
         data={sortedChats}
         keyExtractor={chat => chat.chatid}
         renderItem={renderChatItem}
+        ListHeaderComponent={<View style={styles.listHeader} />}
       />
     </View>
   );
@@ -127,6 +128,9 @@ const getStyles = (theme: Theme) =>
       justifyContent: 'flex-start',
       marginLeft: 15,
       marginRight: 15,
+      height: 100,
+    },
+    listHeader: {
       height: 100,
     },
     textContainer: {

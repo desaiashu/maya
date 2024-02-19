@@ -11,7 +11,7 @@ export const ENV: Environment = 'toshbook';
 export let DEV_SCREEN: Screen;
 
 // Reset local state & storage on app load
-export let RESET_STATE = false;
+export let RESET_STATE = true;
 
 //////////////////////////////////
 

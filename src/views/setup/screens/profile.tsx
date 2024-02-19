@@ -51,16 +51,16 @@ const Profile: React.FC = () => {
       <View style={styles.profileInfo}>
         <Avatar avatar={user.avatar} size={100} style={styles.avatar} />
         <Words tag="h4" style={styles.info}>
-          phone:
+          username
+        </Words>
+        <Words tag="body" style={styles.username}>
+          {user.username}
+        </Words>
+        <Words tag="h4" style={styles.info}>
+          phone
         </Words>
         <Words tag="body" style={styles.phoneNumber}>
           {user.userid}
-        </Words>
-        <Words tag="h4" style={styles.info}>
-          username:
-        </Words>
-        <Words tag="body" style={styles.phoneNumber}>
-          {user.username}
         </Words>
       </View>
     </View>
@@ -77,11 +77,11 @@ const getStyles = (theme: Theme) =>
     },
     text: {},
     info: {
-      marginTop: 50,
+      marginTop: 60,
     },
     avatar: {
       borderRadius: 20,
-      marginTop: 20,
+      marginTop: 70,
     },
     close: {
       marginLeft: -10,
@@ -99,11 +99,11 @@ const getStyles = (theme: Theme) =>
       marginBottom: 150,
     },
     username: {
-      marginTop: 10,
+      marginTop: 20,
       fontSize: 20,
     },
     phoneNumber: {
-      marginTop: 10,
+      marginTop: 22,
       fontSize: 20,
     },
   });

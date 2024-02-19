@@ -75,6 +75,8 @@ const Chat: React.FC = () => {
       : state.messages.filter(message => message.chatid === chatInfo.chatid),
   }));
 
+  console.log('------', chatInfo);
+
   const avatars: Record<string, string> = {};
   const usernames: Record<string, string> = {};
   for (let profile of chatInfo.profiles || []) {
@@ -91,10 +93,8 @@ const Chat: React.FC = () => {
   // For existing chats, profile updates might come through
   useEffect(() => {
     const updatedChat = chats.find(c => c.created === chatInfo.created);
-    console.log('finding');
     if (updatedChat) {
       setChatInfo(updatedChat);
-      console.log('CHAT UPDATED');
     }
   }, [chats, chatInfo.created]);
 
@@ -117,6 +117,7 @@ const Chat: React.FC = () => {
     if (current.chatid === 'stream') {
       return <Stream prev={prev} avatars={avatars} usernames={usernames} />;
     } else {
+      console.log('rendering message', current.sender);
       return (
         <MessageUI
           current={current}

@@ -25,16 +25,13 @@ export const useChatlistState: StateCreator<ChatlistState> = (set, get) => ({
     const chats = get().chats;
     let index = chats.findIndex(c => c.chatid === chat.chatid);
     if (index < 0) {
-      console.log('newwwww');
       index = chats.findIndex(c => c.created === chat.created);
     }
     if (index > -1) {
       chats[index] = chat;
       set({ chats: chats });
-      console.log('setting1');
     } else {
       set({ chats: [...chats, chat] });
-      console.log('setting2');
     }
   },
 

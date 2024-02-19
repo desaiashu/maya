@@ -60,6 +60,7 @@ const NewChat: React.FC = () => {
       participants: [...participants, user.userid],
       topic: 'new chat',
       protocol: protocol,
+      profiles: [],
       created: timestamp(),
       updated: timestamp(),
     };

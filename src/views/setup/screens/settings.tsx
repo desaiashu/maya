@@ -1,5 +1,12 @@
-import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  StyleSheet,
+  Platform,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import {
@@ -57,6 +64,26 @@ const Settings: React.FC = () => {
 
   const [username, setUsername] = useState(user.username);
   const [avatar, setAvatar] = useState(user.avatar);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardWillShowListener = Keyboard.addListener(
+      'keyboardWillShow',
+      () => {
+        setKeyboardVisible(true);
+      },
+    );
+    const keyboardWillHideListener = Keyboard.addListener(
+      'keyboardWillHide',
+      () => {
+        setKeyboardVisible(false);
+      },
+    );
+    return () => {
+      keyboardWillShowListener.remove();
+      keyboardWillHideListener.remove();
+    };
+  }, []);
 
   if (user === null) {
     return null;
@@ -88,27 +115,48 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.profileInfo}>
-        <Words tag="h4" style={styles.info}>
-          select avatar:
-        </Words>
-        <AvatarSelect
-          style={styles.avatar}
-          selectedIndex={avatar}
-          onSelect={setAvatar}
-        />
-        <Words tag="h4" style={styles.info}>
-          edit username:
-        </Words>
-        <Input
-          style={styles.username}
-          value={username}
-          onChangeText={setUsername}
-        />
-        <Button outlined title="save" style={styles.save} onPress={save} />
-      </View>
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.keyboardAvoid}
+      >
+        <View
+          style={[styles.container, keyboardVisible && styles.keyboardVisibile]}
+        >
+          <View style={styles.profileInfo}>
+            <View>
+              <Words tag="h4" style={styles.top}>
+                select avatar
+              </Words>
+            </View>
+            <AvatarSelect
+              style={styles.avatar}
+              selectedIndex={avatar}
+              onSelect={setAvatar}
+            />
+            <View>
+              <Words tag="h4" style={styles.info}>
+                set username
+              </Words>
+            </View>
+            <View style={styles.form}>
+              <Input
+                style={styles.username}
+                value={username}
+                onChangeText={setUsername}
+              />
+              <Button
+                outlined
+                title="save"
+                style={styles.save}
+                onPress={save}
+                disabled={username === '' || avatar === '' ? true : false}
+              />
+            </View>
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -120,30 +168,42 @@ const getStyles = (theme: Theme) =>
       alignItems: 'center',
       backgroundColor: theme.colors.background,
     },
-    text: {},
+    keyboardAvoid: {
+      flex: 1,
+    },
+    keyboardVisibile: {
+      marginBottom: 0,
+    },
+    top: {
+      marginLeft: 10,
+    },
     info: {
-      marginTop: 20,
+      marginLeft: 10,
+      marginBottom: 10,
+      marginTop: -20,
     },
     avatar: {
       marginTop: 10,
+    },
+    form: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-start',
     },
     close: {
       marginLeft: -10,
       marginTop: 1,
     },
     profileInfo: {
-      justifyContent: 'center',
+      justifyContent: 'flex-start',
       alignItems: 'center',
-      marginBottom: 0,
+      marginBottom: 100,
     },
     username: {
       marginTop: 10,
       marginBottom: 40,
     },
-    save: {
-      marginTop: 40,
-      marginBottom: 30,
-    },
+    save: {},
   });
 
 export default Settings;
