@@ -77,5 +77,4 @@ export const cancelLayoutAnimation = () => {
       property: LayoutAnimation.Properties.opacity,
     },
   });
-  // Configure a no-op animation
 };
