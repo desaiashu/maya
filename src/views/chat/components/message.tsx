@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Message } from '@/data/types';
-import { Bubble, Avatar, Day } from '@/views/chat/components';
+import { Bubble, Day } from '@/views/chat/components';
+import { Avatar } from '@/ui/atoms';
 import { isSameUser, isSameDay } from '@/data';
 
 interface MessageProps {
@@ -28,7 +29,11 @@ const MessageUI: React.FC<MessageProps> = props => {
   const renderAvatar = () => {
     return (
       <View style={styles.base.avatarContainer}>
-        {hideAvatar ? null : <Avatar position={position} avatar={avatar} />}
+        {hideAvatar ? null : (
+          <View style={styles.base.avatarAbsolute}>
+            <Avatar position={position} avatar={avatar} />
+          </View>
+        )}
       </View>
     );
   };
@@ -44,13 +49,13 @@ const MessageUI: React.FC<MessageProps> = props => {
     >
       {!hideDay && <Day timestamp={current.timestamp} />}
       <View style={styles[position].container}>
-        {position === 'left' ? renderAvatar() : null}
+        {position === 'left' && renderAvatar()}
         <Bubble
           message={current}
           username={hideHeader ? null : username}
           position={position}
         />
-        {position === 'right' ? renderAvatar() : null}
+        {position === 'right' && renderAvatar()}
       </View>
     </View>
   );
@@ -72,6 +77,12 @@ const getStyles = () => ({
     },
     avatarContainer: {
       width: 46,
+      height: 0,
+      overflow: 'visible',
+    },
+    avatarAbsolute: {
+      position: 'absolute',
+      bottom: 0,
     },
   }),
   left: StyleSheet.create({

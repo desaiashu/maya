@@ -10,28 +10,23 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 
 In progress:
 
-- Speeding up streaming
-  - Independent chunk storage rather than pulling from messages
-  - Use independent chunk store that doesn't persist
-  - Create single element that sits at end of flatlist
 - Create new message, select protocol, select AIs
-- Test oracle, upload to dev server
-- Run on actual phone
 
 Next up:
 
 - Build more discussion protocols
+- Adding other users in chat
 - Handle rapid chats - ie. if you message a string of messages the server should wait, adjust and not double respond
 
 Pre-launch:
 
+- Indicators for success/failure/loading - message send, chat creation, profile update, etc
+- Lastrefresh functionality, so it doesn't reload chats all the time
 - Hash/encrypt phone numbers
 - Tests for oracle
 - Ensure websocket isn't created before userid exists on client
 - Cancel button to stop stream (also stop stream on server? kill web socket and restart it?)
 - Create default "welcome" message for user
-- Loading indicator that timesout after 30sec
-- Success message for profile updated
 - OTA updates
 - Background data updates
 - Update "last-refresh"
@@ -49,6 +44,7 @@ Experimental:
 
 Backlog
 
+- Better data / cache / download management so you're not pulling everything every time
 - Refresh authtoken each session
 - Swap Mongodb with async
 - Audit all async/await
@@ -73,6 +69,9 @@ Done
 - Hook up frontend
 - Frontend chat and
 - LLM streaming
+- Speeding up streaming
+- Test oracle, upload to dev server
+- Run on actual phone
 
 ---
 

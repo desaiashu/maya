@@ -1,12 +1,13 @@
-import { getState } from '@/data';
+import { useStore } from '@/data';
 import { socket } from '@/data/server';
 import {
   MayaRequest,
   RefreshRequest,
   MessageRequest,
   UserRequest,
+  ChatRequest,
 } from '@/data/types';
-import { Message, Auth, Profile } from '@/data/types';
+import { Message, Auth, Profile, ChatInfo } from '@/data/types';
 
 class ServerRequest {
   reinitialize() {
@@ -14,7 +15,7 @@ class ServerRequest {
   }
 
   refreshChatlist() {
-    const state = getState.getState();
+    const state = useStore.getState();
     let request: RefreshRequest = {
       userid: state.currentUser.userid,
       token: state.token,
@@ -26,25 +27,36 @@ class ServerRequest {
     socket.sendRequest(request);
   }
 
+  sendMessage(message: Message) {
+    const state = useStore.getState();
+    let request: MessageRequest = {
+      userid: state.currentUser.userid,
+      token: state.token,
+      command: 'message',
+      data: message,
+    };
+    socket.sendRequest(request);
+  }
+
+  createChat(chat: ChatInfo) {
+    const state = useStore.getState();
+    let request: ChatRequest = {
+      userid: state.currentUser.userid,
+      token: state.token,
+      command: 'create_chat',
+      data: chat,
+    };
+    socket.sendRequest(request);
+  }
+
   updateUserProfile(profile: Profile) {
-    const state = getState.getState();
+    const state = useStore.getState();
     let newUser = { ...state.currentUser, ...profile };
     let request: UserRequest = {
       userid: state.currentUser.userid,
       token: state.token,
       command: 'update_user',
       data: newUser,
-    };
-    socket.sendRequest(request);
-  }
-
-  sendMessage(message: Message) {
-    const state = getState.getState();
-    let request: MessageRequest = {
-      userid: state.currentUser.userid,
-      token: state.token,
-      command: 'message',
-      data: message,
     };
     socket.sendRequest(request);
   }
@@ -64,6 +76,7 @@ class ServerRequest {
       token: auth.token,
       command: 'verify',
     };
+    console.log('Sending verify request:', auth.userid);
     socket.sendRequest(request);
   }
 }

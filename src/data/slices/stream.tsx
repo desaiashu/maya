@@ -18,7 +18,7 @@ export const dummyMessage: Message = {
   timestamp: 0,
 };
 
-export const getStream = create<StreamState>((set, get) => ({
+export const useStream = create<StreamState>((set, get) => ({
   chunks: dummyMessage,
   isStreaming: false,
 

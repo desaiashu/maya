@@ -29,7 +29,7 @@ import {
 } from '@/views/setup';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
-import { State, getState } from '@/data';
+import { State, useStore, DEV_SCREEN } from '@/data';
 
 export type RootStackParamList = {
   ChatList: undefined;
@@ -47,7 +47,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const Navigator: React.FC = () => {
   const theme = useTheme();
 
-  const { isAuthenticated, username } = getState((state: State) => ({
+  const { isAuthenticated, username } = useStore((state: State) => ({
     isAuthenticated: state.isAuthenticated,
     username: state.currentUser.username,
   }));
@@ -56,7 +56,10 @@ const Navigator: React.FC = () => {
 
   let initialRoute: keyof RootStackParamList = 'Auth';
 
-  if (isAuthenticated && userCreated) {
+  if (DEV_SCREEN) {
+    //Override initialRoute for development
+    initialRoute = DEV_SCREEN;
+  } else if (isAuthenticated && userCreated) {
     initialRoute = 'ChatList';
   } else if (isAuthenticated && !userCreated) {
     initialRoute = 'Settings';

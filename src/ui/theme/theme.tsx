@@ -1,4 +1,4 @@
-import { Font, fonts } from './font';
+import { Font, fonts, darkFonts } from './font';
 
 export const lightTheme = {
   colors: {
@@ -6,13 +6,14 @@ export const lightTheme = {
     transparent: 'rgba(0, 0, 0, 0)',
     button: 'black',
     outline: '#999',
-    header: '#f9f9f9',
+    header: '#e8e8e9',
     text: {
-      primary: 'black',
+      primary: '#121212',
       secondary: 'grey',
-      contrast: 'white',
+      contrast: '#f2f2f2',
     },
   },
+  iconOpacity: 0.85,
   fonts,
 };
 
@@ -20,16 +21,17 @@ export const darkTheme = {
   colors: {
     background: '#121212',
     transparent: 'rgba(0, 0, 0, 0)',
-    button: 'white',
+    button: '#ccc',
     outline: '#777',
     header: '#222',
     text: {
-      primary: 'white',
+      primary: '#ccc',
       secondary: 'grey',
-      contrast: 'black',
+      contrast: '#121212',
     },
   },
-  fonts,
+  iconOpacity: 0.7,
+  fonts: darkFonts,
 };
 
 ///////////////////////////////
@@ -48,5 +50,6 @@ export type Theme = {
       contrast: string;
     };
   };
+  iconOpacity: number;
   fonts: Font;
 };

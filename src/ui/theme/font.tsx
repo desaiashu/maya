@@ -7,6 +7,7 @@ export type FontTag =
   | 'h4'
   | 'h5'
   | 'body'
+  | 'large'
   | 'small'
   | 'tiny'
   | 'secondary'
@@ -23,16 +24,22 @@ export const fonts: Font = {
     fontSize: 24,
   },
   h3: {
-    fontFamily: 'LibreFranklinRoman-ExtraBold',
+    fontFamily: 'LibreFranklinRoman-Bold',
     fontSize: 18,
   },
   h4: {
-    fontFamily: 'LibreFranklinRoman-ExtraBold',
+    fontFamily: 'LibreFranklinRoman-Bold',
     fontSize: 14,
   },
   h5: {
-    fontFamily: 'LibreFranklinRoman-ExtraBold',
+    fontFamily: 'LibreFranklinRoman-Bold',
     fontSize: 12,
+  },
+  large: {
+    fontFamily: 'LibreFranklinRoman-Medium',
+    fontWeight: 'normal',
+    fontSize: 16,
+    lineHeight: 24,
   },
   body: {
     fontFamily: 'LibreFranklinRoman-Medium',
@@ -66,6 +73,30 @@ export const fonts: Font = {
     fontFamily: 'LibreFranklinRoman-Medium',
     fontWeight: 'normal',
     fontSize: 16,
+  },
+};
+
+export const darkFonts: Font = {
+  ...fonts,
+  h1: {
+    ...fonts.h1,
+    fontFamily: 'LibreFranklinRoman-Bold',
+  },
+  h2: {
+    ...fonts.h2,
+    fontFamily: 'LibreFranklinRoman-Bold',
+  },
+  h3: {
+    ...fonts.h3,
+    fontFamily: 'LibreFranklinRoman-Bold',
+  },
+  h4: {
+    ...fonts.h4,
+    fontFamily: 'LibreFranklinRoman-Bold',
+  },
+  h5: {
+    ...fonts.h5,
+    fontFamily: 'LibreFranklinRoman-Bold',
   },
 };
 

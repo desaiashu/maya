@@ -24,7 +24,7 @@ const AvatarSelect: React.FC<AvatarSelectProps> = ({
       <View style={item === selectedIndex ? styles.selectedItem : styles.item}>
         <IconButton
           icon={item}
-          style={[styles.icon]}
+          style={styles.icon}
           onPress={() => onSelect(item)}
         />
       </View>

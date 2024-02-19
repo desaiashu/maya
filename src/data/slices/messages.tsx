@@ -31,6 +31,10 @@ export const useMessagesState: StateCreator<MessagesState> = (set, get) => ({
     })),
   selectMessagesByChatId: (chatId: string) =>
     get().messages.filter(message => message.chatid === chatId),
-  updateDraft: (chatid: string, draft: string) =>
-    set(state => ({ drafts: { ...state.drafts, [chatid]: draft } })),
+  updateDraft: (chatid: string, draft: string) => {
+    if (chatid !== 'new') {
+      // don't want to populate unrelated future new chats with the draft
+      set(state => ({ drafts: { ...state.drafts, [chatid]: draft } }));
+    }
+  },
 });

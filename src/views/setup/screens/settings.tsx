@@ -12,7 +12,7 @@ import {
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
 import { Button, IconButton, Input, Words } from '@/ui/atoms';
-import { State, getState, server } from '@/data';
+import { State, useStore, server } from '@/data';
 import { Profile } from '@/data/types';
 import { AvatarSelect } from '@/ui/molecules';
 
@@ -47,7 +47,7 @@ const Settings: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const route = useRoute();
   const { params } = route;
-  const { user, updateUserChats, setUserProfile } = getState(
+  const { user, updateUserChats, setUserProfile } = useStore(
     (state: State) => ({
       user: state.currentUser,
       updateUserChats: state.updateUserChats,
@@ -106,7 +106,7 @@ const Settings: React.FC = () => {
           value={username}
           onChangeText={setUsername}
         />
-        <Button title="Save" style={styles.save} onPress={save} />
+        <Button outlined title="save" style={styles.save} onPress={save} />
       </View>
     </View>
   );

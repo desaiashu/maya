@@ -1,17 +1,20 @@
-import { getState, getStream } from '@/data';
+import { useStore, useStream } from '@/data';
 import { User, RefreshData, ChatInfo, Message, Chunk } from '@/data/types';
 import { LayoutAnimation } from 'react-native';
 
 class ClientUpdate {
   handleRefreshUpdate(data: RefreshData) {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-    const state = getState.getState();
-    state.setChats(data.chatlist);
+    const state = useStore.getState();
+    state.updateChats(data.chatlist);
     state.updateMessages(data.messages);
+    state.updateProtocols(data.protocols);
+    state.updateBots(data.bots);
+    state.updateHumans(data.contacts);
   }
 
   handleUserUpdate(data: User | undefined) {
-    const state = getState.getState();
+    const state = useStore.getState();
     if (data) {
       state.setUser(data);
     }
@@ -19,20 +22,21 @@ class ClientUpdate {
   }
 
   handleChatInfoUpdate(data: ChatInfo) {
-    console.log('ChatInfo:', data);
+    const state = useStore.getState();
+    state.updateChatInfo(data);
   }
 
   handleChunkUpdate(data: Chunk) {
-    const streamState = getStream.getState();
+    const streamState = useStream.getState();
     streamState.handleChunk(data);
   }
 
   handleMessageUpdate(data: Message) {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-    const state = getState.getState();
+    const state = useStore.getState();
     state.updateMessages([data]);
     // Pass message to stream state. If it's relevant, it will be handled
-    const streamState = getStream.getState();
+    const streamState = useStream.getState();
     streamState.handleMessage(data);
   }
 
@@ -43,7 +47,7 @@ class ClientUpdate {
   handleErrorUpdate(data: string) {
     console.error('Error:', data);
     if (data === 'verification failed') {
-      const state = getState.getState();
+      const state = useStore.getState();
       state.clearUser();
     }
   }

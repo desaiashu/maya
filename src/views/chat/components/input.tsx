@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TextInput, Platform, Keyboard } from 'react-native';
 import { Button } from '@/ui/atoms';
 import { Theme, useTheme } from '@/ui/theme';
-import { getState, State } from '@/data';
+import { useStore, State } from '@/data';
 
 interface InputToolbarProps {
   onSend: (text: string) => void;
@@ -10,8 +10,8 @@ interface InputToolbarProps {
 }
 
 const InputToolbar: React.FC<InputToolbarProps> = ({ onSend, chatid }) => {
-  const draft = getState((state: State) => state.drafts[chatid] || '');
-  const updateDraft = getState((state: State) => state.updateDraft);
+  const draft = useStore((state: State) => state.drafts[chatid] || '');
+  const updateDraft = useStore((state: State) => state.updateDraft);
   const [text, setText] = useState(draft);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
@@ -47,7 +47,7 @@ const InputToolbar: React.FC<InputToolbarProps> = ({ onSend, chatid }) => {
   };
 
   return (
-    <View style={[styles.container, keyboardVisible ? styles.keyboard : null]}>
+    <View style={[styles.container, keyboardVisible && styles.keyboard]}>
       <View style={styles.primary}>
         <TextInput
           value={text}
@@ -62,15 +62,16 @@ const InputToolbar: React.FC<InputToolbarProps> = ({ onSend, chatid }) => {
           cursorColor={theme.colors.text.secondary}
           selectionColor={theme.colors.text.secondary}
         />
-        {text.length > 0 ? (
+        {text.length > 0 && (
           <Button
             bare
             tag="h4"
             style={styles.sendContainer}
             title="Send"
             onPress={onSendPress}
+            disabled={chatid === 'new' ? true : false}
           />
-        ) : null}
+        )}
       </View>
     </View>
   );

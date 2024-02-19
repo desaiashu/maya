@@ -8,8 +8,6 @@ export function hashPhoneNumber(phoneNumber: string): string {
   return phoneHash;
 }
 
-export const defaultAvatar = 'local://user.png';
-
 export const timestamp = () => new Date().getTime();
 
 export const isSameDay = (
@@ -38,21 +36,6 @@ export const isSameUser = (
   return message1.sender === message2.sender;
 };
 
-export const getAvatarSource = (avatar: string, color: ColorSchemeName) => {
-  if (!avatar || avatar === '') {
-    return null;
-  }
-  if (avatar.startsWith('https')) {
-    return { uri: avatar };
-  } else {
-    return getImageSource(avatar, color);
-  }
-};
-
-export const getDefaultAvatar = (theme: ColorSchemeName) => {
-  return getAvatarSource(defaultAvatar, theme);
-};
-
 export const getImageSource = (image: string, color: ColorSchemeName) => {
   if (!color) {
     return null;
@@ -64,7 +47,7 @@ export const getImageSource = (image: string, color: ColorSchemeName) => {
   } else if (humanAvatars[image]) {
     return humanAvatars[image][color];
   } else {
-    return humanAvatars[defaultAvatar][color];
+    return null;
   }
 };
 

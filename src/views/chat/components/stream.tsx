@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import { LayoutAnimation } from 'react-native';
 import { Message } from '@/data/types';
 import { MessageUI } from '@/views/chat/components';
-import { StreamState, getStream } from '@/data';
-import { defaultAvatar } from '@/data';
+import { StreamState, useStream } from '@/data';
 
 interface Props {
   prev?: Message;
@@ -14,7 +13,7 @@ interface Props {
 export const Stream: React.FC<Props> = props => {
   const { prev, avatars, usernames } = props;
 
-  const chunks = getStream((state: StreamState) => state.chunks);
+  const chunks = useStream((state: StreamState) => state.chunks);
 
   useEffect(() => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -31,7 +30,7 @@ export const Stream: React.FC<Props> = props => {
       current={chunks}
       next={undefined}
       prev={prev}
-      avatar={avatars[chunks.sender] || defaultAvatar}
+      avatar={avatars[chunks.sender]}
       username={usernames[chunks.sender] || ''}
       position={'left'}
     />

@@ -13,6 +13,8 @@ export interface Auth {
 export interface ChatInfo {
   chatid: string;
   creator: string;
+  created: number;
+  updated: number;
   participants: string[];
   profiles?: Profile[];
   topic?: string;
@@ -96,15 +98,8 @@ export interface RefreshData {
   chatlist: ChatInfo[];
   messages: Message[];
   protocols: string[];
-  contacts: User[];
-  bots: User[];
-}
-export interface User {
-  userid: string;
-  username: string;
-  avatar: string;
-  contacts: string[];
-  bot: boolean;
+  contacts: Profile[];
+  bots: Profile[];
 }
 export interface RefreshRequest {
   userid: string;
@@ -121,6 +116,13 @@ export interface SuccessUpdate {
   data: string;
   update?: string;
   background?: boolean;
+}
+export interface User {
+  userid: string;
+  username: string;
+  avatar: string;
+  contacts: string[];
+  bot: boolean;
 }
 export interface UserRequest {
   userid: string;

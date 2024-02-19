@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { Input, Button, Words } from '@/ui/atoms';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
-import { server, getState, State } from '@/data';
+import { server, useStore, State } from '@/data';
 
 export const authOptions = (): NativeStackNavigationOptions => ({
   title: '',
@@ -18,7 +23,7 @@ const Auth: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [phoneNumber, setPhoneNumber] = useState('+');
 
-  const setPhone = getState((state: State) => state.setPhone);
+  const setPhone = useStore((state: State) => state.setPhone);
 
   const sendToken = () => {
     setPhone(phoneNumber);
@@ -28,17 +33,19 @@ const Auth: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View>
-        <Words style={styles.text} tag="h3">
-          enter phone number
-        </Words>
-        <View style={styles.form}>
-          <Input phone value={phoneNumber} onChangeText={setPhoneNumber} />
-          <Button title="Verify" onPress={sendToken} />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <View>
+          <Words style={styles.text} tag="h3">
+            enter phone number
+          </Words>
+          <View style={styles.form}>
+            <Input phone value={phoneNumber} onChangeText={setPhoneNumber} />
+            <Button outlined title="get code" onPress={sendToken} />
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

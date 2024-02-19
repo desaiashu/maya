@@ -74,13 +74,13 @@ export const Bubble: React.FC<BubbleProps> = props => {
     return <Time timestamp={message.timestamp} position={position} />;
   };
 
-  const messageHeader = username ? (
+  const messageHeader = username && (
     <View style={styles.base.headerView}>
-      {props.position === 'left' ? renderUsername() : null}
+      {props.position === 'left' && renderUsername()}
       {renderTime()}
-      {props.position === 'right' ? renderUsername() : null}
+      {props.position === 'right' && renderUsername()}
     </View>
-  ) : null;
+  );
 
   return (
     <View>
@@ -92,6 +92,7 @@ export const Bubble: React.FC<BubbleProps> = props => {
       <View style={[styles.base.container, styles[position].container]}>
         <TouchableOpacity
           onLongPress={handleLongPress}
+          activeOpacity={1}
           accessibilityRole="text"
         >
           <View style={[styles[position].wrapper]}>{renderMessageText()}</View>

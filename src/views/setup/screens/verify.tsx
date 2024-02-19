@@ -1,8 +1,11 @@
 // TokenVerificationScreen.js
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { server } from '@/data';
-import { StackNavigationProp } from '@react-navigation/stack';
+import {
+  View,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import {
   useNavigation,
   NavigationProp,
@@ -10,11 +13,12 @@ import {
   RouteProp,
   CommonActions,
 } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
 import { Words, Input, Button } from '@/ui/atoms';
-import { State, getState } from '@/data';
+import { State, useStore, server } from '@/data';
 
 export const verifyOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'Verify'>,
@@ -40,7 +44,7 @@ const Verify: React.FC = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'Verify'>>();
   const { phoneNumber } = route.params;
 
-  const { isAuthenticated, userCreated, updateToken } = getState(
+  const { isAuthenticated, userCreated, updateToken } = useStore(
     (state: State) => ({
       isAuthenticated: state.isAuthenticated,
       userCreated: state.currentUser.username !== '',
@@ -75,29 +79,31 @@ const Verify: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View>
-        <Words style={styles.text} tag="h3">
-          we sent a verification
-        </Words>
-        <Words style={styles.text} tag="h3">
-          code on whatsapp
-        </Words>
-        <View style={styles.form}>
-          <Input value={token} caps={true} onChangeText={setToken} />
-          <Button title="verify" onPress={handleValidateToken} />
-        </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <View>
+          <Words style={styles.text} tag="h3">
+            we sent a verification
+          </Words>
+          <Words style={styles.text} tag="h3">
+            code on whatsapp
+          </Words>
+          <View style={styles.form}>
+            <Input value={token} caps={true} onChangeText={setToken} />
+            <Button outlined title="verify" onPress={handleValidateToken} />
+          </View>
 
-        <View style={styles.sendAgain}>
-          <Button
-            title="send it again"
-            tag="small"
-            onPress={sendAgain}
-            outlined
-          />
+          <View style={styles.sendAgain}>
+            <Button
+              title="send it again"
+              tag="small"
+              onPress={sendAgain}
+              bare
+            />
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -116,7 +122,7 @@ const getStyles = (theme: Theme) =>
     },
     sendAgain: {
       alignSelf: 'flex-start',
-      marginTop: 40,
+      marginTop: 20,
     },
     form: {
       flexDirection: 'row',

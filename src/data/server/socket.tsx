@@ -1,4 +1,4 @@
-import { getState } from '@/data';
+import { useStore } from '@/data';
 import { MayaRequest, MayaUpdate } from '@/data/types';
 import { hashPhoneNumber } from '@/data';
 import { client } from '@/data/server/updates';
@@ -23,7 +23,7 @@ class Socket {
 
   private initializeWebSocket = (): WebSocket => {
     console.log('WebSocket starting');
-    const state = getState.getState();
+    const state = useStore.getState();
     const phone_hash = hashPhoneNumber(state.currentUser.userid);
     const socket = new WebSocket(WS_URL + phone_hash);
 

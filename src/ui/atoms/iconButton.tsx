@@ -1,12 +1,11 @@
 import React from 'react';
 import {
   TouchableOpacity,
-  Image,
   StyleSheet,
-  StyleProp,
-  ImageStyle,
   useColorScheme,
+  StyleProp,
 } from 'react-native';
+import FastImage, { ImageStyle } from 'react-native-fast-image';
 import { getImageSource } from '@/data';
 
 interface IconButtonProps {
@@ -15,13 +14,14 @@ interface IconButtonProps {
   style?: StyleProp<ImageStyle>;
 }
 
-const IconButton: React.FC<IconButtonProps> = ({ icon, onPress, style }) => {
+const IconButton: React.FC<IconButtonProps> = props => {
+  const { icon, onPress, style } = props;
   const colorScheme = useColorScheme();
   const styles = getStyles();
 
   return (
     <TouchableOpacity onPress={onPress}>
-      <Image
+      <FastImage
         source={getImageSource(icon, colorScheme)} // Replace with the actual path to your image
         style={[styles.iconButton, style]} // Adjust the size as needed
       />
@@ -35,6 +35,7 @@ const getStyles = () =>
       width: 45, // Adjust the size as needed
       height: 45, // Adjust the size as needed
     },
+    base: {},
   });
 
 export default IconButton;

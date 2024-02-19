@@ -15,6 +15,7 @@ interface ButtonProps {
   outlined?: boolean;
   tag?: FontTag;
   bare?: boolean;
+  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -24,6 +25,7 @@ const Button: React.FC<ButtonProps> = ({
   outlined,
   tag,
   bare,
+  disabled,
 }) => {
   const theme = useTheme();
   if (outlined === undefined) {
@@ -36,10 +38,12 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <TouchableOpacity
       style={[
-        bare ? null : styles.button,
-        bare ? null : tag === 'small' ? styles.small : styles.normal,
+        bare ? styles.bare : styles.button,
+        !bare && (tag === 'small' ? styles.small : styles.normal),
+        disabled && styles.disabled,
         style,
       ]}
+      disabled={disabled}
       onPress={onPress}
     >
       <Words tag={fontTag} alt={outlined || bare} button={true}>
@@ -57,6 +61,12 @@ const getStyles = (theme: Theme, outlined: boolean) =>
       borderColor: theme.colors.outline,
       borderRadius: 5, // Add rounded corners
       margin: 10,
+    },
+    disabled: {
+      opacity: 0.25,
+    },
+    bare: {
+      padding: 10,
     },
     normal: {
       paddingTop: 14, // Add padding

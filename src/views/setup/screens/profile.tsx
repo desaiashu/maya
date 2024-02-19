@@ -1,12 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, useColorScheme } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
-import { IconButton, Words } from '@/ui/atoms';
-import { State, getState, getAvatarSource, getDefaultAvatar } from '@/data';
-import FastImage from 'react-native-fast-image';
+import { IconButton, Words, Avatar } from '@/ui/atoms';
+import { State, useStore } from '@/data';
 
 export const profileOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'Profile'>,
@@ -41,30 +40,24 @@ export const profileOptions = (
 
 const Profile: React.FC = () => {
   const styles = getStyles(useTheme());
-  const user = getState((state: State) => state.currentUser);
-  const colorScheme = useColorScheme();
+  const user = useStore((state: State) => state.currentUser);
 
   if (user === null) {
     return null;
   }
-  const defaultAvatar = getDefaultAvatar(colorScheme);
 
   return (
     <View style={styles.container}>
       <View style={styles.profileInfo}>
-        <FastImage
-          source={getAvatarSource(user.avatar, colorScheme)}
-          defaultSource={defaultAvatar} // Default avatar before remote image loads
-          style={styles.avatar}
-        />
+        <Avatar avatar={user.avatar} size={100} style={styles.avatar} />
         <Words tag="h4" style={styles.info}>
-          Phone Number:
+          phone:
         </Words>
         <Words tag="body" style={styles.phoneNumber}>
           {user.userid}
         </Words>
         <Words tag="h4" style={styles.info}>
-          Username:
+          username:
         </Words>
         <Words tag="body" style={styles.phoneNumber}>
           {user.username}
@@ -87,8 +80,6 @@ const getStyles = (theme: Theme) =>
       marginTop: 50,
     },
     avatar: {
-      width: 100,
-      height: 100,
       borderRadius: 20,
       marginTop: 20,
     },

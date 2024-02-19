@@ -14,7 +14,7 @@ import {
 
 export type State = UserState & ContactsState & ChatlistState & MessagesState;
 
-export const getState = create<State>()(
+export const useStore = create<State>()(
   persist(
     (...a) => ({
       ...useUserState(...a),

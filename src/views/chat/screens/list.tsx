@@ -1,25 +1,17 @@
-import React from 'react';
-import {
-  View,
-  FlatList,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-  useColorScheme,
-} from 'react-native';
+import React, { useMemo } from 'react';
+import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import {
   NavigationProp,
   useNavigation,
   useFocusEffect,
 } from '@react-navigation/native';
 import { RootStackParamList } from '@/views/navigator';
-import { ChatInfo } from '@/data/types';
-import { State, getDefaultAvatar, getAvatarSource } from '@/data';
-import { server, getState } from '@/data';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import { State, useStore, server } from '@/data';
+import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
-import { IconButton, Words } from '@/ui/atoms';
+import { IconButton, Words, Avatar } from '@/ui/atoms';
 
 export const chatListOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'ChatList'>,
@@ -28,14 +20,16 @@ export const chatListOptions = (
   const styles = getStyles(theme);
   return {
     title: 'chats',
-    headerTransparent: true,
+    // headerTransparent: true,
     headerStyle: {
-      backgroundColor: theme.colors.transparent,
+      backgroundColor: theme.colors.background,
     },
     headerLeft: () => (
       <IconButton
         icon="profile"
-        onPress={() => navigation.navigate('Profile')}
+        onPress={() => {
+          navigation.navigate('Profile');
+        }}
         style={styles.profileButton}
       />
     ),
@@ -51,18 +45,22 @@ export const chatListOptions = (
 
 const ChatList: React.FC = () => {
   const styles = getStyles(useTheme());
-  const colorScheme = useColorScheme();
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const { chatList, avatars, topics, participants } = getState(
+  const { chatList, userid, getAvatar, getTopic, getParticipants } = useStore(
     (state: State) => ({
       chatList: state.chats,
-      avatars: state.getAvatars(state.currentUser.userid),
-      topics: state.getTopics(),
-      participants: state.getParticipants(state.currentUser.userid),
+      userid: state.currentUser.userid,
+      getAvatar: state.getAvatar,
+      getTopic: state.getTopic,
+      getParticipants: state.getParticipants,
     }),
   );
+
+  const sortedChats = useMemo(() => {
+    return chatList.slice().sort((a, b) => b.updated - a.updated);
+  }, [chatList]);
 
   const handleSelectChat = (chatInfo: ChatInfo) => {
     navigation.navigate('Chat', chatInfo);
@@ -76,26 +74,16 @@ const ChatList: React.FC = () => {
 
   const renderChatItem = ({ item }: { item: ChatInfo }) => {
     let chatInfo = item;
-    let defaultAvatar = getDefaultAvatar(colorScheme);
-    let avatar = avatars[chatInfo.chatid];
-    if (avatar === '') {
-      avatar = defaultAvatar;
-    }
-
-    let avatarSource = getAvatarSource(avatar, colorScheme);
-    let topic = topics[chatInfo.chatid];
-    let participant = participants[chatInfo.chatid];
+    let avatar = getAvatar(chatInfo, userid);
+    let topic = getTopic(chatInfo);
+    let participant = getParticipants(chatInfo, userid);
 
     return (
       <TouchableOpacity
         style={styles.itemContainer}
-        onPress={() => handleSelectChat(chatInfo as ChatInfo)}
+        onPress={() => handleSelectChat(chatInfo)}
       >
-        <Image
-          source={avatarSource}
-          defaultSource={defaultAvatar} // Default avatar before remote image loads
-          style={styles.avatar}
-        />
+        <Avatar avatar={avatar} size={50} />
         <View style={styles.textContainer}>
           <Words tag="h3" style={styles.name}>
             {participant}
@@ -112,7 +100,7 @@ const ChatList: React.FC = () => {
     <View style={styles.container}>
       <FlatList
         style={styles.content}
-        data={chatList}
+        data={sortedChats}
         keyExtractor={chat => chat.chatid}
         renderItem={renderChatItem}
       />
@@ -124,13 +112,10 @@ const getStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      // marginTop: 5,
       paddingTop: 5,
       backgroundColor: theme.colors.background,
     },
-    content: {
-      paddingTop: 100,
-    },
+    content: {},
     itemContainer: {
       padding: 20,
       borderTopWidth: 0,
@@ -142,27 +127,17 @@ const getStyles = (theme: Theme) =>
       justifyContent: 'flex-start',
       marginLeft: 15,
       marginRight: 15,
-      marginTop: 10,
       height: 100,
     },
     textContainer: {
       flexDirection: 'column', // This is actually the default and can be omitted
-      // justifyContent: 'center',
     },
     name: {
-      // fontSize: 20,
       marginLeft: 20,
-      // fontWeight: 'bold',
     },
     topic: {
-      // fontSize: 16,
       marginLeft: 20,
       marginTop: 3,
-    },
-    avatar: {
-      height: 50,
-      width: 50,
-      borderRadius: 5,
     },
     composeButton: {
       width: 32,
