@@ -117,15 +117,16 @@ const getStyles = (theme: Theme) =>
     sendContainer: {
       height: 44,
       justifyContent: 'center',
-      marginRight: 18,
-      marginBottom: 1,
+      marginRight: 13,
+      marginBottom: 3,
     },
     sendButton: {
       color: theme.colors.text.primary,
     },
     textInput: {
-      paddingRight: 10,
-      paddingBottom: 10,
+      paddingRight: 5,
+      paddingBottom: 12,
+      paddingTop: 6,
       color: theme.colors.text.primary,
       //my styles above
       flex: 1,
