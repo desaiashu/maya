@@ -154,6 +154,11 @@ sudo gem install cocoapods
 
 > See [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, if you have trouble.
 
+
+VSCode plugins:
+- ESLint
+- Prettier
+
 ---
 
 ## Running locally

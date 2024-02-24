@@ -51,7 +51,7 @@ const NewChat: React.FC = () => {
     bots: state.bots,
   }));
 
-  const [protocol, setProtocol] = useState(protocols[2]);
+  const [protocol, setProtocol] = useState(protocols[0]);
   const [participants, setParticipants] = useState<string[]>([]);
 
   const save = () => {
@@ -65,6 +65,7 @@ const NewChat: React.FC = () => {
       created: timestamp(),
       updated: timestamp(),
     };
+    console.log(chat);
     server.createChat(chat);
     navigation.goBack();
     navigation.navigate('Chat', chat);
