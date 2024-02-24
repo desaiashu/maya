@@ -10,19 +10,21 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 
 In progress:
 
-- Taking a break!
+- Group protocols
+- Move over to assistants?
 
 Next up:
 
 - Testflight
 - Build more discussion protocols
-- Force participant set for certain protocols
+- Force participant set for certain protocols, allow others
 - Adding other humans in chat
 - Handle rapid chats - ie. if you message a string of messages the server should wait, adjust and not double respond
 
 Pre-launch:
 
 - Indicators for success/failure/loading - message send, chat creation, profile update, etc
+- Visual bug where some messages show with an extra empty line
 - Lastrefresh functionality, so it doesn't reload chats all the time
 - Hash/encrypt phone numbers
 - Tests for oracle
@@ -46,6 +48,10 @@ Experimental:
 
 Backlog
 
+- Adjust reading speed in user profile
+- Toggle for streaming vs replying
+- Reduce space for new lines
+- Markdown
 - Better data / cache / download management so you're not pulling everything every time
 - Refresh authtoken each session
 - Swap Mongodb with async
@@ -75,6 +81,7 @@ Done
 - Test oracle, upload to dev server
 - Run on actual phone
 - Create new message, select protocol, select AIs
+- 1:1 format list maps bot ID to protocol
 
 ---
 

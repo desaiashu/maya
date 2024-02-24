@@ -5,7 +5,7 @@ import { RootStackParamList } from '@/views/navigator';
 // Overrides for development purposes
 
 ///// Environment /////
-export const ENV: Environment = 'dev';
+export const ENV: Environment = 'local';
 
 ///// Overrides nav stack  /////
 export let DEV_SCREEN: Screen;

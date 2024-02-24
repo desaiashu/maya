@@ -58,7 +58,7 @@ const NewChat: React.FC = () => {
     const chat: ChatInfo = {
       chatid: 'new',
       creator: user.userid,
-      participants: [...participants, user.userid],
+      participants: [user.userid, ...participants],
       topic: 'new chat',
       protocol: protocol,
       profiles: [],
