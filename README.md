@@ -93,6 +93,12 @@ Done
 - Create VS workspace containing both "maya" and "the-oracle" repositories
 - Hide everything non-essential in workspace settings, pull from finder
 
+#### Extensions
+
+- Prettier (typescript formatting)
+- ESLint (typescript linting)
+- Ruff (python linting)
+
 #### Set up several terminals in primary workspace
 
 1. the-oracle - split terminal (backend)
