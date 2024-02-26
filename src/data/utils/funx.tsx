@@ -1,5 +1,5 @@
 import CryptoJS from 'crypto-js';
-import { ColorSchemeName, LayoutAnimation } from 'react-native';
+import { ColorSchemeName, LayoutAnimation, Platform } from 'react-native';
 import { icons, botAvatars, humanAvatars } from '@/data';
 import { Message, Chunk } from '@/data/types';
 
@@ -62,19 +62,24 @@ export const messageFromChunk = (chunk: Chunk): Message => {
 };
 
 export const cancelLayoutAnimation = () => {
-  LayoutAnimation.configureNext({
-    duration: 0,
-    update: {
-      type: LayoutAnimation.Types.easeInEaseOut,
-      property: LayoutAnimation.Properties.opacity,
-    },
-    delete: {
-      type: LayoutAnimation.Types.easeInEaseOut,
-      property: LayoutAnimation.Properties.opacity,
-    },
-    create: {
-      type: LayoutAnimation.Types.easeInEaseOut,
-      property: LayoutAnimation.Properties.opacity,
-    },
-  });
+  if (Platform.OS === 'android') {
+    // For Android, use a supported animation type or disable animation
+    LayoutAnimation.configureNext({ duration: 0 });
+  } else {
+    LayoutAnimation.configureNext({
+      duration: 0,
+      update: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.opacity,
+      },
+      delete: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.opacity,
+      },
+      create: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.opacity,
+      },
+    });
+  }
 };

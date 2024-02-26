@@ -12,7 +12,9 @@ const Maya = () => {
     UIManager.setLayoutAnimationEnabledExperimental
   ) {
     UIManager.setLayoutAnimationEnabledExperimental(true);
+    console.log('LayoutAnimation enabled');
   }
+  console.log('rendered');
   return (
     <ThemeProvider>
       <ActionSheetProvider>

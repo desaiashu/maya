@@ -10,13 +10,12 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 
 In progress:
 
-- Group protocols
-- Move over to assistants?
+- Build group protocols
+- Experiment with deeper trained bots
 
 Next up:
 
 - Testflight
-- Build more discussion protocols
 - Force participant set for certain protocols, allow others
 - Adding other humans in chat
 - Handle rapid chats - ie. if you message a string of messages the server should wait, adjust and not double respond

@@ -1,4 +1,4 @@
-import { LogBox } from 'react-native';
+import { LogBox, Platform } from 'react-native';
 import { RootStackParamList } from '@/views/navigator';
 
 //////////////////////////////////
@@ -20,6 +20,9 @@ export let WS_URL: string;
 switch (ENV as Environment) {
   case 'local':
     WS_URL = 'ws://localhost:8001/maya/';
+    if (Platform.OS === 'android') {
+      WS_URL = 'ws://10.0.2.2:8001/maya/';
+    }
     break;
   case 'toshbook':
     WS_URL = 'ws://192.168.7.207:8001/maya/';
