@@ -12,6 +12,9 @@ In progress:
 
 - Build group protocols
 - Experiment with deeper trained bots
+- Add test for contexts
+- Oracle summary issue
+- Websockets issues: 1. always reopen when app opens, 2. see why it keeps closing
 
 Next up:
 
@@ -108,7 +111,7 @@ Done
 2. maya - split terminal (frontend)
 
 - react `npx react-native start --experimental-debugger`
-- ios `npx run-ios`, `npx react-native run-ios --device toshphone`
+- ios `npx run-ios`, `npx react-native run-ios --device toshphone`, `npx react-native run-android`
 
 3. the-oracle/maya split terminal (version control)
 
