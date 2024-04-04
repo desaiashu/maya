@@ -1,19 +1,24 @@
 module.exports = {
-  presets: ['module:@react-native/babel-preset',
-    ["@babel/preset-typescript", {
-      "allowDeclareFields": true
-    }]
+  presets: [
+    'module:@react-native/babel-preset',
+    [
+      '@babel/preset-typescript',
+      {
+        allowDeclareFields: true,
+      },
+    ],
   ],
   plugins: [
     [
-      "module-resolver",
+      'module-resolver',
       {
-        "root": [__dirname],
-        "alias": {
-          "@": "./src",
-          "%": "./assets",
-        }
-      }
-    ]
-  ]
+        root: [__dirname],
+        alias: {
+          '@': './src',
+          '%': './assets',
+        },
+      },
+    ],
+    'react-native-reanimated/plugin',
+  ],
 };

@@ -5,13 +5,13 @@ import { RootStackParamList } from '@/views/navigator';
 // Overrides for development purposes
 
 ///// Environment /////
-export const ENV: Environment = 'toshbox';
+export const ENV: Environment = 'local';
 
 ///// Overrides nav stack  /////
 export let DEV_SCREEN: Screen;
 
 // Reset local state & storage on app load
-export let RESET_STATE = false;
+export let RESET_STATE = true;
 
 //////////////////////////////////
 
@@ -19,13 +19,13 @@ export let RESET_STATE = false;
 export let WS_URL: string;
 switch (ENV as Environment) {
   case 'local':
-    WS_URL = 'wss://localhost:8001/maya/';
+    WS_URL = 'ws://localhost:8001/maya/';
     if (Platform.OS === 'android') {
-      WS_URL = 'wss://10.0.2.2:8001/maya/';
+      WS_URL = 'ws://10.0.2.2:8001/maya/';
     }
     break;
   case 'toshbook':
-    WS_URL = 'wss://192.168.7.207:8001/maya/';
+    WS_URL = 'ws://192.168.7.207:8001/maya/';
     break;
   case 'toshbox':
     WS_URL = 'wss://maya.txtai.co/maya/';

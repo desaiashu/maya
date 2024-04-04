@@ -10,13 +10,22 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 
 In progress:
 
+- First stream response w/ bounce?
+- Fork for community notes
+  -
+  - Exa bot
+  - Eval bot
+  - Community notes bot
+  - Add annotations feature
+
+Next up:
+
+- Summary issue
 - Build group protocols
 - Experiment with deeper trained bots
 - Add test for contexts
 - Oracle summary issue
 - Websockets issues: 1. always reopen when app opens, 2. see why it keeps closing
-
-Next up:
 
 - Testflight
 - Force participant set for certain protocols, allow others

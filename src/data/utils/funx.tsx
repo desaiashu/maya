@@ -1,7 +1,7 @@
 import CryptoJS from 'crypto-js';
 import { ColorSchemeName, LayoutAnimation, Platform } from 'react-native';
-import { icons, botAvatars, humanAvatars } from '@/data';
-import { Message, Chunk } from '@/data/types';
+import { icons, botAvatars, humanAvatars, useStore, server } from '@/data';
+import { Message, Chunk, ChatInfo } from '@/data/types';
 
 export function hashPhoneNumber(phoneNumber: string): string {
   const phoneHash = CryptoJS.SHA256(phoneNumber).toString(CryptoJS.enc.Hex);
@@ -9,6 +9,29 @@ export function hashPhoneNumber(phoneNumber: string): string {
 }
 
 export const timestamp = () => new Date().getTime();
+
+export const newCommunityChat = () => {
+  const state = useStore.getState();
+  const lastChat = state.chats[0];
+
+  if (lastChat && lastChat.topic === 'new chat') {
+    return lastChat;
+  } else {
+    const userid = state.currentUser.userid;
+    const chat: ChatInfo = {
+      chatid: 'new',
+      creator: userid,
+      participants: [userid, 'maya', 'system'],
+      topic: 'new chat',
+      protocol: 'community_notes',
+      profiles: [],
+      created: timestamp(),
+      updated: timestamp(),
+    };
+    server.createChat(chat);
+    return chat;
+  }
+};
 
 export const isSameDay = (
   message1: Message | undefined,

@@ -1139,8 +1139,17 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
+  - RNGestureHandler (2.16.0):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - RNLocalize (3.0.6):
     - React-Core
+  - RNReanimated (3.8.1):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+    - ReactCommon/turbomodule/core
   - RNScreens (3.29.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1234,7 +1243,9 @@ DEPENDENCIES:
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNFastImage (from `../node_modules/react-native-fast-image`)
+  - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNLocalize (from `../node_modules/react-native-localize`)
+  - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -1366,8 +1377,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-picker/picker"
   RNFastImage:
     :path: "../node_modules/react-native-fast-image"
+  RNGestureHandler:
+    :path: "../node_modules/react-native-gesture-handler"
   RNLocalize:
     :path: "../node_modules/react-native-localize"
+  RNReanimated:
+    :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNSVG:
@@ -1443,7 +1458,9 @@ SPEC CHECKSUMS:
   RNCClipboard: 60fed4b71560d7bfe40e9d35dea9762b024da86d
   RNCPicker: b18aaf30df596e9b1738e7c1f9ee55402a229dca
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
+  RNGestureHandler: 727b656d5a3fa247aac2c8cc70b8757356066451
   RNLocalize: 4222a3756cdbe2dc9a5bdf445765a4d2572107cb
+  RNReanimated: 3e23d4be380e295e504b7b3b3a357df60e1168a2
   RNScreens: b582cb834dc4133307562e930e8fa914b8c04ef2
   RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d

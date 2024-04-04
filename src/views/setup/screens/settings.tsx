@@ -106,7 +106,7 @@ const Settings: React.FC = () => {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: 'ChatList' }],
+          routes: [{ name: 'ChatDrawer' }],
         }),
       );
     } else {

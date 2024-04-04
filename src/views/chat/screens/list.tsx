@@ -8,19 +8,23 @@ import {
 import { RootStackParamList } from '@/views/navigator';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import { State, useStore, server } from '@/data';
+import { State, useStore, server, newCommunityChat } from '@/data';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
 import { IconButton, Words, Avatar } from '@/ui/atoms';
 import { cancelLayoutAnimation } from '@/data';
+import {
+  DrawerNavigationProp,
+  DrawerNavigationOptions,
+} from '@react-navigation/drawer';
 
 export const chatListOptions = (
-  navigation: StackNavigationProp<RootStackParamList, 'ChatList'>,
+  navigation: DrawerNavigationProp<RootStackParamList, 'ChatList'>,
   theme: Theme,
-): NativeStackNavigationOptions => {
+): DrawerNavigationOptions => {
   const styles = getStyles(theme);
   return {
-    title: 'chats',
+    title: 'history',
     headerTransparent: true,
     headerStyle: {
       backgroundColor: theme.colors.background,
@@ -37,7 +41,11 @@ export const chatListOptions = (
     headerRight: () => (
       <IconButton
         icon="compose"
-        onPress={() => navigation.navigate('NewChat')}
+        onPress={() => {
+          const chat = newCommunityChat();
+          server.createChat(chat);
+          navigation.navigate('Chat', chat);
+        }}
         style={styles.composeButton}
       />
     ),
@@ -78,7 +86,7 @@ const ChatList: React.FC = () => {
     let chatInfo = item;
     let avatar = getAvatar(chatInfo, userid);
     let topic = getTopic(chatInfo);
-    let participant = getParticipants(chatInfo, userid);
+    // let participant = getParticipants(chatInfo, userid);
 
     return (
       <TouchableOpacity
@@ -88,11 +96,11 @@ const ChatList: React.FC = () => {
         <Avatar avatar={avatar} size={50} />
         <View style={styles.textContainer}>
           <Words tag="h2" style={styles.name}>
-            {participant}
-          </Words>
-          <Words tag="small" style={styles.topic}>
             {topic}
           </Words>
+          {/* <Words tag="small" style={styles.topic}>
+            {topic}
+          </Words> */}
         </View>
       </TouchableOpacity>
     );

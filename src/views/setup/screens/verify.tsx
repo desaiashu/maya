@@ -65,7 +65,7 @@ const Verify: React.FC = () => {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: 'ChatList' }],
+          routes: [{ name: 'ChatDrawer' }],
         }),
       );
     }

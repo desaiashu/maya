@@ -8,8 +8,12 @@ import {
   FlatList,
   LayoutAnimation,
 } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+// import { StackNavigationProp } from '@react-navigation/stack';
+// import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import {
+  DrawerNavigationProp,
+  DrawerNavigationOptions,
+} from '@react-navigation/drawer';
 import { RootStackParamList } from '@/views/navigator';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
@@ -21,6 +25,7 @@ import {
   timestamp,
   dummyMessage,
   DEV_SCREEN,
+  newCommunityChat,
 } from '@/data';
 import { Message, ChatInfo } from '@/data/types';
 import { MessageUI, InputToolbar, Stream } from '@/views/chat/components';
@@ -28,12 +33,14 @@ import { Theme, useTheme } from '@/ui/theme';
 import { IconButton } from '@/ui/atoms';
 
 export const chatOptions = (
-  navigation: StackNavigationProp<RootStackParamList, 'Chat'>,
+  navigation: DrawerNavigationProp<RootStackParamList, 'Chat'>,
   theme: Theme,
-): NativeStackNavigationOptions => {
+  chat: ChatInfo | undefined,
+): DrawerNavigationOptions => {
   const styles = getStyles(theme);
   return {
-    title: '',
+    title: chat ? chat.topic : 'new chat',
+    headerTitle: '',
     headerTransparent: true,
     headerStyle: {
       backgroundColor: theme.colors.transparent,
@@ -41,9 +48,20 @@ export const chatOptions = (
     headerLeft: () => (
       <IconButton
         icon="back"
-        onPress={() => navigation.goBack()}
+        onPress={() => navigation.toggleDrawer()}
         containerStyle={styles.iconBackContainer}
         style={styles.iconBack}
+      />
+    ),
+    headerRight: () => (
+      <IconButton
+        icon="compose"
+        onPress={() => {
+          const newChat = newCommunityChat();
+          navigation.navigate('new chat', newChat);
+        }}
+        containerStyle={styles.iconComposeContainer}
+        style={styles.iconCompose}
       />
     ),
   };
@@ -53,6 +71,7 @@ const Chat: React.FC = () => {
   const theme = useTheme();
   const styles = getStyles(theme);
   const route = useRoute();
+
   let [chatInfo, setChatInfo] = useState<ChatInfo>(route.params as ChatInfo);
   // let scrollPosition = 0;
   const flatListRef = React.useRef<FlatList>(null);
@@ -61,6 +80,8 @@ const Chat: React.FC = () => {
   //Dev screen override won't have route params
   if (DEV_SCREEN) {
     chatInfo = chats[0]; //Setting directly to execute before next 2 commands
+  } else if (chatInfo === undefined) {
+    chatInfo = newCommunityChat();
   }
 
   const isStreaming = useStream((state: StreamState) => state.isStreaming);
@@ -190,6 +211,23 @@ const getStyles = (theme: Theme) => ({
     shadowRadius: 1,
   },
   iconBack: {
+    width: 20,
+    height: 20,
+  },
+  iconComposeContainer: {
+    backgroundColor: theme.colors.background,
+    paddingLeft: 7,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingRight: 9,
+    marginLeft: -1,
+    borderRadius: 20,
+    shadowColor: theme.colors.outline,
+    shadowOpacity: 0.6,
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 1,
+  },
+  iconCompose: {
     width: 20,
     height: 20,
   },

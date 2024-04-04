@@ -17,6 +17,7 @@ import {
   NewChat,
   newChatOptions,
 } from '@/views/chat';
+import ChatDrawer, { drawerOptions } from '@/views/drawer';
 import {
   Profile,
   profileOptions,
@@ -29,16 +30,19 @@ import {
 } from '@/views/setup';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
+import { Words } from '@/ui/atoms';
 import { State, useStore, DEV_SCREEN } from '@/data';
 
 export type RootStackParamList = {
   ChatList: undefined;
-  Chat: ChatInfo;
+  ChatDrawer: undefined;
   NewChat: undefined;
   Profile: undefined;
   Auth: undefined;
   Verify: { phoneNumber: string };
   Settings: { presentation: 'modal' } | undefined;
+} & {
+  [key: string]: ChatInfo;
 };
 
 export const navigationRef = createNavigationContainerRef();
@@ -54,13 +58,13 @@ const Navigator: React.FC = () => {
 
   const userCreated = username !== '';
 
-  let initialRoute: keyof RootStackParamList = 'Auth';
+  let initialRoute: string = 'Auth';
 
   if (DEV_SCREEN) {
     //Override initialRoute for development
-    initialRoute = DEV_SCREEN;
+    initialRoute = DEV_SCREEN as string;
   } else if (isAuthenticated && userCreated) {
-    initialRoute = 'ChatList';
+    initialRoute = 'ChatDrawer';
   } else if (isAuthenticated && !userCreated) {
     initialRoute = 'Settings';
   } else {
@@ -73,25 +77,11 @@ const Navigator: React.FC = () => {
         initialRouteName={initialRoute}
         screenOptions={defaultNavigationOptions(theme)}
       >
+        <Stack.Screen name="Auth" component={Auth} options={authOptions()} />
         <Stack.Screen
-          name="ChatList"
-          component={ChatList}
-          options={({ navigation }) => chatListOptions(navigation, theme)}
-        />
-        <Stack.Screen
-          name="NewChat"
-          component={NewChat}
-          options={({ navigation }) => newChatOptions(navigation, theme)}
-        />
-        <Stack.Screen
-          name="Chat"
-          component={Chat}
-          options={({ navigation }) => chatOptions(navigation, theme)}
-        />
-        <Stack.Screen
-          name="Profile"
-          component={Profile}
-          options={({ navigation }) => profileOptions(navigation, theme)}
+          name="Verify"
+          component={Verify}
+          options={({ navigation }) => verifyOptions(navigation, theme)}
         />
         <Stack.Screen
           name="Settings"
@@ -100,12 +90,7 @@ const Navigator: React.FC = () => {
             settingsOptions(navigation, route, theme)
           }
         />
-        <Stack.Screen name="Auth" component={Auth} options={authOptions()} />
-        <Stack.Screen
-          name="Verify"
-          component={Verify}
-          options={({ navigation }) => verifyOptions(navigation, theme)}
-        />
+        <Stack.Screen name="ChatDrawer" component={ChatDrawer} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -117,6 +102,7 @@ const defaultNavigationOptions = (
   headerStyle: {
     backgroundColor: theme.colors.header, // Your custom background color
   },
+  headerShown: false,
   headerTintColor: theme.colors.text.primary, // Your custom color for back button and title
   headerTitleStyle: {
     fontFamily: theme.fonts.h3.fontFamily,
