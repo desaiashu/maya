@@ -1,29 +1,25 @@
 // Chat.tsx
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { TextStyle, View } from 'react-native';
 import {
   createDrawerNavigator,
   DrawerNavigationOptions,
-  DrawerNavigationProp,
+  useDrawerStatus,
 } from '@react-navigation/drawer';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/views/navigator';
 import { State, useStore, newCommunityChat, server } from '@/data';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
-import { IconButton } from '@/ui/atoms';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import {
-  Chat,
-  chatOptions,
-  ChatList,
-  chatListOptions,
-  NewChat,
-  newChatOptions,
-} from '@/views/chat';
+  DrawerContentScrollView,
+  DrawerContentComponentProps,
+  DrawerItem,
+} from '@react-navigation/drawer';
+import { Words } from '@/ui/atoms';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Chat, chatOptions } from '@/views/chat';
 import { Profile, profileOptions } from '@/views/setup';
-import { useFocusEffect } from '@react-navigation/native';
 
 export type DrawerParamList = {
   Profile: undefined;
@@ -37,12 +33,6 @@ const Drawer = createDrawerNavigator<RootStackParamList>();
 const ChatDrawer: React.FC = () => {
   const theme = useTheme();
 
-  useFocusEffect(
-    React.useCallback(() => {
-      server.refreshChatlist();
-    }, []),
-  );
-
   const { chats } = useStore((state: State) => ({
     chats: state.chats,
   }));
@@ -52,26 +42,120 @@ const ChatDrawer: React.FC = () => {
   }
 
   return (
-    // <SafeAreaView edges={['top']} style={styles.container}>
     <Drawer.Navigator
       initialRouteName={chats[0] ? chats[0].chatid : 'new chat'}
       screenOptions={defaultDrawerOptions()}
+      drawerContent={renderCustomDrawer(theme)}
     >
-      {chats.map((chat, i) => (
-        <Drawer.Screen
-          name={chat.chatid}
-          key={i}
-          component={Chat}
-          options={({ navigation }) => chatOptions(navigation, theme, chat)}
-          initialParams={chat}
-        />
-      ))}
+      {chats
+        .sort((a, b) => b.updated - a.updated)
+        .map(chat => (
+          <Drawer.Screen
+            name={chat.chatid + (chat.topic || 'new chat')}
+            key={chat.chatid}
+            component={Chat}
+            options={({ navigation }) => chatOptions(navigation, theme, chat)}
+            initialParams={chat}
+          />
+        ))}
       <Drawer.Screen
         name="Profile"
         component={Profile}
         options={({ navigation }) => profileOptions(navigation, theme)}
       />
     </Drawer.Navigator>
+  );
+};
+
+const renderCustomDrawer =
+  (theme: Theme) => (props: DrawerContentComponentProps) => {
+    const filteredProps = {
+      ...props,
+      state: {
+        ...props.state,
+        routes: props.state.routes.filter(route => route.name !== 'Profile'),
+      },
+    };
+    return <CustomDrawer theme={theme} {...filteredProps} />;
+  };
+
+interface CustomDrawerProps extends DrawerContentComponentProps {
+  theme: Theme;
+}
+
+interface ChatLabelProps {
+  topic: string;
+  focused: boolean;
+  theme: Theme;
+  style: TextStyle;
+}
+
+const renderChatLabel = ({ topic, focused, theme, style }: ChatLabelProps) => (
+  <Words
+    tag="h5"
+    style={[
+      theme.fonts.h4,
+      {
+        color: focused
+          ? theme.colors.text.primary
+          : theme.colors.text.secondary,
+      },
+      style,
+    ]}
+  >
+    {topic}
+  </Words>
+);
+
+const CustomDrawer: React.FC<CustomDrawerProps> = ({ theme, ...props }) => {
+  const state = props.state;
+  const styles = getStyles(theme);
+  const routes = state.routes;
+
+  const isDrawerOpen = useDrawerStatus() === 'open';
+
+  useEffect(() => {
+    server.refreshChatlist();
+  }, [isDrawerOpen]);
+
+  return (
+    <SafeAreaView edges={['top']} style={styles.container}>
+      <View style={styles.header}>
+        <Words tag="h3" style={styles.headerText}>
+          Chats
+        </Words>
+      </View>
+      <DrawerContentScrollView {...props}>
+        <View style={styles.chats}>
+          {routes.map((route, i) => {
+            const chat = route.params as ChatInfo;
+            return (
+              <DrawerItem
+                key={chat.chatid}
+                label={({ focused }) =>
+                  renderChatLabel({
+                    topic: chat.topic || 'new chat',
+                    focused: focused,
+                    theme: theme,
+                    style: styles.chatsText,
+                  })
+                }
+                focused={i === state.index}
+                activeTintColor={theme.colors.outline}
+                onPress={() => props.navigation.navigate(route.name)}
+              />
+            );
+          })}
+        </View>
+      </DrawerContentScrollView>
+      <View style={styles.options}>
+        <DrawerItem
+          label="Profile"
+          onPress={() => props.navigation.navigate('Profile')}
+          labelStyle={[theme.fonts.h3, styles.optionsText]}
+        />
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -84,13 +168,39 @@ const getStyles = (theme: Theme) => ({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  keyboardAvoid: {
-    flex: 1,
-  },
-  messagesContainer: {
-    flex: 1,
-    marginTop: -8,
+  header: {
+    paddingBottom: 20,
     marginBottom: 0,
+    borderBottomWidth: 1,
+    borderColor: theme.colors.outline,
+  },
+  headerText: {
+    marginLeft: 20,
+    marginTop: 20,
+  },
+  itemText: {
+    color: theme.colors.text.primary,
+  },
+  chats: {
+    flex: 1,
+    paddingLeft: 0,
+    marginTop: -50,
+    borderTop: 10,
+    borderColor: theme.colors.outline,
+  },
+  chatsText: {
+    marginLeft: 10,
+  },
+  options: {
+    marginBottom: 30,
+    marginLeft: 0,
+    borderTopWidth: 1,
+    borderColor: theme.colors.outline,
+  },
+  optionsText: {
+    color: theme.colors.text.primary,
+    fontWeight: '700',
+    marginLeft: 10,
   },
   back: {
     backgroundColor: theme.colors.background,

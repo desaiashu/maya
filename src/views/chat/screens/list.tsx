@@ -6,8 +6,6 @@ import {
   useFocusEffect,
 } from '@react-navigation/native';
 import { RootStackParamList } from '@/views/navigator';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { State, useStore, server, newCommunityChat } from '@/data';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
@@ -57,13 +55,12 @@ const ChatList: React.FC = () => {
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const { chatList, userid, getAvatar, getTopic, getParticipants } = useStore(
+  const { chatList, userid, getAvatar, getTopic } = useStore(
     (state: State) => ({
       chatList: state.chats,
       userid: state.currentUser.userid,
       getAvatar: state.getAvatar,
       getTopic: state.getTopic,
-      getParticipants: state.getParticipants,
     }),
   );
 

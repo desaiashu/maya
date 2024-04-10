@@ -9,10 +9,13 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 ### Todos
 
 In progress:
-
+- New chat doesn't work yet due to the way sidebar is rendered
+- Sidebar is reverse chronological
+- Profile needs to be fixed
+- Modal view to add annotations
+  - Similar text interface as chat
 - First stream response w/ bounce?
 - Fork for community notes
-  -
   - Exa bot
   - Eval bot
   - Community notes bot

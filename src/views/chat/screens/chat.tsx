@@ -39,7 +39,7 @@ export const chatOptions = (
 ): DrawerNavigationOptions => {
   const styles = getStyles(theme);
   return {
-    title: chat ? chat.topic : 'new chat',
+    title: chat ? chat.chatid : 'new chat',
     headerTitle: '',
     headerTransparent: true,
     headerStyle: {
@@ -47,10 +47,10 @@ export const chatOptions = (
     },
     headerLeft: () => (
       <IconButton
-        icon="back"
+        icon="menu"
         onPress={() => navigation.toggleDrawer()}
-        containerStyle={styles.iconBackContainer}
-        style={styles.iconBack}
+        containerStyle={styles.iconMenuContainer}
+        style={styles.iconMenu}
       />
     ),
     headerRight: () => (
@@ -58,7 +58,7 @@ export const chatOptions = (
         icon="compose"
         onPress={() => {
           const newChat = newCommunityChat();
-          navigation.navigate('new chat', newChat);
+          navigation.navigate(newChat.chatid + 'new chat', newChat);
         }}
         containerStyle={styles.iconComposeContainer}
         style={styles.iconCompose}
@@ -186,7 +186,7 @@ const getStyles = (theme: Theme) => ({
   },
   back: {
     backgroundColor: theme.colors.background,
-    paddingLeft: 11,
+    paddingLeft: 12,
     paddingTop: 8,
     paddingBottom: 8,
     paddingRight: 3,
@@ -197,30 +197,30 @@ const getStyles = (theme: Theme) => ({
     shadowRadius: 1,
     fontWeight: 'bold',
   },
-  iconBackContainer: {
+  iconMenuContainer: {
     backgroundColor: theme.colors.background,
-    paddingLeft: 7,
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingLeft: 9,
+    paddingTop: 9,
+    paddingBottom: 9,
     paddingRight: 9,
-    marginLeft: -1,
+    marginLeft: 15,
     borderRadius: 20,
     shadowColor: theme.colors.outline,
     shadowOpacity: 0.6,
     shadowOffset: { width: 0, height: 0 },
     shadowRadius: 1,
   },
-  iconBack: {
-    width: 20,
-    height: 20,
+  iconMenu: {
+    width: 18,
+    height: 18,
   },
   iconComposeContainer: {
     backgroundColor: theme.colors.background,
-    paddingLeft: 7,
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingLeft: 9,
+    paddingTop: 9,
+    paddingBottom: 9,
     paddingRight: 9,
-    marginLeft: -1,
+    marginRight: 14,
     borderRadius: 20,
     shadowColor: theme.colors.outline,
     shadowOpacity: 0.6,

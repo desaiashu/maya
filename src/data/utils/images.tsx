@@ -116,4 +116,8 @@ export const icons: RequireConverter = {
     light: require('%/icons/light/back.png'),
     dark: require('%/icons/dark/back.png'),
   },
+  menu: {
+    light: require('%/icons/light/menu.png'),
+    dark: require('%/icons/dark/menu.png'),
+  },
 };
