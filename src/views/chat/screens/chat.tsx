@@ -7,9 +7,9 @@ import {
   KeyboardAvoidingView,
   FlatList,
   LayoutAnimation,
+  View,
+  StyleSheet,
 } from 'react-native';
-// import { StackNavigationProp } from '@react-navigation/stack';
-// import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import {
   DrawerNavigationProp,
   DrawerNavigationOptions,
@@ -54,15 +54,28 @@ export const chatOptions = (
       />
     ),
     headerRight: () => (
-      <IconButton
-        icon="compose"
-        onPress={() => {
-          const newChat = newCommunityChat();
-          navigation.navigate(newChat.chatid + 'new chat', newChat);
-        }}
-        containerStyle={styles.iconComposeContainer}
-        style={styles.iconCompose}
-      />
+      <View style={styles.rightMenu}>
+        <IconButton
+          icon="share"
+          onPress={() => {}}
+          containerStyle={styles.iconShareContainer}
+          style={styles.iconShare}
+        />
+        <IconButton
+          icon="compose"
+          onPress={() => {
+            const newChat = newCommunityChat();
+            navigation.reset({
+              index: 0,
+              routes: [
+                { name: newChat.chatid + newChat.topic, params: newChat },
+              ],
+            });
+          }}
+          containerStyle={styles.iconComposeContainer}
+          style={styles.iconCompose}
+        />
+      </View>
     ),
   };
 };
@@ -80,8 +93,6 @@ const Chat: React.FC = () => {
   //Dev screen override won't have route params
   if (DEV_SCREEN) {
     chatInfo = chats[0]; //Setting directly to execute before next 2 commands
-  } else if (chatInfo === undefined) {
-    chatInfo = newCommunityChat();
   }
 
   const isStreaming = useStream((state: StreamState) => state.isStreaming);
@@ -171,66 +182,87 @@ const Chat: React.FC = () => {
   );
 };
 
-const getStyles = (theme: Theme) => ({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  },
-  keyboardAvoid: {
-    flex: 1,
-  },
-  messagesContainer: {
-    flex: 1,
-    marginTop: -8,
-    marginBottom: 0,
-  },
-  back: {
-    backgroundColor: theme.colors.background,
-    paddingLeft: 12,
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingRight: 3,
-    borderRadius: 20,
-    shadowColor: theme.colors.outline,
-    shadowOpacity: 0.6,
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 1,
-    fontWeight: 'bold',
-  },
-  iconMenuContainer: {
-    backgroundColor: theme.colors.background,
-    paddingLeft: 9,
-    paddingTop: 9,
-    paddingBottom: 9,
-    paddingRight: 9,
-    marginLeft: 15,
-    borderRadius: 20,
-    shadowColor: theme.colors.outline,
-    shadowOpacity: 0.6,
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 1,
-  },
-  iconMenu: {
-    width: 18,
-    height: 18,
-  },
-  iconComposeContainer: {
-    backgroundColor: theme.colors.background,
-    paddingLeft: 9,
-    paddingTop: 9,
-    paddingBottom: 9,
-    paddingRight: 9,
-    marginRight: 14,
-    borderRadius: 20,
-    shadowColor: theme.colors.outline,
-    shadowOpacity: 0.6,
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 1,
-  },
-  iconCompose: {
-    width: 20,
-    height: 20,
-  },
-});
+const getStyles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+    },
+    keyboardAvoid: {
+      flex: 1,
+    },
+    messagesContainer: {
+      flex: 1,
+      marginTop: -8,
+      marginBottom: 0,
+    },
+    rightMenu: {
+      flexDirection: 'row',
+    },
+    back: {
+      backgroundColor: theme.colors.background,
+      paddingLeft: 12,
+      paddingTop: 8,
+      paddingBottom: 8,
+      paddingRight: 3,
+      borderRadius: 20,
+      shadowColor: theme.colors.outline,
+      shadowOpacity: 0.6,
+      shadowOffset: { width: 0, height: 0 },
+      shadowRadius: 1,
+      fontWeight: 'bold',
+    },
+    iconMenuContainer: {
+      backgroundColor: theme.colors.background,
+      paddingLeft: 9,
+      paddingTop: 9,
+      paddingBottom: 9,
+      paddingRight: 9,
+      marginLeft: 15,
+      borderRadius: 20,
+      shadowColor: theme.colors.outline,
+      shadowOpacity: 0.6,
+      shadowOffset: { width: 0, height: 0 },
+      shadowRadius: 1,
+    },
+    iconMenu: {
+      width: 18,
+      height: 18,
+    },
+    iconShareContainer: {
+      backgroundColor: theme.colors.background,
+      paddingLeft: 8,
+      paddingTop: 11,
+      paddingBottom: 7,
+      paddingRight: 10,
+      marginRight: 14,
+      borderRadius: 20,
+      shadowColor: theme.colors.outline,
+      shadowOpacity: 0.6,
+      shadowOffset: { width: 0, height: 0 },
+      shadowRadius: 1,
+    },
+    iconShare: {
+      width: 18,
+      height: 18,
+    },
+    iconComposeContainer: {
+      backgroundColor: theme.colors.background,
+      paddingLeft: 9,
+      paddingTop: 9,
+      paddingBottom: 9,
+      paddingRight: 9,
+      marginRight: 14,
+      borderRadius: 20,
+      shadowColor: theme.colors.outline,
+      shadowOpacity: 0.6,
+      shadowOffset: { width: 0, height: 0 },
+      shadowRadius: 1,
+    },
+    iconCompose: {
+      width: 20,
+      height: 20,
+    },
+  });
 
 export default Chat;

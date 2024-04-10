@@ -10,6 +10,21 @@ export function hashPhoneNumber(phoneNumber: string): string {
 
 export const timestamp = () => new Date().getTime();
 
+export const emptyChat = () => {
+  const state = useStore.getState();
+  const userid = state.currentUser.userid;
+  return {
+    chatid: '_',
+    creator: userid,
+    participants: [userid, 'maya', 'system'],
+    topic: 'new chat',
+    protocol: 'community_notes',
+    profiles: [],
+    created: timestamp(),
+    updated: timestamp(),
+  };
+};
+
 export const newCommunityChat = () => {
   const state = useStore.getState();
   const lastChat = state.chats[0];
@@ -17,17 +32,7 @@ export const newCommunityChat = () => {
   if (lastChat && lastChat.topic === 'new chat') {
     return lastChat;
   } else {
-    const userid = state.currentUser.userid;
-    const chat: ChatInfo = {
-      chatid: 'new',
-      creator: userid,
-      participants: [userid, 'maya', 'system'],
-      topic: 'new chat',
-      protocol: 'community_notes',
-      profiles: [],
-      created: timestamp(),
-      updated: timestamp(),
-    };
+    const chat: ChatInfo = emptyChat();
     server.createChat(chat);
     return chat;
   }

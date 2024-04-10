@@ -1,14 +1,20 @@
 // Chat.tsx
 
-import React, { useEffect } from 'react';
-import { TextStyle, View } from 'react-native';
+import React, { useEffect, useMemo } from 'react';
+import { TextStyle, View, StyleSheet } from 'react-native';
 import {
   createDrawerNavigator,
   DrawerNavigationOptions,
   useDrawerStatus,
 } from '@react-navigation/drawer';
 import { RootStackParamList } from '@/views/navigator';
-import { State, useStore, newCommunityChat, server } from '@/data';
+import {
+  State,
+  useStore,
+  newCommunityChat,
+  server,
+  cancelLayoutAnimation,
+} from '@/data';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
 import {
@@ -37,13 +43,16 @@ const ChatDrawer: React.FC = () => {
     chats: state.chats,
   }));
 
-  if (chats.length === 0) {
-    chats.push(newCommunityChat());
-  }
+  const newChat: ChatInfo | undefined = useMemo(() => {
+    if (chats.length === 0) {
+      console.log('newchat');
+      return newCommunityChat();
+    }
+  }, [chats]);
 
   return (
     <Drawer.Navigator
-      initialRouteName={chats[0] ? chats[0].chatid : 'new chat'}
+      initialRouteName={chats[0] ? chats[0].chatid : '_new chat'}
       screenOptions={defaultDrawerOptions()}
       drawerContent={renderCustomDrawer(theme)}
     >
@@ -59,6 +68,13 @@ const ChatDrawer: React.FC = () => {
           />
         ))}
       <Drawer.Screen
+        name={'_new chat'}
+        key={'_'}
+        component={Chat}
+        options={({ navigation }) => chatOptions(navigation, theme, newChat)}
+        initialParams={newChat}
+      />
+      <Drawer.Screen
         name="Profile"
         component={Profile}
         options={({ navigation }) => profileOptions(navigation, theme)}
@@ -69,18 +85,30 @@ const ChatDrawer: React.FC = () => {
 
 const renderCustomDrawer =
   (theme: Theme) => (props: DrawerContentComponentProps) => {
+    const newChatScreen = props.state.routes[props.state.routes.length - 2];
+    const excluded = ['Profile', '_new chat']; // Add the route names you want to exclude
     const filteredProps = {
       ...props,
       state: {
         ...props.state,
-        routes: props.state.routes.filter(route => route.name !== 'Profile'),
+        routes: props.state.routes.filter(
+          route => !excluded.includes(route.name),
+        ),
       },
     };
-    return <CustomDrawer theme={theme} {...filteredProps} />;
+
+    return (
+      <CustomDrawer
+        theme={theme}
+        newScreen={newChatScreen}
+        {...filteredProps}
+      />
+    );
   };
 
 interface CustomDrawerProps extends DrawerContentComponentProps {
   theme: Theme;
+  newScreen: any;
 }
 
 interface ChatLabelProps {
@@ -107,7 +135,11 @@ const renderChatLabel = ({ topic, focused, theme, style }: ChatLabelProps) => (
   </Words>
 );
 
-const CustomDrawer: React.FC<CustomDrawerProps> = ({ theme, ...props }) => {
+const CustomDrawer: React.FC<CustomDrawerProps> = ({
+  theme,
+  newScreen,
+  ...props
+}) => {
   const state = props.state;
   const styles = getStyles(theme);
   const routes = state.routes;
@@ -127,8 +159,16 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({ theme, ...props }) => {
       </View>
       <DrawerContentScrollView {...props}>
         <View style={styles.chats}>
-          {routes.map((route, i) => {
+          {routes.map(route => {
             const chat = route.params as ChatInfo;
+            let selected = false;
+            if (routes[state.index] !== undefined) {
+              const selectedChat = routes[state.index].params as ChatInfo;
+              selected = chat.chatid === selectedChat.chatid;
+            } else if (state.index === routes.length) {
+              const newChat = newScreen.params as ChatInfo;
+              selected = newChat ? chat.created === newChat.created : false;
+            }
             return (
               <DrawerItem
                 key={chat.chatid}
@@ -140,7 +180,7 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({ theme, ...props }) => {
                     style: styles.chatsText,
                   })
                 }
-                focused={i === state.index}
+                focused={selected}
                 activeTintColor={theme.colors.outline}
                 onPress={() => props.navigation.navigate(route.name)}
               />
@@ -151,8 +191,13 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({ theme, ...props }) => {
       <View style={styles.options}>
         <DrawerItem
           label="Profile"
-          onPress={() => props.navigation.navigate('Profile')}
+          onPress={() => {
+            cancelLayoutAnimation();
+            props.navigation.navigate('Profile');
+          }}
           labelStyle={[theme.fonts.h3, styles.optionsText]}
+          focused={state.index === routes.length + 1}
+          activeTintColor={theme.colors.outline}
         />
       </View>
     </SafeAreaView>
@@ -163,92 +208,92 @@ const defaultDrawerOptions = (): DrawerNavigationOptions => ({
   headerShown: true,
 });
 
-const getStyles = (theme: Theme) => ({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  },
-  header: {
-    paddingBottom: 20,
-    marginBottom: 0,
-    borderBottomWidth: 1,
-    borderColor: theme.colors.outline,
-  },
-  headerText: {
-    marginLeft: 20,
-    marginTop: 20,
-  },
-  itemText: {
-    color: theme.colors.text.primary,
-  },
-  chats: {
-    flex: 1,
-    paddingLeft: 0,
-    marginTop: -50,
-    borderTop: 10,
-    borderColor: theme.colors.outline,
-  },
-  chatsText: {
-    marginLeft: 10,
-  },
-  options: {
-    marginBottom: 30,
-    marginLeft: 0,
-    borderTopWidth: 1,
-    borderColor: theme.colors.outline,
-  },
-  optionsText: {
-    color: theme.colors.text.primary,
-    fontWeight: '700',
-    marginLeft: 10,
-  },
-  back: {
-    backgroundColor: theme.colors.background,
-    paddingLeft: 11,
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingRight: 3,
-    borderRadius: 20,
-    shadowColor: theme.colors.outline,
-    shadowOpacity: 0.6,
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 1,
-    fontWeight: 'bold',
-  },
-  iconBackContainer: {
-    backgroundColor: theme.colors.background,
-    paddingLeft: 7,
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingRight: 9,
-    marginLeft: -1,
-    borderRadius: 20,
-    shadowColor: theme.colors.outline,
-    shadowOpacity: 0.6,
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 1,
-  },
-  iconBack: {
-    width: 20,
-    height: 20,
-  },
-  iconComposeContainer: {
-    backgroundColor: theme.colors.background,
-    paddingLeft: 7,
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingRight: 9,
-    marginLeft: -1,
-    borderRadius: 20,
-    shadowColor: theme.colors.outline,
-    shadowOpacity: 0.6,
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 1,
-  },
-  iconCompose: {
-    width: 20,
-    height: 20,
-  },
-});
+const getStyles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+    },
+    header: {
+      paddingBottom: 20,
+      marginBottom: 0,
+      borderBottomWidth: 1,
+      borderColor: theme.colors.outline,
+    },
+    headerText: {
+      marginLeft: 20,
+      marginTop: 20,
+    },
+    itemText: {
+      color: theme.colors.text.primary,
+    },
+    chats: {
+      flex: 1,
+      paddingLeft: 0,
+      marginTop: -50,
+      borderColor: theme.colors.outline,
+    },
+    chatsText: {
+      marginLeft: 10,
+    },
+    options: {
+      marginBottom: 30,
+      marginLeft: 0,
+      borderTopWidth: 1,
+      borderColor: theme.colors.outline,
+    },
+    optionsText: {
+      color: theme.colors.text.primary,
+      fontWeight: 'bold',
+      marginLeft: 10,
+    },
+    back: {
+      backgroundColor: theme.colors.background,
+      paddingLeft: 11,
+      paddingTop: 8,
+      paddingBottom: 8,
+      paddingRight: 3,
+      borderRadius: 20,
+      shadowColor: theme.colors.outline,
+      shadowOpacity: 0.6,
+      shadowOffset: { width: 0, height: 0 },
+      shadowRadius: 1,
+      fontWeight: 'bold',
+    },
+    iconBackContainer: {
+      backgroundColor: theme.colors.background,
+      paddingLeft: 7,
+      paddingTop: 8,
+      paddingBottom: 8,
+      paddingRight: 9,
+      marginLeft: -1,
+      borderRadius: 20,
+      shadowColor: theme.colors.outline,
+      shadowOpacity: 0.6,
+      shadowOffset: { width: 0, height: 0 },
+      shadowRadius: 1,
+    },
+    iconBack: {
+      width: 20,
+      height: 20,
+    },
+    iconComposeContainer: {
+      backgroundColor: theme.colors.background,
+      paddingLeft: 7,
+      paddingTop: 8,
+      paddingBottom: 8,
+      paddingRight: 9,
+      marginLeft: -1,
+      borderRadius: 20,
+      shadowColor: theme.colors.outline,
+      shadowOpacity: 0.6,
+      shadowOffset: { width: 0, height: 0 },
+      shadowRadius: 1,
+    },
+    iconCompose: {
+      width: 20,
+      height: 20,
+    },
+  });
 
 export default ChatDrawer;

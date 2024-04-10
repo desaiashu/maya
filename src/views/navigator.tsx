@@ -9,18 +9,8 @@ import {
   createNativeStackNavigator,
   NativeStackNavigationOptions,
 } from '@react-navigation/native-stack';
+import ChatDrawer from '@/views/drawer';
 import {
-  Chat,
-  chatOptions,
-  ChatList,
-  chatListOptions,
-  NewChat,
-  newChatOptions,
-} from '@/views/chat';
-import ChatDrawer, { drawerOptions } from '@/views/drawer';
-import {
-  Profile,
-  profileOptions,
   Auth,
   authOptions,
   Verify,
@@ -30,7 +20,6 @@ import {
 } from '@/views/setup';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
-import { Words } from '@/ui/atoms';
 import { State, useStore, DEV_SCREEN } from '@/data';
 
 export type RootStackParamList = {
