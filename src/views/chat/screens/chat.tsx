@@ -51,15 +51,21 @@ export const chatOptions = (
         onPress={() => navigation.toggleDrawer()}
         containerStyle={styles.iconMenuContainer}
         style={styles.iconMenu}
+        round
+        shadow
       />
     ),
     headerRight: () => (
       <View style={styles.rightMenu}>
         <IconButton
           icon="share"
-          onPress={() => {}}
+          onPress={() => {
+            console.log('share');
+          }}
           containerStyle={styles.iconShareContainer}
           style={styles.iconShare}
+          round
+          shadow
         />
         <IconButton
           icon="compose"
@@ -74,6 +80,8 @@ export const chatOptions = (
           }}
           containerStyle={styles.iconComposeContainer}
           style={styles.iconCompose}
+          round
+          shadow
         />
       </View>
     ),
@@ -199,55 +207,29 @@ const getStyles = (theme: Theme) =>
     rightMenu: {
       flexDirection: 'row',
     },
-    back: {
-      backgroundColor: theme.colors.background,
-      paddingLeft: 12,
-      paddingTop: 8,
-      paddingBottom: 8,
-      paddingRight: 3,
-      borderRadius: 20,
-      shadowColor: theme.colors.outline,
-      shadowOpacity: 0.6,
-      shadowOffset: { width: 0, height: 0 },
-      shadowRadius: 1,
-      fontWeight: 'bold',
-    },
     iconMenuContainer: {
-      backgroundColor: theme.colors.background,
       paddingLeft: 9,
       paddingTop: 9,
       paddingBottom: 9,
       paddingRight: 9,
       marginLeft: 15,
-      borderRadius: 20,
-      shadowColor: theme.colors.outline,
-      shadowOpacity: 0.6,
-      shadowOffset: { width: 0, height: 0 },
-      shadowRadius: 1,
     },
     iconMenu: {
       width: 18,
       height: 18,
     },
     iconShareContainer: {
-      backgroundColor: theme.colors.background,
       paddingLeft: 8,
       paddingTop: 11,
       paddingBottom: 7,
       paddingRight: 10,
       marginRight: 14,
-      borderRadius: 20,
-      shadowColor: theme.colors.outline,
-      shadowOpacity: 0.6,
-      shadowOffset: { width: 0, height: 0 },
-      shadowRadius: 1,
     },
     iconShare: {
       width: 18,
       height: 18,
     },
     iconComposeContainer: {
-      backgroundColor: theme.colors.background,
       paddingLeft: 9,
       paddingTop: 9,
       paddingBottom: 9,

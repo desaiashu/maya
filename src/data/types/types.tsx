@@ -47,6 +47,17 @@ export interface ChunkUpdate {
   update?: string;
   background?: boolean;
 }
+export interface Confidence {
+  chatid: string;
+  messageid: number;
+  evaluator: string;
+  percent: number;
+}
+export interface ConfidenceUpdate {
+  data: Confidence;
+  update?: string;
+  background?: boolean;
+}
 export interface Context {
   chatid: string;
   content: string;

@@ -18,6 +18,7 @@ import {
   Settings,
   settingsOptions,
 } from '@/views/setup';
+import { Annotation, annotationOptions } from '@/views/chat';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
 import { State, useStore, DEV_SCREEN } from '@/data';
@@ -29,6 +30,7 @@ export type RootStackParamList = {
   Profile: undefined;
   Auth: undefined;
   Verify: { phoneNumber: string };
+  Annotation: undefined;
   Settings: { presentation: 'modal' } | undefined;
 } & {
   [key: string]: ChatInfo;
@@ -80,6 +82,11 @@ const Navigator: React.FC = () => {
           }
         />
         <Stack.Screen name="ChatDrawer" component={ChatDrawer} />
+        <Stack.Screen
+          name="Annotation"
+          component={Annotation}
+          options={({ navigation }) => annotationOptions(navigation, theme)}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -15,6 +15,7 @@ interface ButtonProps {
   outlined?: boolean;
   tag?: FontTag;
   bare?: boolean;
+  shadow?: boolean;
   disabled?: boolean;
 }
 
@@ -25,6 +26,7 @@ const Button: React.FC<ButtonProps> = ({
   outlined,
   tag,
   bare,
+  shadow,
   disabled,
 }) => {
   const theme = useTheme();
@@ -40,6 +42,7 @@ const Button: React.FC<ButtonProps> = ({
       style={[
         bare ? styles.bare : styles.button,
         !bare && (tag === 'small' ? styles.small : styles.normal),
+        shadow && styles.shadow,
         disabled && styles.disabled,
         style,
       ]}
@@ -64,6 +67,13 @@ const getStyles = (theme: Theme, outlined: boolean) =>
     },
     disabled: {
       opacity: 0.25,
+    },
+    shadow: {
+      borderWidth: 0,
+      shadowColor: theme.colors.outline,
+      shadowOpacity: 0.6,
+      shadowOffset: { width: 0, height: 0 },
+      shadowRadius: 1.5,
     },
     bare: {
       padding: 10,

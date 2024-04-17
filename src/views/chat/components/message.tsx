@@ -1,9 +1,16 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Message } from '@/data/types';
-import { Bubble, Day } from '@/views/chat/components';
-import { Avatar } from '@/ui/atoms';
+import {
+  Bubble,
+  Day,
+  ConfidenceBadge,
+  Perspective,
+} from '@/views/chat/components';
+import { Avatar, Words } from '@/ui/atoms';
 import { isSameUser, isSameDay } from '@/data';
+import { Theme, useTheme } from '@/ui/theme';
+import { useNavigation } from '@react-navigation/native';
 
 interface MessageProps {
   current: Message;
@@ -17,7 +24,10 @@ interface MessageProps {
 const MessageUI: React.FC<MessageProps> = props => {
   const { current, next, prev, position, avatar, username } = props;
 
-  const styles = getStyles();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
+  const theme = useTheme();
+  const styles = getStyles(theme);
 
   const hideAvatar = isSameUser(current, next) && isSameDay(current, next);
   const hideDay = isSameDay(current, prev);
@@ -26,11 +36,34 @@ const MessageUI: React.FC<MessageProps> = props => {
   const first = !prev;
   const final = !next;
 
+  const openAnnotation = () => {
+    console.log('annotate');
+  };
+
+  const openDiscussion = () => {
+    console.log('discuss');
+  };
+
+  const renderPerspective = () => {
+    return username === 'maya' ? (
+      <View style={styles.base.perspective}>
+        <Perspective message={current} onPress={openDiscussion} />
+      </View>
+    ) : null;
+  };
+
+  const renderConfidence = () => {
+    return username === 'maya' ? (
+      <ConfidenceBadge onPress={openAnnotation} />
+    ) : null;
+  };
+
   const renderAvatar = () => {
     return (
       <View style={styles.base.avatarContainer}>
         {hideAvatar ? null : (
           <View style={styles.base.avatarAbsolute}>
+            {renderConfidence()}
             <Avatar position={position} avatar={avatar} />
           </View>
         )}
@@ -57,11 +90,12 @@ const MessageUI: React.FC<MessageProps> = props => {
         />
         {position === 'right' && renderAvatar()}
       </View>
+      {renderPerspective()}
     </View>
   );
 };
 
-const getStyles = () => ({
+const getStyles = (theme: Theme) => ({
   base: StyleSheet.create({
     messageContainer: {
       marginTop: 8,
@@ -84,6 +118,9 @@ const getStyles = () => ({
     avatarAbsolute: {
       position: 'absolute',
       bottom: 2,
+    },
+    perspective: {
+      marginRight: 25,
     },
   }),
   left: StyleSheet.create({

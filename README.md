@@ -9,17 +9,13 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 ### Todos
 
 In progress:
-- New chat doesn't work yet due to the way sidebar is rendered
-- Sidebar is reverse chronological
-- Profile needs to be fixed
+
 - Modal view to add annotations
   - Similar text interface as chat
+- Exa bot
+- Eval bot
+- Community notes bot
 - First stream response w/ bounce?
-- Fork for community notes
-  - Exa bot
-  - Eval bot
-  - Community notes bot
-  - Add annotations feature
 
 Next up:
 
@@ -37,6 +33,7 @@ Next up:
 
 Pre-launch:
 
+- Share functionality w/ web based viewer of chatid
 - Indicators for success/failure/loading - message send, chat creation, profile update, etc
 - Visual bug where some messages show with an extra empty line
 - Lastrefresh functionality, so it doesn't reload chats all the time
@@ -81,6 +78,10 @@ Backlog
 
 Done
 
+- Chatlist refresh, doing so in drawer screws with animation
+- New chat doesn't work yet due to the way sidebar is rendered
+- Sidebar is reverse chronological
+- Profile needs to be fixed
 - Build message refresh
 - Build websockets
   - Helper function for websocket to create the right json

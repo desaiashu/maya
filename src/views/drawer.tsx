@@ -8,13 +8,7 @@ import {
   useDrawerStatus,
 } from '@react-navigation/drawer';
 import { RootStackParamList } from '@/views/navigator';
-import {
-  State,
-  useStore,
-  newCommunityChat,
-  server,
-  cancelLayoutAnimation,
-} from '@/data';
+import { State, useStore, newCommunityChat, server } from '@/data';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
 import {
@@ -144,10 +138,15 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
   const styles = getStyles(theme);
   const routes = state.routes;
 
+  // TODO: make sure this is the right timing to refresh
   const isDrawerOpen = useDrawerStatus() === 'open';
-
   useEffect(() => {
-    server.refreshChatlist();
+    if (isDrawerOpen) {
+      const refreshChatListAsync = async () => {
+        await server.refreshChatlist();
+      };
+      refreshChatListAsync();
+    }
   }, [isDrawerOpen]);
 
   return (
@@ -182,7 +181,9 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
                 }
                 focused={selected}
                 activeTintColor={theme.colors.outline}
-                onPress={() => props.navigation.navigate(route.name)}
+                onPress={() => {
+                  props.navigation.navigate(route.name);
+                }}
               />
             );
           })}
@@ -192,7 +193,6 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
         <DrawerItem
           label="Profile"
           onPress={() => {
-            cancelLayoutAnimation();
             props.navigation.navigate('Profile');
           }}
           labelStyle={[theme.fonts.h3, styles.optionsText]}

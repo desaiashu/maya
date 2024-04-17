@@ -5,7 +5,7 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import { Message } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
 import { Words } from '@/ui/atoms';
-import { Time } from '@/views/chat/components/timestamp';
+import { Time } from '@/views/chat/components';
 
 interface BubbleProps {
   onLongPress?: (context: any, message: any) => void;
