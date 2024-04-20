@@ -1,19 +1,14 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Words, Button } from '@/ui/atoms';
-import { Message } from '@/data/types';
-import { Theme, useTheme } from '@/ui/theme';
-import { Confidence } from '@/views/chat/components';
+import { Button } from '@/ui/atoms';
 
 interface PerspectiveProps {
-  message: Message;
   onPress: () => void;
 }
 
 const Perspective: React.FC<PerspectiveProps> = props => {
-  const { message, onPress } = props;
-  const theme = useTheme();
-  const styles = getStyles(theme);
+  const { onPress } = props;
+  const styles = getStyles();
   return (
     <View style={styles.container}>
       <Button
@@ -28,7 +23,7 @@ const Perspective: React.FC<PerspectiveProps> = props => {
   );
 };
 
-const getStyles = (theme: Theme) =>
+const getStyles = () =>
   StyleSheet.create({
     container: {
       flexDirection: 'row', // This makes child components align horizontally

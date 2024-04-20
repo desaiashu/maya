@@ -1,23 +1,26 @@
 import React from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ViewStyle, TouchableOpacity } from 'react-native';
 import { Words } from '@/ui/atoms';
 import { Confidence } from '@/data/types';
-import { Theme, useTheme } from '@/ui/theme';
+import { Theme, useTheme, FontTag } from '@/ui/theme';
 
 interface ConfidenceProps {
   confidence?: Confidence;
   onPress?: () => void;
+  tag?: FontTag;
+  size?: number;
+  style?: ViewStyle;
 }
 
 const ConfidenceBadge: React.FC<ConfidenceProps> = props => {
-  const { confidence, onPress } = props;
+  const { confidence, onPress, style, tag = 'small', size = 11 } = props;
   const theme = useTheme();
-  const styles = getStyles(theme);
+  const styles = getStyles(theme, size);
 
   return (
     <TouchableOpacity style={styles.button} onPress={onPress}>
-      <View style={styles.circle}>
-        <Words tag="small" style={styles.number}>
+      <View style={[styles.circle, style]}>
+        <Words tag={tag} style={styles.number}>
           {confidence ? confidence.percent : '85'}
         </Words>
       </View>
@@ -25,7 +28,7 @@ const ConfidenceBadge: React.FC<ConfidenceProps> = props => {
   );
 };
 
-const getStyles = (theme: Theme) =>
+const getStyles = (theme: Theme, size: number) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row', // This makes child components align horizontally
@@ -53,7 +56,7 @@ const getStyles = (theme: Theme) =>
       shadowOffset: { width: 0, height: 0 },
       shadowRadius: 1,
     },
-    number: { fontSize: 11 },
+    number: { fontSize: size },
     high: {},
     mid: {},
     low: {},

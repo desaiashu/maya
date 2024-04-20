@@ -20,10 +20,19 @@ interface MessageProps {
   avatar: string;
   username: string;
   position?: 'left' | 'right';
+  stream?: boolean;
 }
 
 const MessageUI: React.FC<MessageProps> = props => {
-  const { current, next, prev, avatar, username, position = 'left' } = props;
+  const {
+    current,
+    next,
+    prev,
+    avatar,
+    username,
+    stream = false,
+    position = 'left',
+  } = props;
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -63,15 +72,15 @@ const MessageUI: React.FC<MessageProps> = props => {
   };
 
   const renderPerspective = () => {
-    return username === 'maya' ? (
+    return username === 'maya' && !stream ? (
       <View style={styles.base.perspective}>
-        <Perspective message={current} onPress={openDiscussion} />
+        <Perspective onPress={openDiscussion} />
       </View>
     ) : null;
   };
 
   const renderConfidence = () => {
-    return username === 'maya' ? (
+    return username === 'maya' && !stream ? (
       <ConfidenceBadge confidence={c} onPress={openAnnotation} />
     ) : null;
   };

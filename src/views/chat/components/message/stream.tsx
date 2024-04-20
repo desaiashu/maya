@@ -32,7 +32,7 @@ export const Stream: React.FC<Props> = props => {
       prev={prev}
       avatar={avatars[chunks.sender]}
       username={usernames[chunks.sender] || ''}
-      position={'left'}
+      stream={true}
     />
   );
 };

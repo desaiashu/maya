@@ -8,12 +8,14 @@ interface InputToolbarProps {
   onSend: (text: string) => void;
   chatid?: string;
   onLayout?: (event: any) => void;
+  placeholder?: string;
 }
 
 const InputToolbar: React.FC<InputToolbarProps> = ({
   onSend,
   chatid,
   onLayout,
+  placeholder = 'Type a message...',
 }) => {
   const draft = useStore((state: State) =>
     chatid ? state.drafts[chatid] || '' : '',
@@ -62,7 +64,7 @@ const InputToolbar: React.FC<InputToolbarProps> = ({
         <TextInput
           value={text}
           onChangeText={setText}
-          placeholder={'Type a message...'}
+          placeholder={placeholder}
           placeholderTextColor={theme.colors.text.secondary}
           multiline={true}
           style={[theme.fonts.body, styles.textInput]}

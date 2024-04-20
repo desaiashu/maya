@@ -63,15 +63,52 @@ const Annotation: React.FC = () => {
         style={styles.keyboardAvoid}
       >
         <View style={styles.content}>
-          <ConfidenceBadge confidence={confidence} />
-          <Words tag="h1">{'yay'}</Words>
+          <Words tag="h2" style={styles.rating}>
+            {'Confidence rating'}
+          </Words>
+          <ConfidenceBadge
+            confidence={confidence}
+            tag={'body'}
+            size={24}
+            style={styles.confidence}
+          />
+          <Words tag="body" style={styles.explainer}>
+            {` 
+    Confidence ratings are on a 0-100 scale
+
+    A high confidence means the answer has
+    - A lower chance of bias
+    - A lower chance of hallucination
+    - A lower chance of misinformation
+
+    Our goal is to present a holistic perspective 
+    on info and seek ground truth, reducing 
+    cultural, political, and financial bias
+    
+    Please feel free to contribute more 
+    information on the topic at hand
+            `}
+          </Words>
+          {/* We calculate bias using embeddings, identify hallucinations using
+          secondary LLMs, and flag potential misinformation using community
+          notes  */}
+          {/* Since LLMs are trained on internet data, they only contain a
+          small fraction of the world's information. Given this, we rely on our
+          community to contribute additional information about topics discussed */}
           {/* A high confidence means the answer is:
           Lower chance of bias Lower chance of hallucination Lower chance of
           misinformation Community notes Add note: Bias = Ruling party dominance
           Statements */}
         </View>
-        <MessageList messages={notes} profiles={profiles} />
-        <InputToolbar onSend={onSend} />
+        <MessageList
+          style={styles.messages}
+          messages={notes}
+          profiles={profiles}
+        />
+        <InputToolbar
+          placeholder={'Contribute information...'}
+          onSend={onSend}
+        />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -86,6 +123,18 @@ const getStyles = (theme: Theme) =>
     content: { flex: 1, alignItems: 'center' },
     keyboardAvoid: {
       flex: 1,
+    },
+    rating: { bottom: 20 },
+    messages: { maxHeight: 300 },
+    explainer: {},
+    confidence: {
+      width: 64,
+      height: 64,
+      borderRadius: 32,
+      shadowRadius: 3,
+      paddingTop: 5,
+      left: 0,
+      bottom: 0,
     },
     save: {},
     iconCloseContainer: {
