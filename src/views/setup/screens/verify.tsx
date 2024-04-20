@@ -42,6 +42,10 @@ export const verifyOptions = (
   };
 };
 
+export interface VerifyProps {
+  phoneNumber: string;
+}
+
 const Verify: React.FC = () => {
   const styles = getStyles(useTheme());
   const [token, setToken] = useState('');

@@ -47,6 +47,8 @@ const getStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
       backgroundColor: theme.colors.background,
+      justifyContent: 'center', // Center vertically
+      alignItems: 'center',
     },
     iconButton: {
       width: 45, // Adjust the size as needed

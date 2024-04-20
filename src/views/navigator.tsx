@@ -15,10 +15,19 @@ import {
   authOptions,
   Verify,
   verifyOptions,
+  VerifyProps,
   Settings,
   settingsOptions,
+  SettingsProps,
 } from '@/views/setup';
-import { Annotation, annotationOptions } from '@/views/chat';
+import {
+  Annotation,
+  annotationOptions,
+  AnnotationProps,
+  Discussion,
+  discussionOptions,
+  DiscussionProps,
+} from '@/views/chat';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
 import { State, useStore, DEV_SCREEN } from '@/data';
@@ -29,9 +38,10 @@ export type RootStackParamList = {
   NewChat: undefined;
   Profile: undefined;
   Auth: undefined;
-  Verify: { phoneNumber: string };
-  Annotation: undefined;
-  Settings: { presentation: 'modal' } | undefined;
+  Verify: VerifyProps;
+  Annotation: AnnotationProps;
+  Discussion: DiscussionProps;
+  Settings: SettingsProps | undefined;
 } & {
   [key: string]: ChatInfo;
 };
@@ -86,6 +96,11 @@ const Navigator: React.FC = () => {
           name="Annotation"
           component={Annotation}
           options={({ navigation }) => annotationOptions(navigation, theme)}
+        />
+        <Stack.Screen
+          name="Discussion"
+          component={Discussion}
+          options={({ navigation }) => discussionOptions(navigation, theme)}
         />
       </Stack.Navigator>
     </NavigationContainer>

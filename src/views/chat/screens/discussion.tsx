@@ -1,29 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import {
-  View,
-  StyleSheet,
-  Platform,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from 'react-native';
+import React from 'react';
+import { View, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import {
-  useNavigation,
-  NavigationProp,
-  RouteProp,
-  useRoute,
-  CommonActions,
-} from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
-import { Button, IconButton, Input, Words } from '@/ui/atoms';
-import { State, useStore, server } from '@/data';
-import { Profile } from '@/data/types';
-import { AvatarSelect } from '@/ui/molecules';
+import { IconButton, Words } from '@/ui/atoms';
+import { Message, Profile } from '@/data/types';
+import { MessageList, InputToolbar } from '@/views/chat/components';
 
-export const annotationOptions = (
+export const discussionOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'Settings'>,
   theme: Theme,
 ): NativeStackNavigationOptions => {
@@ -31,15 +18,15 @@ export const annotationOptions = (
   return {
     title: 'discussion',
     headerTitle: '',
-    // presentation: 'modal',
-    headerShown: false,
+    presentation: 'card',
+    headerShown: true,
     headerTransparent: true,
     headerStyle: {
       backgroundColor: theme.colors.transparent,
     },
     headerLeft: () => (
       <IconButton
-        icon="close"
+        icon="backarrow"
         onPress={() => navigation.goBack()}
         containerStyle={styles.iconCloseContainer}
         style={styles.iconClose}
@@ -48,65 +35,35 @@ export const annotationOptions = (
   };
 };
 
+export interface DiscussionProps {
+  prompt: Message;
+  response: Message;
+}
+
 const Discussion: React.FC = () => {
   const styles = getStyles(useTheme());
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   const route = useRoute();
-  const { params } = route;
-  const { user, updateUserChats, setUserProfile } = useStore(
-    (state: State) => ({
-      user: state.currentUser,
-      updateUserChats: state.updateUserChats,
-      setUserProfile: state.setUserProfile,
-    }),
-  );
+  const { prompt, response } = route.params as DiscussionProps;
 
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const perspectives: Message[] = [];
+  const profiles: Profile[] = [];
 
-  useEffect(() => {
-    const keyboardWillShowListener = Keyboard.addListener(
-      'keyboardWillShow',
-      () => {
-        setKeyboardVisible(true);
-      },
-    );
-    const keyboardWillHideListener = Keyboard.addListener(
-      'keyboardWillHide',
-      () => {
-        setKeyboardVisible(false);
-      },
-    );
-    return () => {
-      keyboardWillShowListener.remove();
-      keyboardWillHideListener.remove();
-    };
-  }, []);
-
-  if (user === null) {
-    return null;
-  }
-
-  const save = () => {};
+  const onSend = () => {};
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <SafeAreaView edges={['top']} style={styles.container}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'height' : 'height'}
         style={styles.keyboardAvoid}
       >
-        <View
-          style={[styles.container, keyboardVisible && styles.keyboardVisibile]}
-        >
-          <View>
-            <View>
-              <Words tag="h4" style={styles.top}>
-                select avatar
-              </Words>
-            </View>
-          </View>
+        <View style={styles.content}>
+          <Words tag="h1">{'yay'}</Words>
         </View>
+        <MessageList messages={perspectives} profiles={profiles} />
+        <InputToolbar onSend={onSend} />
       </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
+    </SafeAreaView>
   );
 };
 
@@ -114,23 +71,12 @@ const getStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
       backgroundColor: theme.colors.background,
     },
     keyboardAvoid: {
       flex: 1,
     },
-    keyboardVisibile: {
-      marginBottom: 0,
-    },
-    top: {
-      marginLeft: 10,
-    },
-    close: {
-      marginLeft: -10,
-      marginTop: 1,
-    },
+    content: { flex: 1, alignItems: 'center' },
     save: {},
     iconCloseContainer: {
       backgroundColor: theme.colors.background,
@@ -145,10 +91,12 @@ const getStyles = (theme: Theme) =>
       shadowOpacity: 0.6,
       shadowOffset: { width: 0, height: 0 },
       shadowRadius: 1,
+      width: 35,
+      height: 35,
     },
     iconClose: {
-      width: 33,
-      height: 33,
+      width: 18,
+      height: 18,
     },
   });
 

@@ -124,4 +124,12 @@ export const icons: RequireConverter = {
     light: require('%/icons/light/share.png'),
     dark: require('%/icons/dark/share.png'),
   },
+  closex: {
+    light: require('%/icons/light/closex.png'),
+    dark: require('%/icons/dark/closex.png'),
+  },
+  backarrow: {
+    light: require('%/icons/light/backarrow.png'),
+    dark: require('%/icons/dark/backarrow.png'),
+  },
 };

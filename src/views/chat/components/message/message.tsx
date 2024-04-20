@@ -1,16 +1,17 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Message } from '@/data/types';
+import { Message, Confidence } from '@/data/types';
 import {
   Bubble,
   Day,
   ConfidenceBadge,
   Perspective,
 } from '@/views/chat/components';
-import { Avatar, Words } from '@/ui/atoms';
+import { Avatar } from '@/ui/atoms';
 import { isSameUser, isSameDay } from '@/data';
-import { Theme, useTheme } from '@/ui/theme';
-import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '@/views/navigator';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { AnnotationProps, DiscussionProps } from '@/views/chat';
 
 interface MessageProps {
   current: Message;
@@ -18,16 +19,15 @@ interface MessageProps {
   prev?: Message;
   avatar: string;
   username: string;
-  position: 'left' | 'right';
+  position?: 'left' | 'right';
 }
 
 const MessageUI: React.FC<MessageProps> = props => {
-  const { current, next, prev, position, avatar, username } = props;
+  const { current, next, prev, avatar, username, position = 'left' } = props;
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const theme = useTheme();
-  const styles = getStyles(theme);
+  const styles = getStyles();
 
   const hideAvatar = isSameUser(current, next) && isSameDay(current, next);
   const hideDay = isSameDay(current, prev);
@@ -36,12 +36,30 @@ const MessageUI: React.FC<MessageProps> = props => {
   const first = !prev;
   const final = !next;
 
+  const c: Confidence = {
+    chatid: '1',
+    messageid: 1,
+    evaluator: 'string',
+    percent: 85,
+  };
+
   const openAnnotation = () => {
     console.log('annotate');
+    const p: AnnotationProps = {
+      prompt: prev!,
+      response: current,
+      confidence: c,
+    };
+    navigation.navigate('Annotation', p);
   };
 
   const openDiscussion = () => {
     console.log('discuss');
+    const p: DiscussionProps = {
+      prompt: prev!,
+      response: current,
+    };
+    navigation.navigate('Discussion', p);
   };
 
   const renderPerspective = () => {
@@ -54,7 +72,7 @@ const MessageUI: React.FC<MessageProps> = props => {
 
   const renderConfidence = () => {
     return username === 'maya' ? (
-      <ConfidenceBadge onPress={openAnnotation} />
+      <ConfidenceBadge confidence={c} onPress={openAnnotation} />
     ) : null;
   };
 
@@ -95,7 +113,7 @@ const MessageUI: React.FC<MessageProps> = props => {
   );
 };
 
-const getStyles = (theme: Theme) => ({
+const getStyles = () => ({
   base: StyleSheet.create({
     messageContainer: {
       marginTop: 8,

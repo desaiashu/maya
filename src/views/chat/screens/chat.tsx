@@ -28,7 +28,7 @@ import {
   newCommunityChat,
 } from '@/data';
 import { Message, ChatInfo } from '@/data/types';
-import { MessageUI, InputToolbar, Stream } from '@/views/chat/components';
+import { MessageList, InputToolbar } from '@/views/chat/components';
 import { Theme, useTheme } from '@/ui/theme';
 import { IconButton } from '@/ui/atoms';
 
@@ -117,13 +117,6 @@ const Chat: React.FC = () => {
       : state.messages.filter(message => message.chatid === chatInfo.chatid),
   }));
 
-  const avatars: Record<string, string> = {};
-  const usernames: Record<string, string> = {};
-  for (let profile of chatInfo.profiles || []) {
-    avatars[profile.userid] = profile.avatar;
-    usernames[profile.userid] = profile.username;
-  }
-
   // For new chats, the chatID will be 'new' and requires update
   // For existing chats, profile updates might come through
   useEffect(() => {
@@ -148,41 +141,16 @@ const Chat: React.FC = () => {
     server.sendMessage(newMessage);
   };
 
-  const renderMessage = (current: Message, next?: Message, prev?: Message) => {
-    if (current.chatid === 'stream') {
-      return <Stream prev={prev} avatars={avatars} usernames={usernames} />;
-    } else {
-      return (
-        <MessageUI
-          current={current}
-          next={next}
-          prev={prev}
-          avatar={avatars[current.sender]}
-          username={usernames[current.sender] || ''}
-          position={'left'} //user.userid === current.sender ? 'right' : 'left'}
-        />
-      );
-    }
-  };
-
   return (
     <SafeAreaView edges={['top']} style={styles.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'height' : 'height'}
         style={styles.keyboardAvoid}
       >
-        {/* Note: FlatList doesn't play well with KeyboardAvoidingView
-        unless "inverted" and using messages.reverse().*/}
-        <FlatList
-          data={messages.reverse()}
-          renderItem={({ item, index }) =>
-            renderMessage(item, messages[index - 1], messages[index + 1])
-          }
-          keyExtractor={item => item.timestamp.toString()}
-          style={styles.messagesContainer}
+        <MessageList
+          messages={messages}
+          profiles={chatInfo.profiles || []}
           ref={flatListRef}
-          scrollIndicatorInsets={{ right: -3 }}
-          inverted
         />
         <InputToolbar onSend={onSend} chatid={chatInfo.chatid} />
       </KeyboardAvoidingView>
@@ -198,11 +166,6 @@ const getStyles = (theme: Theme) =>
     },
     keyboardAvoid: {
       flex: 1,
-    },
-    messagesContainer: {
-      flex: 1,
-      marginTop: -8,
-      marginBottom: 0,
     },
     rightMenu: {
       flexDirection: 'row',

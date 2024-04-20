@@ -51,6 +51,10 @@ export const settingsOptions = (
   };
 };
 
+export interface SettingsProps {
+  presentation: 'modal';
+}
+
 const Settings: React.FC = () => {
   const styles = getStyles(useTheme());
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();

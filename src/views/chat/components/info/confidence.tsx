@@ -6,7 +6,7 @@ import { Theme, useTheme } from '@/ui/theme';
 
 interface ConfidenceProps {
   confidence?: Confidence;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 const ConfidenceBadge: React.FC<ConfidenceProps> = props => {
@@ -18,7 +18,7 @@ const ConfidenceBadge: React.FC<ConfidenceProps> = props => {
     <TouchableOpacity style={styles.button} onPress={onPress}>
       <View style={styles.circle}>
         <Words tag="small" style={styles.number}>
-          {confidence ? confidence.percent : '_'}
+          {confidence ? confidence.percent : '85'}
         </Words>
       </View>
     </TouchableOpacity>

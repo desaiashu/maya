@@ -1,27 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import {
-  View,
-  StyleSheet,
-  Platform,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from 'react-native';
+import React from 'react';
+import { View, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import {
-  useNavigation,
-  NavigationProp,
-  RouteProp,
-  useRoute,
-  CommonActions,
-} from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
-import { Button, IconButton, Input, Words } from '@/ui/atoms';
-import { State, useStore, server } from '@/data';
-import { Profile } from '@/data/types';
-import { AvatarSelect } from '@/ui/molecules';
+import { IconButton, Words } from '@/ui/atoms';
+import { Message, Profile, Confidence } from '@/data/types';
+import {
+  ConfidenceBadge,
+  MessageList,
+  InputToolbar,
+} from '@/views/chat/components';
 
 export const annotationOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'Settings'>,
@@ -32,14 +23,14 @@ export const annotationOptions = (
     title: 'annotation',
     headerTitle: '',
     presentation: 'modal',
-    headerShown: false,
+    headerShown: true,
     headerTransparent: true,
     headerStyle: {
       backgroundColor: theme.colors.transparent,
     },
     headerLeft: () => (
       <IconButton
-        icon="close"
+        icon="closex"
         onPress={() => navigation.goBack()}
         containerStyle={styles.iconCloseContainer}
         style={styles.iconClose}
@@ -48,65 +39,41 @@ export const annotationOptions = (
   };
 };
 
+export interface AnnotationProps {
+  prompt: Message;
+  response: Message;
+  confidence: Confidence;
+}
+
 const Annotation: React.FC = () => {
   const styles = getStyles(useTheme());
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   const route = useRoute();
-  const { params } = route;
-  const { user, updateUserChats, setUserProfile } = useStore(
-    (state: State) => ({
-      user: state.currentUser,
-      updateUserChats: state.updateUserChats,
-      setUserProfile: state.setUserProfile,
-    }),
-  );
+  const { prompt, response, confidence } = route.params as AnnotationProps;
 
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const notes: Message[] = [];
+  const profiles: Profile[] = [];
 
-  useEffect(() => {
-    const keyboardWillShowListener = Keyboard.addListener(
-      'keyboardWillShow',
-      () => {
-        setKeyboardVisible(true);
-      },
-    );
-    const keyboardWillHideListener = Keyboard.addListener(
-      'keyboardWillHide',
-      () => {
-        setKeyboardVisible(false);
-      },
-    );
-    return () => {
-      keyboardWillShowListener.remove();
-      keyboardWillHideListener.remove();
-    };
-  }, []);
-
-  if (user === null) {
-    return null;
-  }
-
-  const save = () => {};
+  const onSend = () => {};
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <SafeAreaView edges={['top']} style={styles.container}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'height' : 'height'}
         style={styles.keyboardAvoid}
       >
-        <View
-          style={[styles.container, keyboardVisible && styles.keyboardVisibile]}
-        >
-          <View>
-            <View>
-              <Words tag="h4" style={styles.top}>
-                select avatar
-              </Words>
-            </View>
-          </View>
+        <View style={styles.content}>
+          <ConfidenceBadge confidence={confidence} />
+          <Words tag="h1">{'yay'}</Words>
+          {/* A high confidence means the answer is:
+          Lower chance of bias Lower chance of hallucination Lower chance of
+          misinformation Community notes Add note: Bias = Ruling party dominance
+          Statements */}
         </View>
+        <MessageList messages={notes} profiles={profiles} />
+        <InputToolbar onSend={onSend} />
       </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
+    </SafeAreaView>
   );
 };
 
@@ -114,22 +81,11 @@ const getStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
       backgroundColor: theme.colors.background,
     },
+    content: { flex: 1, alignItems: 'center' },
     keyboardAvoid: {
       flex: 1,
-    },
-    keyboardVisibile: {
-      marginBottom: 0,
-    },
-    top: {
-      marginLeft: 10,
-    },
-    close: {
-      marginLeft: -10,
-      marginTop: 1,
     },
     save: {},
     iconCloseContainer: {
@@ -145,10 +101,12 @@ const getStyles = (theme: Theme) =>
       shadowOpacity: 0.6,
       shadowOffset: { width: 0, height: 0 },
       shadowRadius: 1,
+      width: 35,
+      height: 35,
     },
     iconClose: {
-      width: 33,
-      height: 33,
+      width: 19,
+      height: 19,
     },
   });
 
