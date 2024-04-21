@@ -15,7 +15,7 @@ const Perspective: React.FC<PerspectiveProps> = props => {
         tag="small"
         outlined
         shadow
-        title="points of view "
+        title="points of view ⌱"
         onPress={onPress}
         style={styles.button}
       />

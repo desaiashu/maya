@@ -21,6 +21,7 @@ interface MessageProps {
   username: string;
   position?: 'left' | 'right';
   stream?: boolean;
+  info?: boolean;
 }
 
 const MessageUI: React.FC<MessageProps> = props => {
@@ -31,6 +32,7 @@ const MessageUI: React.FC<MessageProps> = props => {
     avatar,
     username,
     stream = false,
+    info = false,
     position = 'left',
   } = props;
 
@@ -47,9 +49,11 @@ const MessageUI: React.FC<MessageProps> = props => {
 
   const c: Confidence = {
     chatid: '1',
-    messageid: 1,
-    evaluator: 'string',
-    percent: 85,
+    content: 'yay',
+    timestamp: 1,
+    responseid: 1,
+    sender: 'string',
+    value: 85,
   };
 
   const openAnnotation = () => {
@@ -72,7 +76,7 @@ const MessageUI: React.FC<MessageProps> = props => {
   };
 
   const renderPerspective = () => {
-    return username === 'maya' && !stream ? (
+    return username === 'maya' && !stream && !info ? (
       <View style={styles.base.perspective}>
         <Perspective onPress={openDiscussion} />
       </View>
@@ -80,7 +84,7 @@ const MessageUI: React.FC<MessageProps> = props => {
   };
 
   const renderConfidence = () => {
-    return username === 'maya' && !stream ? (
+    return username === 'maya' && !stream && !info ? (
       <ConfidenceBadge confidence={c} onPress={openAnnotation} />
     ) : null;
   };
@@ -107,7 +111,7 @@ const MessageUI: React.FC<MessageProps> = props => {
         final && styles.base.final,
       ]}
     >
-      {!hideDay && <Day timestamp={current.timestamp} />}
+      {!hideDay && !info && <Day timestamp={current.timestamp} />}
       <View style={styles[position].container}>
         {position === 'left' && renderAvatar()}
         <Bubble

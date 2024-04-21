@@ -7,8 +7,8 @@ import { useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
 import { IconButton, Words } from '@/ui/atoms';
-import { Message, Profile } from '@/data/types';
-import { MessageList, InputToolbar } from '@/views/chat/components';
+import { Message, Profile, SearchResult } from '@/data/types';
+import { MessageList, InputToolbar, Search } from '@/views/chat/components';
 
 export const discussionOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'Settings'>,
@@ -46,8 +46,31 @@ const Discussion: React.FC = () => {
   const route = useRoute();
   const { prompt, response } = route.params as DiscussionProps;
 
-  const perspectives: Message[] = [];
-  const profiles: Profile[] = [];
+  const perspectives: Message[] = [prompt, response];
+  const profiles: Profile[] = [
+    { avatar: 'local://2199210.png', userid: '+16504305130', username: 'ashu' },
+    { avatar: 'local://1473489.png', userid: 'maya', username: 'maya' },
+    { avatar: 'local://butler.png', userid: 'system', username: 'system' },
+  ];
+
+  const results: SearchResult[] = [
+    {
+      title: 'GPU computing',
+      url: 'https://boinc.berkeley.edu/wiki/GPU_computing',
+    },
+    {
+      title: 'What are GPUs',
+      url: 'https://www.worldcommunitygrid.org/help/topic.s?shortName=GPU',
+    },
+    {
+      title: 'View source for GPU computing',
+      url: 'https://boinc.berkeley.edu/w/?title=GPU_computing&action=edit',
+    },
+    {
+      title: 'About GPUs | Compute Engine Documentation | Google Cloud',
+      url: 'https://cloud.google.com/compute/docs/gpus/about-gpus',
+    },
+  ];
 
   const onSend = () => {};
 
@@ -57,11 +80,20 @@ const Discussion: React.FC = () => {
         behavior={Platform.OS === 'ios' ? 'height' : 'height'}
         style={styles.keyboardAvoid}
       >
-        <View style={styles.content}>
-          <Words tag="h1">{'yay'}</Words>
+        <View style={styles.header}>
+          <Words tag="h2">{'Points of view'}</Words>
         </View>
-        <MessageList messages={perspectives} profiles={profiles} />
-        <InputToolbar onSend={onSend} />
+        <View style={styles.search}>
+          <Search results={results} />
+        </View>
+
+        <MessageList
+          messages={perspectives}
+          profiles={profiles}
+          style={styles.messages}
+          info
+        />
+        {/* <InputToolbar onSend={onSend} /> */}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -76,7 +108,16 @@ const getStyles = (theme: Theme) =>
     keyboardAvoid: {
       flex: 1,
     },
-    content: { flex: 1, alignItems: 'center' },
+    header: {
+      alignItems: 'center',
+      top: 8,
+    },
+    search: {
+      top: 40,
+    },
+    messages: {
+      marginTop: 50,
+    },
     save: {},
     iconCloseContainer: {
       backgroundColor: theme.colors.background,

@@ -10,26 +10,24 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 
 In progress:
 
-- Modal view to add annotations
-  - Similar text interface as chat
-- Exa bot
-- Eval bot
-- Community notes bot
-- First stream response w/ bounce?
+- Confidence FE
+- Confidence BE
+- Perspectives FE
+- Perspectives BE
+- Share link
+- Invite to chat
 
 Next up:
 
-- Summary issue
-- Build group protocols
-- Experiment with deeper trained bots
+- Testflight
+- Webview
+
+QA:
+
+- Handle rapid chats - ie. if you message a string of messages the server should wait, adjust and not double respond
 - Add test for contexts
 - Oracle summary issue
 - Websockets issues: 1. always reopen when app opens, 2. see why it keeps closing
-
-- Testflight
-- Force participant set for certain protocols, allow others
-- Adding other humans in chat
-- Handle rapid chats - ie. if you message a string of messages the server should wait, adjust and not double respond
 
 Pre-launch:
 
@@ -47,10 +45,19 @@ Pre-launch:
 - Update "last-refresh"
 - App Icons
 
-Multi-user chats
+Group chats
 
 - Test real time
 - Figure out how to handle contacts
+- Search
+- Force participant set for certain protocols, allow others
+- Adding other humans in chat
+- Build group protocols
+- Experiment with deeper trained bots
+
+UI improvements:
+
+- First stream response w/ bounce?
 
 Experimental:
 
@@ -97,6 +104,53 @@ Done
 - Run on actual phone
 - Create new message, select protocol, select AIs
 - 1:1 format list maps bot ID to protocol
+
+---
+
+Thought dump
+
+- Explore "perspectives" modal
+  - Offers new perspectives
+  - Similar text interface as chat
+
+Perspective
+analogy
+domain mapping
+pattern matching
+Consider this from another angle
+Globalist thinking
+3D UX?
+
+- Modal view to add annotations
+
+- Exa bot
+- Eval bot
+- Community notes bot
+
+---
+
+### Concept
+
+Goals:
+
+- Higher bandwidth information transfer
+- Explore more perspectives // holistic perspectives
+- Dead simple getting started UX (peel back layers of onion)
+- Inherently social / sharable
+
+Non goals:
+
+- Maximize profit
+- Non-text modalities (video, actions)
+
+#### What does high bandwidth info transfer mean?
+
+Explore information / conversations more like how our brains work. Less linear, more recursive
+https://a9.io/glue-comic/
+Additional LLM perspectives
+Human annotations (ala community notes) to expand training data set
+Dig into threads, bring context back to macro discussion
+Allow threads to persist as their own things
 
 ---
 

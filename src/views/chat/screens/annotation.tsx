@@ -74,19 +74,19 @@ const Annotation: React.FC = () => {
           />
           <Words tag="body" style={styles.explainer}>
             {` 
-    Confidence ratings are on a 0-100 scale
+   Confidence ratings are on a 0-100 scale
 
-    A high confidence means the answer has
-    - A lower chance of bias
-    - A lower chance of hallucination
-    - A lower chance of misinformation
+   A high confidence means the answer has
+   - A lower chance of bias
+   - A lower chance of hallucination
+   - A lower chance of misinformation
 
-    Our goal is to present a holistic perspective 
-    on info and seek ground truth, reducing 
-    cultural, political, and financial bias
+   Our goal is to present a holistic perspective 
+   on info and seek ground truth, reducing 
+   cultural, political, and financial bias
     
-    Please feel free to contribute more 
-    information on the topic at hand
+   Please feel free to contribute more 
+   information on the topic at hand
             `}
           </Words>
           {/* We calculate bias using embeddings, identify hallucinations using
@@ -104,6 +104,7 @@ const Annotation: React.FC = () => {
           style={styles.messages}
           messages={notes}
           profiles={profiles}
+          info
         />
         <InputToolbar
           placeholder={'Contribute information...'}

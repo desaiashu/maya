@@ -7,11 +7,12 @@ interface MessageListProps {
   messages: Message[];
   profiles: Profile[];
   style?: ViewStyle;
+  info?: boolean;
 }
 
 const MessageList = forwardRef<FlatList<any>, MessageListProps>(
   (props, ref) => {
-    const { messages, profiles, style } = props;
+    const { messages, profiles, style, info = false } = props;
 
     const styles = getStyles();
 
@@ -37,6 +38,7 @@ const MessageList = forwardRef<FlatList<any>, MessageListProps>(
             prev={prev}
             avatar={avatars[current.sender]}
             username={usernames[current.sender] || ''}
+            info={info}
           />
         );
       }

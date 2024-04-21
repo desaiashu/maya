@@ -21,7 +21,7 @@ const ConfidenceBadge: React.FC<ConfidenceProps> = props => {
     <TouchableOpacity style={styles.button} onPress={onPress}>
       <View style={[styles.circle, style]}>
         <Words tag={tag} style={styles.number}>
-          {confidence ? confidence.percent : '85'}
+          {confidence ? confidence.value : '85'}
         </Words>
       </View>
     </TouchableOpacity>

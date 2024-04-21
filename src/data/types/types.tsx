@@ -5,6 +5,26 @@
 /* Do not modify it by hand - just update the pydantic models and then re-run the script
 */
 
+export interface Annotation {
+  content: string;
+  chatid: string;
+  sender: string;
+  timestamp: number;
+  context: string;
+  promptid: number;
+  responseid: number;
+}
+export interface AnnotationRequest {
+  userid: string;
+  token: string;
+  command: string;
+  data: Annotation;
+}
+export interface AnnotationUpdate {
+  data: Annotation;
+  update?: string;
+  background?: boolean;
+}
 export interface Auth {
   userid: string;
   token: string;
@@ -48,10 +68,12 @@ export interface ChunkUpdate {
   background?: boolean;
 }
 export interface Confidence {
+  content: string;
   chatid: string;
-  messageid: number;
-  evaluator: string;
-  percent: number;
+  sender: string;
+  timestamp: number;
+  value: number;
+  responseid: number;
 }
 export interface ConfidenceUpdate {
   data: Confidence;
@@ -105,6 +127,26 @@ export interface MessageUpdate {
   background?: boolean;
 }
 export interface MongoModel {}
+export interface Perspective {
+  content: string;
+  chatid: string;
+  sender: string;
+  timestamp: number;
+  context: string;
+  promptid: number;
+  responseid: number;
+}
+export interface PerspectiveRequest {
+  userid: string;
+  token: string;
+  command: string;
+  data: Perspective;
+}
+export interface PerspectiveUpdate {
+  data: Perspective;
+  update?: string;
+  background?: boolean;
+}
 export interface RefreshData {
   chatlist: ChatInfo[];
   messages: Message[];
@@ -120,6 +162,15 @@ export interface RefreshRequest {
 }
 export interface RefreshUpdate {
   data: RefreshData;
+  update?: string;
+  background?: boolean;
+}
+export interface SearchResult {
+  title: string;
+  url: string;
+}
+export interface SearchUpdate {
+  data: SearchResult[];
   update?: string;
   background?: boolean;
 }
