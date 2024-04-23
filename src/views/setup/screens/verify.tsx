@@ -30,6 +30,7 @@ export const verifyOptions = (
     headerStyle: {
       backgroundColor: theme.colors.background,
     },
+    headerShown: true,
     headerTransparent: true,
     headerLeft: () => (
       <IconButton

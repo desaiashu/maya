@@ -18,6 +18,9 @@ class Socket {
       message: client.handleMessageUpdate,
       chatinfo: client.handleChatInfoUpdate,
       user: client.handleUserUpdate,
+      confidence: client.handleConfidenceUpdate,
+      related: client.handleRelatedUpdate,
+      search: client.handleSearchUpdate,
     };
   }
 

@@ -1,7 +1,7 @@
 import CryptoJS from 'crypto-js';
 import { ColorSchemeName, LayoutAnimation, Platform } from 'react-native';
 import { icons, botAvatars, humanAvatars, useStore, server } from '@/data';
-import { Message, Chunk, ChatInfo } from '@/data/types';
+import { Message, Chunk, ChatInfo, PerspectiveData } from '@/data/types';
 
 export function hashPhoneNumber(phoneNumber: string): string {
   const phoneHash = CryptoJS.SHA256(phoneNumber).toString(CryptoJS.enc.Hex);
@@ -10,18 +10,32 @@ export function hashPhoneNumber(phoneNumber: string): string {
 
 export const timestamp = () => new Date().getTime();
 
-export const emptyChat = () => {
+export const messageid = (message: Message) =>
+  message.chatid + '_' + message.timestamp.toString;
+
+export const emptyChat = (): ChatInfo => {
   const state = useStore.getState();
   const userid = state.currentUser.userid;
   return {
     chatid: '_',
     creator: userid,
-    participants: [userid, 'maya', 'system'],
+    participants: [userid, 'maya', 'system', 'uncensored', 'oracle'],
     topic: 'new chat',
-    protocol: 'community_notes',
+    protocol: 'maya',
     profiles: [],
     created: timestamp(),
     updated: timestamp(),
+  };
+};
+
+export const emptyPerspective = (): PerspectiveData => {
+  return {
+    messageid: 0,
+    chatid: '',
+    lastupdated: 0,
+    confidence: undefined,
+    relatedTopics: [],
+    searchResults: [],
   };
 };
 

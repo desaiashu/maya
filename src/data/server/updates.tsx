@@ -1,5 +1,14 @@
 import { useStore, useStream } from '@/data';
-import { User, RefreshData, ChatInfo, Message, Chunk } from '@/data/types';
+import {
+  User,
+  RefreshData,
+  ChatInfo,
+  Message,
+  Chunk,
+  RelatedTopic,
+  Confidence,
+  SearchResult,
+} from '@/data/types';
 import { LayoutAnimation } from 'react-native';
 
 class ClientUpdate {
@@ -39,6 +48,25 @@ class ClientUpdate {
     // Pass message to stream state. If it's relevant, it will be handled
     const streamState = useStream.getState();
     streamState.handleMessage(data);
+  }
+
+  handleConfidenceUpdate(data: Confidence) {
+    const state = useStore.getState();
+    state.updatePerspective(data.messageid, data.chatid, { confidence: data });
+  }
+
+  handleSearchUpdate(data: SearchResult[]) {
+    const state = useStore.getState();
+    state.updatePerspective(data[0].messageid, data[0].chatid, {
+      searchResults: data,
+    });
+  }
+
+  handleRelatedUpdate(data: RelatedTopic[]) {
+    const state = useStore.getState();
+    state.updatePerspective(data[0].messageid, data[0].chatid, {
+      relatedTopics: data,
+    });
   }
 
   handleSuccessUpdate(data: string) {

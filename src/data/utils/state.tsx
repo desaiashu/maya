@@ -10,9 +10,15 @@ import {
   useChatlistState,
   MessagesState,
   useMessagesState,
+  PerspectiveState,
+  usePerspectiveState,
 } from '@/data/slices';
 
-export type State = UserState & ContactsState & ChatlistState & MessagesState;
+export type State = UserState &
+  ContactsState &
+  ChatlistState &
+  MessagesState &
+  PerspectiveState;
 
 export const useStore = create<State>()(
   persist(
@@ -21,6 +27,7 @@ export const useStore = create<State>()(
       ...useContactsState(...a),
       ...useChatlistState(...a),
       ...useMessagesState(...a),
+      ...usePerspectiveState(...a),
     }),
     {
       name: 'state',

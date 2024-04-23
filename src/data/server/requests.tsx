@@ -6,6 +6,8 @@ import {
   MessageRequest,
   UserRequest,
   ChatRequest,
+  AnnotationRequest,
+  PerspectiveRequest,
 } from '@/data/types';
 import { Message, Auth, Profile, ChatInfo } from '@/data/types';
 
@@ -34,6 +36,28 @@ class ServerRequest {
       token: state.token,
       command: 'message',
       data: message,
+    };
+    socket.sendRequest(request);
+  }
+
+  getPerspectives(messages: Message[]) {
+    const state = useStore.getState();
+    let request: PerspectiveRequest = {
+      userid: state.currentUser.userid,
+      token: state.token,
+      command: 'perspective',
+      data: messages,
+    };
+    socket.sendRequest(request);
+  }
+
+  getAnnotations(messages: Message[]) {
+    const state = useStore.getState();
+    let request: AnnotationRequest = {
+      userid: state.currentUser.userid,
+      token: state.token,
+      command: 'annotation',
+      data: messages,
     };
     socket.sendRequest(request);
   }

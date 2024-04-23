@@ -38,6 +38,7 @@ const MessageList = forwardRef<FlatList<any>, MessageListProps>(
             prev={prev}
             avatar={avatars[current.sender]}
             username={usernames[current.sender] || ''}
+            profiles={profiles}
             info={info}
           />
         );

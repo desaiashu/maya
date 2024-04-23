@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Message, Confidence } from '@/data/types';
+import { Message, Confidence, Profile } from '@/data/types';
 import {
   Bubble,
   Day,
   ConfidenceBadge,
   Perspective,
 } from '@/views/chat/components';
-import { Avatar } from '@/ui/atoms';
-import { isSameUser, isSameDay } from '@/data';
+import { Avatar, IconButton } from '@/ui/atoms';
+import { isSameUser, isSameDay, State, useStore } from '@/data';
 import { RootStackParamList } from '@/views/navigator';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { AnnotationProps, DiscussionProps } from '@/views/chat';
@@ -19,6 +19,7 @@ interface MessageProps {
   prev?: Message;
   avatar: string;
   username: string;
+  profiles?: Profile[];
   position?: 'left' | 'right';
   stream?: boolean;
   info?: boolean;
@@ -31,6 +32,7 @@ const MessageUI: React.FC<MessageProps> = props => {
     prev,
     avatar,
     username,
+    profiles = [],
     stream = false,
     info = false,
     position = 'left',
@@ -47,21 +49,24 @@ const MessageUI: React.FC<MessageProps> = props => {
   const first = !prev;
   const final = !next;
 
-  const c: Confidence = {
-    chatid: '1',
-    content: 'yay',
-    timestamp: 1,
-    responseid: 1,
-    sender: 'string',
-    value: 85,
-  };
+  const showPerspective = username === 'maya' && !stream && !info;
+
+  const { perspective } = useStore((state: State) => ({
+    perspective: state.perspectives[current.timestamp],
+  }));
+
+  const [confidence, setConfidence] = useState<Confidence>();
+  useEffect(() => {
+    perspective && setConfidence(perspective.confidence);
+  }, [perspective]);
 
   const openAnnotation = () => {
     console.log('annotate');
     const p: AnnotationProps = {
       prompt: prev!,
       response: current,
-      confidence: c,
+      confidence: confidence,
+      profiles,
     };
     navigation.navigate('Annotation', p);
   };
@@ -71,21 +76,47 @@ const MessageUI: React.FC<MessageProps> = props => {
     const p: DiscussionProps = {
       prompt: prev!,
       response: current,
+      profiles,
     };
     navigation.navigate('Discussion', p);
   };
 
-  const renderPerspective = () => {
-    return username === 'maya' && !stream && !info ? (
-      <View style={styles.base.perspective}>
+  const thumbs = (direction: 'up' | 'down') => {
+    console.log(direction);
+  };
+
+  const renderButtons = () => {
+    return showPerspective ? (
+      <View style={styles.base.buttons}>
+        <View style={styles.base.thumbsRow}>
+          <IconButton
+            round
+            shadow
+            icon="thumbsdown"
+            style={styles.base.thumbs}
+            containerStyle={[
+              styles.base.thumbsContainer,
+              styles.base.thumbsDown,
+            ]}
+            onPress={() => thumbs('down')}
+          />
+          <IconButton
+            round
+            shadow
+            icon="thumbsup"
+            style={styles.base.thumbs}
+            containerStyle={[styles.base.thumbsContainer, styles.base.thumbsUp]}
+            onPress={() => thumbs('up')}
+          />
+        </View>
         <Perspective onPress={openDiscussion} />
       </View>
     ) : null;
   };
 
   const renderConfidence = () => {
-    return username === 'maya' && !stream && !info ? (
-      <ConfidenceBadge confidence={c} onPress={openAnnotation} />
+    return showPerspective ? (
+      <ConfidenceBadge confidence={confidence} onPress={openAnnotation} />
     ) : null;
   };
 
@@ -121,7 +152,7 @@ const MessageUI: React.FC<MessageProps> = props => {
         />
         {position === 'right' && renderAvatar()}
       </View>
-      {renderPerspective()}
+      {renderButtons()}
     </View>
   );
 };
@@ -150,8 +181,35 @@ const getStyles = () => ({
       position: 'absolute',
       bottom: 2,
     },
-    perspective: {
-      marginRight: 25,
+    buttons: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginRight: 20,
+      marginLeft: 62,
+    },
+    thumbsRow: {
+      flexDirection: 'row',
+    },
+    thumbs: {
+      height: 17,
+      width: 17,
+    },
+    thumbsContainer: {
+      marginTop: 10,
+      marginRight: 8,
+      paddingTop: 0,
+      paddingBottom: 0,
+      paddingLeft: 0,
+      paddingRight: 0,
+      width: 28,
+      height: 28,
+    },
+    thumbsDown: {
+      paddingTop: 2,
+      paddingLeft: 1,
+    },
+    thumbsUp: {
+      paddingBottom: 2,
     },
   }),
   left: StyleSheet.create({

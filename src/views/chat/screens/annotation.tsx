@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -6,8 +6,9 @@ import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
-import { IconButton, Words } from '@/ui/atoms';
+import { Divider, IconButton, Words } from '@/ui/atoms';
 import { Message, Profile, Confidence } from '@/data/types';
+import { server } from '@/data';
 import {
   ConfidenceBadge,
   MessageList,
@@ -28,6 +29,7 @@ export const annotationOptions = (
     headerStyle: {
       backgroundColor: theme.colors.transparent,
     },
+    gestureEnabled: false,
     headerLeft: () => (
       <IconButton
         icon="closex"
@@ -42,17 +44,30 @@ export const annotationOptions = (
 export interface AnnotationProps {
   prompt: Message;
   response: Message;
-  confidence: Confidence;
+  confidence?: Confidence;
+  profiles: Profile[];
 }
 
 const Annotation: React.FC = () => {
   const styles = getStyles(useTheme());
 
   const route = useRoute();
-  const { prompt, response, confidence } = route.params as AnnotationProps;
+  const { prompt, response, confidence, profiles } =
+    route.params as AnnotationProps;
 
-  const notes: Message[] = [];
-  const profiles: Profile[] = [];
+  useEffect(() => {
+    server.getAnnotations([prompt, response]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const a: Message = {
+    content:
+      'A user left a note about this topic. They feel this information might be biased due to the funding sources of the studies. Their perspective was that the benefits of Modafinil for adhd are not confirmed.',
+    sender: 'system',
+    timestamp: 1,
+    chatid: '1',
+  };
+  const notes: Message[] = [a];
 
   const onSend = () => {};
 
@@ -72,21 +87,21 @@ const Annotation: React.FC = () => {
             size={24}
             style={styles.confidence}
           />
-          <Words tag="body" style={styles.explainer}>
+          <Words tag="small" style={styles.explainer}>
             {` 
-   Confidence ratings are on a 0-100 scale
+Confidence ratings are on a 0-100 scale
 
-   A high confidence means the answer has
-   - A lower chance of bias
-   - A lower chance of hallucination
-   - A lower chance of misinformation
+A high confidence means the answer has
+- A lower chance of bias
+- A lower chance of hallucination
+- A lower chance of misinformation
 
-   Our goal is to present a holistic perspective 
-   on info and seek ground truth, reducing 
-   cultural, political, and financial bias
+Our goal is to present a holistic perspective 
+on info and seek ground truth, reducing 
+cultural, political, and financial bias
     
-   Please feel free to contribute more 
-   information on the topic at hand
+Please feel free to contribute more 
+information on the topic at hand
             `}
           </Words>
           {/* We calculate bias using embeddings, identify hallucinations using
@@ -100,6 +115,7 @@ const Annotation: React.FC = () => {
           misinformation Community notes Add note: Bias = Ruling party dominance
           Statements */}
         </View>
+        <Divider />
         <MessageList
           style={styles.messages}
           messages={notes}
@@ -125,17 +141,18 @@ const getStyles = (theme: Theme) =>
     keyboardAvoid: {
       flex: 1,
     },
-    rating: { bottom: 20 },
-    messages: { maxHeight: 300 },
-    explainer: {},
+    rating: { marginTop: -40, marginBottom: 30 },
+    messages: { marginTop: 20, maxHeight: 300 },
+    explainer: { fontSize: 12 },
     confidence: {
       width: 64,
       height: 64,
       borderRadius: 32,
       shadowRadius: 3,
       paddingTop: 5,
-      left: 0,
-      bottom: 0,
+      //   marginTop: 10,
+      //   marginLeft: 0,
+      //   marginBottom: 0,
     },
     save: {},
     iconCloseContainer: {

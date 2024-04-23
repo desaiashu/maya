@@ -5,25 +5,17 @@
 /* Do not modify it by hand - just update the pydantic models and then re-run the script
 */
 
-export interface Annotation {
-  content: string;
-  chatid: string;
-  sender: string;
-  timestamp: number;
-  context: string;
-  promptid: number;
-  responseid: number;
-}
 export interface AnnotationRequest {
   userid: string;
   token: string;
   command: string;
-  data: Annotation;
+  data: Message[];
 }
-export interface AnnotationUpdate {
-  data: Annotation;
-  update?: string;
-  background?: boolean;
+export interface Message {
+  content: string;
+  chatid: string;
+  sender: string;
+  timestamp: number;
 }
 export interface Auth {
   userid: string;
@@ -38,6 +30,7 @@ export interface ChatInfo {
   participants: string[];
   profiles?: Profile[];
   topic?: string;
+  threadid?: string;
   protocol: string;
 }
 export interface Profile {
@@ -72,8 +65,8 @@ export interface Confidence {
   chatid: string;
   sender: string;
   timestamp: number;
+  messageid: number;
   value: number;
-  responseid: number;
 }
 export interface ConfidenceUpdate {
   data: Confidence;
@@ -109,12 +102,6 @@ export interface MayaUpdate {
   update: string;
   background?: boolean;
 }
-export interface Message {
-  content: string;
-  chatid: string;
-  sender: string;
-  timestamp: number;
-}
 export interface MessageRequest {
   userid: string;
   token: string;
@@ -127,25 +114,36 @@ export interface MessageUpdate {
   background?: boolean;
 }
 export interface MongoModel {}
-export interface Perspective {
+export interface PerspectiveData {
+  chatid: string;
+  messageid: number;
+  lastupdated: number;
+  confidence?: Confidence;
+  relatedTopics: RelatedTopic[];
+  searchResults: SearchResult[];
+}
+export interface RelatedTopic {
   content: string;
   chatid: string;
   sender: string;
   timestamp: number;
-  context: string;
-  promptid: number;
-  responseid: number;
+  messageid: number;
+  topic: string;
+}
+export interface SearchResult {
+  content: string;
+  chatid: string;
+  sender: string;
+  timestamp: number;
+  messageid: number;
+  title: string;
+  url: string;
 }
 export interface PerspectiveRequest {
   userid: string;
   token: string;
   command: string;
-  data: Perspective;
-}
-export interface PerspectiveUpdate {
-  data: Perspective;
-  update?: string;
-  background?: boolean;
+  data: Message[];
 }
 export interface RefreshData {
   chatlist: ChatInfo[];
@@ -165,9 +163,10 @@ export interface RefreshUpdate {
   update?: string;
   background?: boolean;
 }
-export interface SearchResult {
-  title: string;
-  url: string;
+export interface RelatedUpdate {
+  data: RelatedTopic[];
+  update?: string;
+  background?: boolean;
 }
 export interface SearchUpdate {
   data: SearchResult[];
@@ -185,6 +184,9 @@ export interface User {
   avatar: string;
   contacts: string[];
   bot: boolean;
+  streaming?: boolean;
+  plan?: string;
+  readspeed?: number;
 }
 export interface UserRequest {
   userid: string;

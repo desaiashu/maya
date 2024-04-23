@@ -55,6 +55,7 @@ const getStyles = (theme: Theme) =>
       justifyContent: 'center',
       marginBottom: 0,
       paddingBottom: 0,
+      marginLeft: '-6%',
     },
     button: {
       backgroundColor: theme.colors.background,

@@ -1,14 +1,26 @@
-import React from 'react';
-import { View, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  StyleSheet,
+  Platform,
+  KeyboardAvoidingView,
+  LayoutAnimation,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
-import { IconButton, Words } from '@/ui/atoms';
-import { Message, Profile, SearchResult } from '@/data/types';
-import { MessageList, InputToolbar, Search } from '@/views/chat/components';
+import { IconButton, Words, Divider } from '@/ui/atoms';
+import { Message, Profile, SearchResult, RelatedTopic } from '@/data/types';
+import { State, messageid, useStore, server } from '@/data';
+import {
+  MessageList,
+  InputToolbar,
+  Search,
+  Related,
+} from '@/views/chat/components';
 
 export const discussionOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'Settings'>,
@@ -38,39 +50,37 @@ export const discussionOptions = (
 export interface DiscussionProps {
   prompt: Message;
   response: Message;
+  profiles: Profile[];
 }
 
 const Discussion: React.FC = () => {
   const styles = getStyles(useTheme());
 
   const route = useRoute();
-  const { prompt, response } = route.params as DiscussionProps;
+  const { prompt, response, profiles } = route.params as DiscussionProps;
 
   const perspectives: Message[] = [prompt, response];
-  const profiles: Profile[] = [
-    { avatar: 'local://2199210.png', userid: '+16504305130', username: 'ashu' },
-    { avatar: 'local://1473489.png', userid: 'maya', username: 'maya' },
-    { avatar: 'local://butler.png', userid: 'system', username: 'system' },
-  ];
 
-  const results: SearchResult[] = [
-    {
-      title: 'GPU computing',
-      url: 'https://boinc.berkeley.edu/wiki/GPU_computing',
-    },
-    {
-      title: 'What are GPUs',
-      url: 'https://www.worldcommunitygrid.org/help/topic.s?shortName=GPU',
-    },
-    {
-      title: 'View source for GPU computing',
-      url: 'https://boinc.berkeley.edu/w/?title=GPU_computing&action=edit',
-    },
-    {
-      title: 'About GPUs | Compute Engine Documentation | Google Cloud',
-      url: 'https://cloud.google.com/compute/docs/gpus/about-gpus',
-    },
-  ];
+  useEffect(() => {
+    server.getPerspectives([prompt, response]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const { perspective } = useStore((state: State) => ({
+    perspective: state.perspectives[messageid(response)],
+  }));
+
+  const [results, setResults] = useState<SearchResult[]>([]);
+  useEffect(() => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    perspective && setResults(perspective.searchResults);
+  }, [perspective]);
+
+  const [related, setRelated] = useState<RelatedTopic[]>([]);
+  useEffect(() => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    perspective && setRelated(perspective.relatedTopics);
+  }, [perspective]);
 
   const onSend = () => {};
 
@@ -84,16 +94,26 @@ const Discussion: React.FC = () => {
           <Words tag="h2">{'Points of view'}</Words>
         </View>
         <View style={styles.search}>
+          <Words tag="body" style={styles.h2}>
+            {'Web search'}
+          </Words>
           <Search results={results} />
         </View>
-
+        <View style={styles.related}>
+          <Words tag="body" style={styles.h2}>
+            {'Related questions'}
+          </Words>
+          <Related related={related} />
+        </View>
+        <Divider />
         <MessageList
           messages={perspectives}
           profiles={profiles}
           style={styles.messages}
           info
         />
-        {/* <InputToolbar onSend={onSend} /> */}
+
+        <InputToolbar onSend={onSend} />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -110,13 +130,23 @@ const getStyles = (theme: Theme) =>
     },
     header: {
       alignItems: 'center',
-      top: 8,
+      marginTop: 8,
+    },
+    h2: {
+      marginBottom: 0,
+      color: theme.colors.outline,
+      fontSize: 12,
     },
     search: {
-      top: 40,
+      marginLeft: '5%',
+      marginTop: 20,
+    },
+    related: {
+      marginTop: 10,
+      marginLeft: '5%',
     },
     messages: {
-      marginTop: 50,
+      marginTop: 0,
     },
     save: {},
     iconCloseContainer: {

@@ -10,17 +10,30 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 
 In progress:
 
+- Create concept of "thread" that is linked to chatid + messageid but is it's own chat
+  - Use this to update messages
+  - Use protocol to differentiate
 - Confidence FE
 - Confidence BE
 - Perspectives FE
 - Perspectives BE
+  - One LLM needs to be uncensored
+- Add perspective data to refresh
 - Share link
-- Invite to chat
+- Reading speed
+- Turn off streaming (+ don't save "nostream" in message to db)
+- Stop button
 
 Next up:
 
 - Testflight
-- Webview
+- User prompt
+- Webview for sharing
+- Deeplinking for sharing
+- Invite to chat
+- Privacy terms (allow ppl to keep data private? on thread basis?)
+- Render markdown
+- Thumbs up / thumbs down
 
 QA:
 
@@ -40,7 +53,7 @@ Pre-launch:
 - Ensure websocket isn't created before userid exists on client
 - Cancel button to stop stream (also stop stream on server? kill web socket and restart it?)
 - Create default "welcome" message for user
-- OTA updates
+- OTA updates (expo?)
 - Background data updates
 - Update "last-refresh"
 - App Icons
@@ -208,6 +221,14 @@ Additionally it has the following API endpoints:
 - Refresh (updates the chat list and recent messages)
 - Update profile (updates a user's username/avatar)
 - Auth / verify (sms based authentication)
+
+### Data types
+
+ChatInfo
+Chats follow a discussion protocol
+"maya" is the base protocol
+"perspectives" is a protocol to offer more perspectives
+"annotations" is a protocol for annotations
 
 ---
 
