@@ -9,6 +9,7 @@ import {
   LayoutAnimation,
   View,
   StyleSheet,
+  Share,
 } from 'react-native';
 import {
   DrawerNavigationProp,
@@ -26,17 +27,24 @@ import {
   dummyMessage,
   DEV_SCREEN,
   newCommunityChat,
+  hashChatID,
 } from '@/data';
+import { useNavigation } from '@react-navigation/native';
 import { Message, ChatInfo } from '@/data/types';
 import { MessageList, InputToolbar } from '@/views/chat/components';
 import { Theme, useTheme } from '@/ui/theme';
 import { IconButton } from '@/ui/atoms';
 
+interface chatOptionsProps {
+  navigation: DrawerNavigationProp<RootStackParamList, 'Chat'>;
+  theme: Theme;
+  chat: ChatInfo | undefined;
+}
+
 export const chatOptions = (
-  navigation: DrawerNavigationProp<RootStackParamList, 'Chat'>,
-  theme: Theme,
-  chat: ChatInfo | undefined,
+  props: chatOptionsProps,
 ): DrawerNavigationOptions => {
+  const { navigation, theme, chat } = props;
   const styles = getStyles(theme);
   return {
     title: chat ? chat.chatid : 'new chat',
@@ -55,40 +63,59 @@ export const chatOptions = (
         shadow
       />
     ),
-    headerRight: () => (
-      <View style={styles.rightMenu}>
+    headerRight: () => renderRightMenu(props),
+  };
+};
+
+const renderRightMenu = (props: chatOptionsProps) => {
+  const { navigation, theme, chat } = props;
+  const styles = getStyles(theme);
+
+  const renderShare = () => {
+    return (
+      chat && (
         <IconButton
           icon="share"
           onPress={() => {
             console.log('share');
+            Share.share({
+              url: 'https://askmaya.xyz/' + hashChatID(chat.chatid),
+              title: 'Maya Chat',
+            });
           }}
           containerStyle={styles.iconShareContainer}
           style={styles.iconShare}
           round
           shadow
         />
-        <IconButton
-          icon="compose"
-          onPress={() => {
-            const newChat = newCommunityChat();
-            navigation.reset({
-              index: 0,
-              routes: [
-                { name: newChat.chatid + newChat.topic, params: newChat },
-              ],
-            });
-          }}
-          containerStyle={styles.iconComposeContainer}
-          style={styles.iconCompose}
-          round
-          shadow
-        />
-      </View>
-    ),
+      )
+    );
   };
+
+  return (
+    <View style={styles.rightMenu}>
+      {chat && renderShare()}
+      <IconButton
+        icon="compose"
+        onPress={() => {
+          const newChat = newCommunityChat();
+          navigation.reset({
+            index: 0,
+            routes: [{ name: newChat.chatid + newChat.topic, params: newChat }],
+          });
+        }}
+        containerStyle={styles.iconComposeContainer}
+        style={styles.iconCompose}
+        round
+        shadow
+      />
+    </View>
+  );
 };
 
 const Chat: React.FC = () => {
+  const navigation =
+    useNavigation<DrawerNavigationProp<RootStackParamList, 'Chat'>>();
   const theme = useTheme();
   const styles = getStyles(theme);
   const route = useRoute();
@@ -123,7 +150,13 @@ const Chat: React.FC = () => {
     const updatedChat = chats.find(c => c.created === chatInfo.created);
     if (updatedChat) {
       setChatInfo(updatedChat);
+      navigation.setOptions({
+        headerRight: () =>
+          renderRightMenu({ navigation, theme, chat: updatedChat }),
+        // You can set other header options here based on chatInfo
+      });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chats, chatInfo.created]);
 
   const onSend = (message: string) => {

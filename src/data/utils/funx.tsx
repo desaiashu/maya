@@ -8,6 +8,11 @@ export function hashPhoneNumber(phoneNumber: string): string {
   return phoneHash;
 }
 
+export function hashChatID(chatid: string): string {
+  const chatHash = CryptoJS.SHA256(chatid).toString(CryptoJS.enc.Base64url);
+  return chatHash.substring(0, 10);
+}
+
 export const timestamp = () => new Date().getTime();
 
 export const messageid = (message: Message) =>

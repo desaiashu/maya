@@ -57,7 +57,9 @@ const ChatDrawer: React.FC = () => {
             name={chat.chatid + (chat.topic || 'new chat')}
             key={chat.chatid}
             component={Chat}
-            options={({ navigation }) => chatOptions(navigation, theme, chat)}
+            options={({ navigation }) =>
+              chatOptions({ navigation, theme, chat })
+            }
             initialParams={chat}
           />
         ))}
@@ -65,7 +67,9 @@ const ChatDrawer: React.FC = () => {
         name={'_new chat'}
         key={'_'}
         component={Chat}
-        options={({ navigation }) => chatOptions(navigation, theme, newChat)}
+        options={({ navigation }) =>
+          chatOptions({ navigation, theme, chat: newChat })
+        }
         initialParams={newChat}
       />
       <Drawer.Screen
