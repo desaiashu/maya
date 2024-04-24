@@ -1,9 +1,9 @@
 import { StateCreator } from 'zustand';
 import { PerspectiveData } from '@/data/types';
-import { emptyPerspective } from '@/data';
+import { emptyPerspective, threadid } from '@/data';
 
 export interface PerspectiveState {
-  perspectives: { [messageid: string]: PerspectiveData };
+  perspectives: { [threadid: string]: PerspectiveData };
   updatePerspective: (
     messageid: number,
     chatid: string,
@@ -15,14 +15,16 @@ export const usePerspectiveState: StateCreator<PerspectiveState> = set => ({
   perspectives: {},
   updatePerspective: (messageid, chatid, data) =>
     set(state => {
-      const existingData = state.perspectives[messageid] || emptyPerspective();
+      const existingData =
+        state.perspectives[threadid(chatid, messageid)] || emptyPerspective();
       return {
         perspectives: {
           ...state.perspectives,
-          [messageid]: {
+          [threadid(chatid, messageid)]: {
             messageid: messageid,
             chatid: chatid,
-            confidence: data.confidence,
+            confidence: data.confidence || existingData.confidence,
+            lastupdated: data.lastupdated || existingData.lastupdated,
             relatedTopics: data.relatedTopics || existingData.relatedTopics,
             searchResults: data.searchResults || existingData.searchResults,
           },

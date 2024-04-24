@@ -133,14 +133,10 @@ const Chat: React.FC = () => {
   const { messages, user, addMessage } = useStore((state: State) => ({
     user: state.currentUser,
     addMessage: state.addMessage,
-    messages: isStreaming
-      ? [
-          ...state.messages.filter(
-            message => message.chatid === chatInfo.chatid,
-          ),
-          dummyMessage,
-        ]
-      : state.messages.filter(message => message.chatid === chatInfo.chatid),
+    messages: [
+      ...state.messages.filter(message => message.chatid === chatInfo.chatid),
+      ...(isStreaming ? [dummyMessage] : []),
+    ],
   }));
 
   // For new chats, the chatID will be 'new' and requires update

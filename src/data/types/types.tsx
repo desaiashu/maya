@@ -53,7 +53,6 @@ export interface ChatInfo {
   participants: string[];
   profiles?: Profile[];
   topic?: string;
-  threadid?: string;
   protocol: string;
 }
 export interface Profile {
@@ -146,18 +145,12 @@ export interface PerspectiveData {
   searchResults: SearchResult[];
 }
 export interface RelatedTopic {
-  content: string;
   chatid: string;
-  sender: string;
-  timestamp: number;
   messageid: number;
   topic: string;
 }
 export interface SearchResult {
-  content: string;
   chatid: string;
-  sender: string;
-  timestamp: number;
   messageid: number;
   title: string;
   url: string;

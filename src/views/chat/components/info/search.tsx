@@ -67,7 +67,7 @@ const getStyles = (theme: Theme) =>
       marginBottom: 3,
       marginLeft: 4,
       marginRight: 4,
-      maxWidth: '22%',
+      width: '20.5%',
     },
     shadow: {
       shadowColor: theme.colors.outline,

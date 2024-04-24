@@ -62,7 +62,7 @@ const Annotation: React.FC = () => {
 
   const a: Message = {
     content:
-      'A user left a note about this topic. They feel this information might be biased due to the funding sources of the studies. Their perspective was that the benefits of Modafinil for adhd are not confirmed.',
+      'A user left a note about this topic. They feel this information might be biased due to the funding sources of the studies. Their perspective was that...',
     sender: 'system',
     timestamp: 1,
     chatid: '1',

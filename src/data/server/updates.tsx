@@ -48,6 +48,7 @@ class ClientUpdate {
     // Pass message to stream state. If it's relevant, it will be handled
     const streamState = useStream.getState();
     streamState.handleMessage(data);
+    console.log('message update');
   }
 
   handleConfidenceUpdate(data: Confidence) {
@@ -67,6 +68,7 @@ class ClientUpdate {
     state.updatePerspective(data[0].messageid, data[0].chatid, {
       relatedTopics: data,
     });
+    console.log('related update');
   }
 
   handleSuccessUpdate(data: string) {

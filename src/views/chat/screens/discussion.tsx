@@ -14,7 +14,15 @@ import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
 import { IconButton, Words, Divider } from '@/ui/atoms';
 import { Message, Profile, SearchResult, RelatedTopic } from '@/data/types';
-import { State, messageid, useStore, server } from '@/data';
+import {
+  State,
+  useStore,
+  threadid,
+  server,
+  dummyMessage,
+  StreamState,
+  useStream,
+} from '@/data';
 import {
   MessageList,
   InputToolbar,
@@ -59,31 +67,49 @@ const Discussion: React.FC = () => {
   const route = useRoute();
   const { prompt, response, profiles } = route.params as DiscussionProps;
 
-  const perspectives: Message[] = [prompt, response];
+  const messageid = threadid(response.chatid, response.timestamp);
+
+  const isStreaming = useStream((state: StreamState) => state.isStreaming);
+  const { messages } = useStore((state: State) => ({
+    messages: [
+      prompt,
+      response,
+      ...state.messages.filter(message => message.chatid === messageid),
+      ...(isStreaming ? [dummyMessage] : []),
+    ],
+  }));
+
+  const perspectives: Message[] = messages;
 
   useEffect(() => {
     server.getPerspectives([prompt, response]);
+    console.log('req sent');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { perspective } = useStore((state: State) => ({
-    perspective: state.perspectives[messageid(response)],
+    perspective:
+      state.perspectives[threadid(response.chatid, response.timestamp)],
   }));
 
-  const [results, setResults] = useState<SearchResult[]>([]);
+  const [results, setResults] = useState<SearchResult[]>(
+    perspective ? perspective.searchResults : [],
+  );
   useEffect(() => {
-    if (results.length > 0)
+    console.log('updated search');
+    if (perspective && perspective.searchResults.length > 0)
       LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     perspective && setResults(perspective.searchResults);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [perspective]);
 
-  const [related, setRelated] = useState<RelatedTopic[]>([]);
+  const [related, setRelated] = useState<RelatedTopic[]>(
+    perspective ? perspective.relatedTopics : [],
+  );
   useEffect(() => {
-    if (related.length > 0)
+    console.log('updated topics');
+    if (perspective && perspective.relatedTopics.length > 0)
       LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     perspective && setRelated(perspective.relatedTopics);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [perspective]);
 
   const onSend = () => {};

@@ -10,11 +10,16 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 
 In progress:
 
+- NEED TO FIGURE OUT WHERE TO STORE CONFIDENCES IN DB (separate from perspectivedata?)
+- Refresh needs to load the other data
+
 - Create concept of "thread" that is linked to chatid + messageid but is it's own chat
   - Use this to update messages
   - Use protocol to differentiate
 - Confidence FE
 - Confidence BE
+- Annotations BE
+  - Dedicated collection
 - Perspectives FE
 - Perspectives BE
   - One LLM needs to be uncensored
@@ -70,6 +75,10 @@ Group chats
 - Adding other humans in chat
 - Build group protocols
 - Experiment with deeper trained bots
+
+Social features
+
+- Trending topics in "new chat" page?
 
 UI improvements:
 

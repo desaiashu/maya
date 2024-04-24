@@ -8,7 +8,7 @@ import {
   Perspective,
 } from '@/views/chat/components';
 import { Avatar, IconButton } from '@/ui/atoms';
-import { isSameUser, isSameDay, State, useStore } from '@/data';
+import { isSameUser, isSameDay, State, useStore, threadid } from '@/data';
 import { RootStackParamList } from '@/views/navigator';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { AnnotationProps, DiscussionProps } from '@/views/chat';
@@ -49,10 +49,12 @@ const MessageUI: React.FC<MessageProps> = props => {
   const first = !prev;
   const final = !next;
 
-  const showPerspective = username === 'maya' && !stream && !info;
+  const showPerspective =
+    username === 'maya' && !stream && !info && current.content.length > 50;
 
   const { perspective } = useStore((state: State) => ({
-    perspective: state.perspectives[current.timestamp],
+    perspective:
+      state.perspectives[threadid(current.chatid, current.timestamp)],
   }));
 
   const [confidence, setConfidence] = useState<Confidence>();

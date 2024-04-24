@@ -15,8 +15,8 @@ export function hashChatID(chatid: string): string {
 
 export const timestamp = () => new Date().getTime();
 
-export const messageid = (message: Message) =>
-  message.chatid + '_' + message.timestamp.toString;
+export const threadid = (chatid: string, messid: number) =>
+  chatid + '_' + messid.toString();
 
 export const emptyChat = (): ChatInfo => {
   const state = useStore.getState();
