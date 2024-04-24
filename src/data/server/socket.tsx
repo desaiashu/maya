@@ -1,12 +1,12 @@
 import { useStore } from '@/data';
-import { MayaRequest, MayaUpdate } from '@/data/types';
+import { MayaRequest, MayaUpdate, WSUpdate } from '@/data/types';
 import { hashPhoneNumber } from '@/data';
 import { client } from '@/data/server/updates';
 import { WS_URL } from '@/data';
 
 class Socket {
   private socket: WebSocket;
-  private updateHandlers: Record<string, (data: any) => void>;
+  private updateHandlers: Record<WSUpdate, (data: any) => void>;
 
   constructor() {
     this.socket = this.initializeWebSocket();

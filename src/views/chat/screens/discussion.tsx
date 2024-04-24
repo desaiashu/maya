@@ -72,14 +72,18 @@ const Discussion: React.FC = () => {
 
   const [results, setResults] = useState<SearchResult[]>([]);
   useEffect(() => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    if (results.length > 0)
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     perspective && setResults(perspective.searchResults);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [perspective]);
 
   const [related, setRelated] = useState<RelatedTopic[]>([]);
   useEffect(() => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    if (related.length > 0)
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     perspective && setRelated(perspective.relatedTopics);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [perspective]);
 
   const onSend = () => {};

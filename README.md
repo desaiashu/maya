@@ -18,22 +18,24 @@ In progress:
 - Perspectives FE
 - Perspectives BE
   - One LLM needs to be uncensored
+- Save context on perspectives, retrieve context from subthreads
 - Add perspective data to refresh
 - Share link
 - Reading speed
-- Turn off streaming (+ don't save "nostream" in message to db)
+- Turn off streaming
 - Stop button
 
 Next up:
 
-- Testflight
+- Testflight + force update
 - User prompt
 - Webview for sharing
 - Deeplinking for sharing
 - Invite to chat
 - Privacy terms (allow ppl to keep data private? on thread basis?)
 - Render markdown
-- Thumbs up / thumbs down
+- Thumbs up / thumbs down data saving
+- Analytics
 
 QA:
 
@@ -41,6 +43,7 @@ QA:
 - Add test for contexts
 - Oracle summary issue
 - Websockets issues: 1. always reopen when app opens, 2. see why it keeps closing
+- Websocket server to client sending on a multi-worker server
 
 Pre-launch:
 

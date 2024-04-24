@@ -30,13 +30,6 @@ const ConfidenceBadge: React.FC<ConfidenceProps> = props => {
 
 const getStyles = (theme: Theme, size: number) =>
   StyleSheet.create({
-    container: {
-      flexDirection: 'row', // This makes child components align horizontally
-      alignItems: 'flex-end',
-      justifyContent: 'flex-end',
-      marginBottom: 0,
-      paddingBottom: 0,
-    },
     button: {
       // Add any additional button styles if needed
     },
@@ -47,8 +40,8 @@ const getStyles = (theme: Theme, size: number) =>
       height: 30, // Adjust size as needed
       paddingLeft: 1,
       paddingTop: 1,
-      left: 6.5,
-      bottom: 10,
+      marginLeft: 6.5,
+      marginBottom: 10,
       borderRadius: 15, // Half of width/height to make it a circle
       backgroundColor: theme.colors.background,
       shadowColor: theme.colors.outline,

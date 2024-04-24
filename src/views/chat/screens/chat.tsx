@@ -125,10 +125,9 @@ const Chat: React.FC = () => {
   const flatListRef = React.useRef<FlatList>(null);
 
   const chats = useStore((state: State) => state.chats);
+
   //Dev screen override won't have route params
-  if (DEV_SCREEN) {
-    chatInfo = chats[0]; //Setting directly to execute before next 2 commands
-  }
+  if (DEV_SCREEN) chatInfo = chats[0]; //Setting directly to execute before next 2 commands
 
   const isStreaming = useStream((state: StreamState) => state.isStreaming);
   const { messages, user, addMessage } = useStore((state: State) => ({

@@ -5,10 +5,33 @@
 /* Do not modify it by hand - just update the pydantic models and then re-run the script
 */
 
+export type WSRequest =
+  | "auth"
+  | "verify"
+  | "refresh"
+  | "message"
+  | "annotation"
+  | "perspective"
+  | "create_chat"
+  | "update_group"
+  | "update_user"
+  | "test";
+export type WSUpdate =
+  | "refresh"
+  | "success"
+  | "error"
+  | "chunk"
+  | "message"
+  | "chatinfo"
+  | "user"
+  | "confidence"
+  | "related"
+  | "search";
+
 export interface AnnotationRequest {
   userid: string;
   token: string;
-  command: string;
+  command: WSRequest;
   data: Message[];
 }
 export interface Message {
@@ -46,7 +69,7 @@ export interface ChatInfoUpdate {
 export interface ChatRequest {
   userid: string;
   token: string;
-  command: string;
+  command: WSRequest;
   data: ChatInfo;
 }
 export interface Chunk {
@@ -94,18 +117,18 @@ export interface LastRefresh {
 export interface MayaRequest {
   userid: string;
   token: string;
-  command: string;
+  command: WSRequest;
   data?: unknown;
 }
 export interface MayaUpdate {
   data?: unknown;
-  update: string;
+  update: WSUpdate;
   background?: boolean;
 }
 export interface MessageRequest {
   userid: string;
   token: string;
-  command: string;
+  command: WSRequest;
   data: Message;
 }
 export interface MessageUpdate {
@@ -142,7 +165,7 @@ export interface SearchResult {
 export interface PerspectiveRequest {
   userid: string;
   token: string;
-  command: string;
+  command: WSRequest;
   data: Message[];
 }
 export interface RefreshData {
@@ -155,7 +178,7 @@ export interface RefreshData {
 export interface RefreshRequest {
   userid: string;
   token: string;
-  command: string;
+  command: WSRequest;
   data: LastRefresh;
 }
 export interface RefreshUpdate {
@@ -191,7 +214,7 @@ export interface User {
 export interface UserRequest {
   userid: string;
   token: string;
-  command: string;
+  command: WSRequest;
   data: User;
 }
 export interface UserUpdate {

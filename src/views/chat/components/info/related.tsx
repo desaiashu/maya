@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, TouchableOpacity, Linking } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Words } from '@/ui/atoms';
 import { RelatedTopic } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
@@ -13,7 +13,7 @@ const Related: React.FC<RelatedProps> = props => {
   const styles = getStyles(useTheme());
 
   const onPress = (r: RelatedTopic) => {
-    // Linking.openURL(r.url);
+    console.log(r.topic);
   };
 
   return (
