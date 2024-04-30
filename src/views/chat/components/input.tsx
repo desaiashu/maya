@@ -15,7 +15,7 @@ const InputToolbar: React.FC<InputToolbarProps> = ({
   onSend,
   chatid,
   onLayout,
-  placeholder = 'Type a message...',
+  placeholder = 'What...', //'Type a message...',
 }) => {
   const draft = useStore((state: State) =>
     chatid ? state.drafts[chatid] || '' : '',

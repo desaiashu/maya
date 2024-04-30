@@ -60,10 +60,10 @@ const getStyles = (theme: Theme) =>
     button: {
       backgroundColor: theme.colors.background,
       borderRadius: 3,
-      paddingTop: 10,
-      paddingBottom: 10,
-      paddingLeft: 10,
-      paddingRight: 10,
+      paddingTop: 5,
+      paddingBottom: 4,
+      paddingLeft: 6,
+      paddingRight: 6,
       marginBottom: 3,
       marginLeft: 4,
       marginRight: 4,
@@ -78,7 +78,7 @@ const getStyles = (theme: Theme) =>
     title: {
       height: 30,
       fontSize: 10,
-      marginBottom: 10,
+      marginBottom: 0,
     },
     url: {
       height: 10,

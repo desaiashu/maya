@@ -5,6 +5,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   LayoutAnimation,
+  FlatList,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -22,6 +23,7 @@ import {
   dummyMessage,
   StreamState,
   useStream,
+  timestamp,
 } from '@/data';
 import {
   MessageList,
@@ -67,13 +69,17 @@ const Discussion: React.FC = () => {
   const route = useRoute();
   const { prompt, response, profiles } = route.params as DiscussionProps;
 
+  const messagesRef = React.useRef<FlatList>(null);
+
   const messageid = threadid(response.chatid, response.timestamp);
 
   const isStreaming = useStream((state: StreamState) => state.isStreaming);
-  const { messages } = useStore((state: State) => ({
+  const { messages, user, addMessage } = useStore((state: State) => ({
+    user: state.currentUser,
+    addMessage: state.addMessage,
     messages: [
-      prompt,
-      response,
+      // prompt,
+      // response,
       ...state.messages.filter(message => message.chatid === messageid),
       ...(isStreaming ? [dummyMessage] : []),
     ],
@@ -83,8 +89,7 @@ const Discussion: React.FC = () => {
 
   useEffect(() => {
     server.getPerspectives([prompt, response]);
-    console.log('req sent');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { perspective } = useStore((state: State) => ({
@@ -112,7 +117,30 @@ const Discussion: React.FC = () => {
     perspective && setRelated(perspective.relatedTopics);
   }, [perspective]);
 
-  const onSend = () => {};
+  const sendMessage = (message: string) => {
+    let newMessage: Message = {
+      chatid: messageid,
+      content: message,
+      sender: user.userid,
+      timestamp: timestamp(),
+    };
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    addMessage(newMessage);
+    if (messages.length > 0) {
+      messagesRef?.current?.scrollToIndex({ index: 0, animated: true });
+    }
+    server.sendMessage(newMessage);
+  };
+
+  const onSend = (message: string) => {
+    sendMessage(message);
+  };
+
+  const onRelated = (topic: string) => {
+    console.log(topic);
+    sendMessage(topic);
+    // Additional logic for handling the selected topic
+  };
 
   return (
     <SafeAreaView edges={['top']} style={styles.container}>
@@ -124,16 +152,16 @@ const Discussion: React.FC = () => {
           <Words tag="h2">{'Points of view'}</Words>
         </View>
         <View style={styles.search}>
-          <Words tag="body" style={styles.h2}>
-            {'Web search'}
-          </Words>
+          {/* <Words tag="body" style={styles.h2}>
+            {'Web'}
+          </Words> */}
           <Search results={results} />
         </View>
         <View style={styles.related}>
-          <Words tag="body" style={styles.h2}>
-            {'Related questions'}
-          </Words>
-          <Related related={related} />
+          {/* <Words tag="body" style={styles.h2}>
+            {'Related'}
+          </Words> */}
+          <Related related={related} onSelect={onRelated} />
         </View>
         <Divider />
         <MessageList
@@ -141,6 +169,7 @@ const Discussion: React.FC = () => {
           profiles={profiles}
           style={styles.messages}
           info
+          ref={messagesRef}
         />
 
         <InputToolbar onSend={onSend} />
@@ -172,7 +201,7 @@ const getStyles = (theme: Theme) =>
       marginTop: 20,
     },
     related: {
-      marginTop: 10,
+      marginTop: 5,
       marginLeft: '5%',
     },
     messages: {

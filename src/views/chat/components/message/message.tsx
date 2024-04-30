@@ -49,8 +49,10 @@ const MessageUI: React.FC<MessageProps> = props => {
   const first = !prev;
   const final = !next;
 
-  const showPerspective =
-    username === 'maya' && !stream && !info && current.content.length > 50;
+  //Add thumbs and confidence later
+  const showConfidence = false;
+  const showThumbs = false;
+  const showPerspective = username === 'maya' && !stream && !info;
 
   const { perspective } = useStore((state: State) => ({
     perspective:
@@ -91,33 +93,41 @@ const MessageUI: React.FC<MessageProps> = props => {
     return showPerspective ? (
       <View style={styles.base.buttons}>
         <View style={styles.base.thumbsRow}>
-          <IconButton
-            round
-            shadow
-            icon="thumbsdown"
-            style={styles.base.thumbs}
-            containerStyle={[
-              styles.base.thumbsContainer,
-              styles.base.thumbsDown,
-            ]}
-            onPress={() => thumbs('down')}
-          />
-          <IconButton
-            round
-            shadow
-            icon="thumbsup"
-            style={styles.base.thumbs}
-            containerStyle={[styles.base.thumbsContainer, styles.base.thumbsUp]}
-            onPress={() => thumbs('up')}
-          />
+          {showThumbs && (
+            <>
+              <IconButton
+                round
+                shadow
+                icon="thumbsdown"
+                style={styles.base.thumbs}
+                containerStyle={[
+                  styles.base.thumbsContainer,
+                  styles.base.thumbsDown,
+                ]}
+                onPress={() => thumbs('down')}
+              />
+              <IconButton
+                round
+                shadow
+                icon="thumbsup"
+                style={styles.base.thumbs}
+                containerStyle={[
+                  styles.base.thumbsContainer,
+                  styles.base.thumbsUp,
+                ]}
+                onPress={() => thumbs('up')}
+              />
+            </>
+          )}
         </View>
+
         <Perspective onPress={openDiscussion} />
       </View>
     ) : null;
   };
 
   const renderConfidence = () => {
-    return showPerspective ? (
+    return showPerspective && showConfidence ? (
       <ConfidenceBadge confidence={confidence} onPress={openAnnotation} />
     ) : null;
   };

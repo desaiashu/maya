@@ -6,15 +6,12 @@ import { Theme, useTheme } from '@/ui/theme';
 
 interface RelatedProps {
   related: RelatedTopic[];
+  onSelect: (topic: string) => void;
 }
 
 const Related: React.FC<RelatedProps> = props => {
-  const { related } = props;
+  const { related, onSelect } = props;
   const styles = getStyles(useTheme());
-
-  const onPress = (r: RelatedTopic) => {
-    console.log(r.topic);
-  };
 
   return (
     <View style={styles.container}>
@@ -22,7 +19,7 @@ const Related: React.FC<RelatedProps> = props => {
         <TouchableOpacity
           key={index}
           style={[styles.button, styles.shadow]}
-          onPress={() => onPress(r)}
+          onPress={() => onSelect(r.topic)}
         >
           <Words tag={'small'} style={styles.title}>
             {r.topic + '  ⇢'}

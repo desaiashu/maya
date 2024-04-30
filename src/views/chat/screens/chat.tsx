@@ -79,7 +79,7 @@ const renderRightMenu = (props: chatOptionsProps) => {
           onPress={() => {
             console.log('share');
             Share.share({
-              url: 'https://askmaya.xyz/' + hashChatID(chat.chatid),
+              url: 'https://seekmaya.com/' + hashChatID(chat.chatid),
               title: 'Maya Chat',
             });
           }}

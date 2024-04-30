@@ -14,7 +14,7 @@ const Divider: React.FC<DividerProps> = props => {
   const {
     color = theme.colors.outline,
     thickness = 0.2,
-    marginTop = 10,
+    marginTop = 3,
     marginBottom = 0,
   } = props;
   const styles = getStyles({ color, thickness, marginTop, marginBottom });

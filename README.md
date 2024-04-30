@@ -10,30 +10,37 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 
 In progress:
 
-- NEED TO FIGURE OUT WHERE TO STORE CONFIDENCES IN DB (separate from perspectivedata?)
+- Draft has a bug where it won't reset back to empty when creating a new message
+
+- Save context on perspectives, retrieve context from subthreads
+- Update and test summarization code to handle perspective contexts
+
+- Enable messaging in discussion (maya + alternate between two others)
+- Make search results smaller
+- Hide search + related when keyboard is open
+- Figure out whether to stream the secondary responses - why so slow?
+
 - Refresh needs to load the other data
+- Don't request new perspective every time
 
 - Create concept of "thread" that is linked to chatid + messageid but is it's own chat
   - Use this to update messages
   - Use protocol to differentiate
-- Confidence FE
-- Confidence BE
-- Annotations BE
-  - Dedicated collection
+- Markdown
 - Perspectives FE
 - Perspectives BE
+
   - One LLM needs to be uncensored
-- Save context on perspectives, retrieve context from subthreads
+
 - Add perspective data to refresh
 - Share link
-- Reading speed
-- Turn off streaming
 - Stop button
 
-Next up:
+#### Next up:
 
 - Testflight + force update
 - User prompt
+- Ask clarifying questions to user
 - Webview for sharing
 - Deeplinking for sharing
 - Invite to chat
@@ -41,8 +48,9 @@ Next up:
 - Render markdown
 - Thumbs up / thumbs down data saving
 - Analytics
+- Finetune chatbot on my Make School emails?
 
-QA:
+#### QA:
 
 - Handle rapid chats - ie. if you message a string of messages the server should wait, adjust and not double respond
 - Add test for contexts
@@ -50,7 +58,7 @@ QA:
 - Websockets issues: 1. always reopen when app opens, 2. see why it keeps closing
 - Websocket server to client sending on a multi-worker server
 
-Pre-launch:
+#### Pre-launch:
 
 - Share functionality w/ web based viewer of chatid
 - Indicators for success/failure/loading - message send, chat creation, profile update, etc
@@ -66,7 +74,22 @@ Pre-launch:
 - Update "last-refresh"
 - App Icons
 
-Group chats
+#### Personalization
+
+- Per user context / preferences
+- Reading speed
+- Turn off streaming
+
+#### Confidence / annotations
+
+- Confidence FE
+- Confidence BE
+- Annotation submission/retrieval
+- NEED TO FIGURE OUT WHERE TO STORE CONFIDENCES IN DB (separate from perspectivedata?)
+- Annotations BE
+  - Dedicated collection
+
+#### Group chats
 
 - Test real time
 - Figure out how to handle contacts
@@ -76,20 +99,20 @@ Group chats
 - Build group protocols
 - Experiment with deeper trained bots
 
-Social features
+#### Social features
 
 - Trending topics in "new chat" page?
 
-UI improvements:
+#### UI improvements:
 
 - First stream response w/ bounce?
 
-Experimental:
+#### Experimental:
 
 - Build web demo on maya url
 - Build web editor for chatagents (login via sms code, add python for agents, or add webhooks for people to build/host their own)
 
-Backlog
+#### Backlog
 
 - Adjust reading speed in user profile
 - Toggle for streaming vs replying
