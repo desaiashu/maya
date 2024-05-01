@@ -16,6 +16,7 @@ module.exports = {
         alias: {
           '@': './src',
           '%': './assets',
+          '^react-native$': 'react-native-web',
         },
       },
     ],
