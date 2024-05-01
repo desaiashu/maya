@@ -4,8 +4,10 @@ import {
   StyleSheet,
   useColorScheme,
   StyleProp,
+  Image,
+  ImageStyle,
 } from 'react-native';
-import FastImage, { ImageStyle } from 'react-native-fast-image';
+// import FastImage, { ImageStyle } from 'react-native-fast-image';
 import { getImageSource } from '@/data';
 import { Theme, useTheme } from '@/ui/theme';
 
@@ -35,7 +37,8 @@ const IconButton: React.FC<IconButtonProps> = props => {
         containerStyle,
       ]}
     >
-      <FastImage
+      {/* <FastImage */}
+      <Image
         source={getImageSource(icon, colorScheme)} // Replace with the actual path to your image
         style={[styles.iconButton, style]} // Adjust the size as needed
       />

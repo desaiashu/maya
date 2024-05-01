@@ -6,8 +6,9 @@ import {
   FlatList,
   StyleSheet,
   useColorScheme,
+  Image,
 } from 'react-native';
-import FastImage from 'react-native-fast-image';
+// import FastImage from 'react-native-fast-image';
 import { Avatar, Words } from '@/ui/atoms';
 import { useTheme, Theme } from '@/ui/theme';
 import { getImageSource } from '@/data';
@@ -49,7 +50,8 @@ const ParticipantSelect: React.FC<ParticipantSelectProps> = props => {
           </Words>
         </View>
         {selected.includes(profile.userid) && (
-          <FastImage
+          // <FastImage
+          <Image
             source={getImageSource('check', colorScheme)}
             style={styles.check}
           />

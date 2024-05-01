@@ -113,7 +113,11 @@ const renderRightMenu = (props: chatOptionsProps) => {
   );
 };
 
-const Chat: React.FC = () => {
+interface ChatProps {
+  slug?: string;
+}
+
+const Chat: React.FC<ChatProps> = ({ slug }) => {
   const navigation =
     useNavigation<DrawerNavigationProp<RootStackParamList, 'Chat'>>();
   const theme = useTheme();

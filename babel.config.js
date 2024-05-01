@@ -1,12 +1,15 @@
 module.exports = {
   presets: [
-    'module:@react-native/babel-preset',
+    // 'module:@react-native/babel-preset', #old
+    'module:metro-react-native-babel-preset',
     [
       '@babel/preset-typescript',
       {
         allowDeclareFields: true,
       },
     ],
+    '@babel/preset-env', // For ES6+
+    '@babel/preset-react', // For JSX
   ],
   plugins: [
     [
