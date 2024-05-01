@@ -50,6 +50,13 @@ In progress:
 - Analytics
 - Finetune chatbot on my Make School emails?
 
+#### User feedback
+
+Way to request features (so I can add ideas)
+“Add wisdom” to integrate into our knowledge base
+“Add ideas” for the app
+Way to report bugs
+
 #### QA:
 
 - Handle rapid chats - ie. if you message a string of messages the server should wait, adjust and not double respond
@@ -88,6 +95,9 @@ In progress:
 - NEED TO FIGURE OUT WHERE TO STORE CONFIDENCES IN DB (separate from perspectivedata?)
 - Annotations BE
   - Dedicated collection
+  - Top contributors can earn?
+    Dont tell them, just give them gifts
+    Don’t want ppl to contribute in order to get paid
 
 #### Group chats
 
