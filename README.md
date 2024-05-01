@@ -27,8 +27,6 @@ In progress:
   - Use this to update messages
   - Use protocol to differentiate
 - Markdown
-- Perspectives FE
-- Perspectives BE
 
   - One LLM needs to be uncensored
 
@@ -48,7 +46,6 @@ In progress:
 - Render markdown
 - Thumbs up / thumbs down data saving
 - Analytics
-- Finetune chatbot on my Make School emails?
 
 #### User feedback
 
@@ -80,6 +77,10 @@ Way to report bugs
 - Background data updates
 - Update "last-refresh"
 - App Icons
+
+#### Social
+
+- Invite to thread
 
 #### Personalization
 
@@ -140,8 +141,9 @@ Way to report bugs
 - Host on maya url rather than txtai.co
 - Expire login codes
 - Enable multiple dynos via redis/pubsub
+- Finetune chatbot on my Make School emails?
 
-Done
+### Done
 
 - Chatlist refresh, doing so in drawer screws with animation
 - New chat doesn't work yet due to the way sidebar is rendered
@@ -162,6 +164,8 @@ Done
 - Run on actual phone
 - Create new message, select protocol, select AIs
 - 1:1 format list maps bot ID to protocol
+- Perspectives FE
+- Perspectives BE
 
 ---
 
