@@ -3,8 +3,9 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const appDirectory = path.resolve(__dirname);
+const appDirectory = path.resolve(__dirname, '../');
 
 const compileNodeModules = [
   // Add every react-native package that needs compiling
@@ -21,8 +22,8 @@ const babelLoaderConfiguration = {
   test: /\.(js|jsx|ts|tsx)$/,
   // Add every directory that needs to be compiled by Babel during the build.
   include: [
-    path.resolve(appDirectory, 'index.web.js'),
-    path.resolve(appDirectory, 'maya.web.tsx'),
+    path.resolve(appDirectory, 'web/index.web.js'),
+    path.resolve(appDirectory, 'web/maya.web.tsx'),
     path.resolve(appDirectory, 'src'),
     ...compileNodeModules,
   ],
@@ -61,12 +62,25 @@ const imageLoaderConfiguration = {
   },
 };
 
+const fontLoaderConfiguration = {
+  test: /\.(woff|woff2|eot|ttf|otf)$/,
+  use: [
+    {
+      loader: 'file-loader',
+      options: {
+        name: '[name].[ext]',
+        outputPath: 'fonts/', // The directory where fonts will be placed
+      },
+    },
+  ],
+};
+
 module.exports = {
   entry: [
     // load any web API polyfills
     // path.resolve(appDirectory, 'polyfills-web.js'),
     // your web-specific entry file
-    path.resolve(appDirectory, 'index.web.js'),
+    path.resolve(appDirectory, 'web/index.web.js'),
   ],
 
   // configures where the build ends up
@@ -79,7 +93,11 @@ module.exports = {
   // ...the rest of your config
 
   module: {
-    rules: [babelLoaderConfiguration, imageLoaderConfiguration],
+    rules: [
+      babelLoaderConfiguration,
+      imageLoaderConfiguration,
+      fontLoaderConfiguration,
+    ],
   },
 
   resolve: {
@@ -109,7 +127,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'index.html'),
+      template: path.join(appDirectory, 'web/index.html'),
     }),
     new webpack.HotModuleReplacementPlugin(), // Enable HMR
     new webpack.DefinePlugin({
@@ -117,5 +135,8 @@ module.exports = {
     }),
     new webpack.EnvironmentPlugin({ JEST_WORKER_ID: null }),
     new webpack.DefinePlugin({ process: { env: {} } }),
+    new CopyWebpackPlugin({
+      patterns: [{ from: path.resolve(appDirectory, 'assets'), to: 'assets' }],
+    }),
   ],
 };
