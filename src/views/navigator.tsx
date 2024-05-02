@@ -31,6 +31,7 @@ import {
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
 import { State, useStore, DEV_SCREEN } from '@/data';
+import { Platform } from 'react-native';
 
 export type RootStackParamList = {
   ChatList: undefined;
@@ -50,6 +51,8 @@ export const navigationRef = createNavigationContainerRef();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const Navigator: React.FC = () => {
+  const web = Platform.OS === 'web';
+
   const theme = useTheme();
 
   const { isAuthenticated, username } = useStore((state: State) => ({
@@ -60,6 +63,15 @@ const Navigator: React.FC = () => {
   const userCreated = username !== '';
 
   let initialRoute: string = 'Auth';
+
+  if (web) {
+    initialRoute = 'ChatDrawer';
+  }
+
+  console.log('=========');
+  console.log(web);
+  console.log(Platform.OS);
+  console.log(initialRoute);
 
   if (DEV_SCREEN) {
     //Override initialRoute for development

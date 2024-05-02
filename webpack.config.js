@@ -96,18 +96,17 @@ module.exports = {
       '.jsx',
     ],
   },
-  // devServer: {
-  //   static: {
-  //     directory: path.join(appDirectory), // Where to serve content from
-  //     watch: true,
-  //   },
-  //   historyApiFallback: {
-  //     index: '/index.html', // Serve index.html as the fallback for 404s
-  //   },
-  //   hot: true, // Enable hot module replacement
-  //   open: true, // Open the browser after server had been started
-  //   port: 3000, // Port to run the server on
-  // },
+  devServer: {
+    static: {
+      directory: path.join(appDirectory, 'assets'), // Serve content from the assets directory
+      publicPath: '/',
+      watch: true,
+    },
+    historyApiFallback: true, // This is crucial for single-page applications
+    hot: true, // Enable hot module replacement
+    open: true, // Open the browser after the server has been started
+    port: 3000, // Port to run the server on
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'index.html'),

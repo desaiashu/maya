@@ -34,6 +34,7 @@ import { Message, ChatInfo } from '@/data/types';
 import { MessageList, InputToolbar } from '@/views/chat/components';
 import { Theme, useTheme } from '@/ui/theme';
 import { IconButton } from '@/ui/atoms';
+import { useParams } from 'react-router-dom';
 
 interface chatOptionsProps {
   navigation: DrawerNavigationProp<RootStackParamList, 'Chat'>;
@@ -113,11 +114,12 @@ const renderRightMenu = (props: chatOptionsProps) => {
   );
 };
 
-interface ChatProps {
-  slug?: string;
-}
+const Chat: React.FC = () => {
+  const web = Platform.OS === 'web';
+  const params = useParams();
+  params && console.log(params);
+  console.log('params=======');
 
-const Chat: React.FC<ChatProps> = ({ slug }) => {
   const navigation =
     useNavigation<DrawerNavigationProp<RootStackParamList, 'Chat'>>();
   const theme = useTheme();
