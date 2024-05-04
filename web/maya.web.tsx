@@ -1,7 +1,12 @@
 // maya.web.tsx = Web App Root
 
 import React from 'react';
-import { View, Dimensions, StyleSheet } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  useWindowDimensions,
+  ScaledSize,
+} from 'react-native';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from '@/ui/theme';
 import Navigator from '@/views/navigator';
@@ -9,7 +14,7 @@ import { Landing } from '@/views/setup';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 const WebApp = () => {
-  const styles = getStyles();
+  const styles = getStyles(useWindowDimensions());
   return (
     <View style={styles.container}>
       <Navigator />
@@ -33,10 +38,10 @@ const MayaWeb = () => {
   );
 };
 
-const getStyles = () =>
+const getStyles = (windowDims: ScaledSize) =>
   StyleSheet.create({
     container: {
-      minHeight: Dimensions.get('window').height,
+      minHeight: windowDims.height,
     },
   });
 

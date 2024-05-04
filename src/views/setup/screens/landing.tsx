@@ -5,15 +5,20 @@ import {
   Image,
   Linking,
   useColorScheme,
-  Dimensions,
+  useWindowDimensions,
+  ScaledSize,
+  ImageStyle,
 } from 'react-native';
 import { Theme, useTheme } from '@/ui/theme';
 import { Words, Button } from '@/ui/atoms';
 import { DOWNLOAD_URL, getImageSource } from '@/data';
 
 const Landing: React.FC = () => {
-  const styles = getStyles(useTheme());
+  const windowDims = useWindowDimensions();
+  const styles = getStyles(useTheme(), windowDims, screenshotDims(windowDims));
   const colorScheme = useColorScheme();
+
+  console.log(getImageSource('screenshot', colorScheme));
 
   return (
     <View style={styles.container}>
@@ -25,10 +30,6 @@ const Landing: React.FC = () => {
         primary LLM, a secondary uncensored contrarian LLM, and a third holistic
         LLM. We also present web links to go deeper into the topics discussed.
       </Words>
-      <Image
-        source={getImageSource('screenshot', colorScheme)}
-        style={styles.screenshot}
-      />
       <Button
         title="Download beta"
         tag="body"
@@ -36,29 +37,66 @@ const Landing: React.FC = () => {
         style={styles.button}
         outlined
       />
+      <Image
+        source={getImageSource('screenshot', colorScheme)}
+        style={styles.screenshot}
+      />
     </View>
   );
 };
 
-const getStyles = (theme: Theme) =>
+const getStyles = (
+  theme: Theme,
+  dims: ScaledSize,
+  screenshotDims: ImageStyle,
+) =>
   StyleSheet.create({
     container: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: theme.colors.background,
-      minHeight: Dimensions.get('window').height,
+      minHeight: dims.height,
     },
     title: {
       marginBottom: 20,
     },
     description: {
-      margin: 30,
+      marginTop: 30,
+      marginLeft: 20,
+      marginRight: 20,
+      marginBottom: 20,
+      maxWidth: 500,
     },
     screenshot: {
-      height: 200,
+      ...screenshotDims,
     },
-    button: {},
+    button: {
+      marginBottom: 30,
+    },
   });
+
+const screenshotDims = (windowDims: ScaledSize) => {
+  const windowHeight = windowDims.height;
+  const windowWidth = windowDims.width;
+
+  const maxImageHeight = windowHeight * 0.6; // 60% of the window height
+  const maxImageWidth = windowWidth * 0.8; // 80% of the window width
+
+  const aspectRatio = 930 / 1772; // Replace with the actual aspect ratio of the image
+
+  let imageHeight = maxImageHeight;
+  let imageWidth = imageHeight * aspectRatio;
+
+  if (imageWidth > maxImageWidth) {
+    imageWidth = maxImageWidth;
+    imageHeight = imageWidth / aspectRatio;
+  }
+
+  return {
+    height: imageHeight,
+    width: imageWidth,
+  };
+};
 
 export default Landing;
