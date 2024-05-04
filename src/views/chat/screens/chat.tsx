@@ -10,6 +10,7 @@ import {
   View,
   StyleSheet,
   Share,
+  Linking,
 } from 'react-native';
 import {
   DrawerNavigationProp,
@@ -29,12 +30,14 @@ import {
   newCommunityChat,
   hashChatID,
   WEB_URL,
+  DOWNLOAD_URL,
+  emptyChat,
 } from '@/data';
 import { useNavigation } from '@react-navigation/native';
 import { Message, ChatInfo } from '@/data/types';
 import { MessageList, InputToolbar } from '@/views/chat/components';
 import { Theme, useTheme } from '@/ui/theme';
-import { IconButton } from '@/ui/atoms';
+import { IconButton, Button } from '@/ui/atoms';
 import { useParams } from 'react-router-dom';
 
 interface chatOptionsProps {
@@ -127,7 +130,9 @@ const Chat: React.FC = () => {
   const styles = getStyles(theme);
   const route = useRoute();
 
-  let [chatInfo, setChatInfo] = useState<ChatInfo>(route.params as ChatInfo);
+  let [chatInfo, setChatInfo] = useState<ChatInfo>(
+    web ? emptyChat() : (route.params as ChatInfo),
+  );
   // let scrollPosition = 0;
   const flatListRef = React.useRef<FlatList>(null);
 
@@ -182,12 +187,21 @@ const Chat: React.FC = () => {
         behavior={Platform.OS === 'ios' ? 'height' : 'height'}
         style={styles.keyboardAvoid}
       >
+        {web && (
+          <Button
+            title="Download beta"
+            tag="h4"
+            onPress={() => Linking.openURL(DOWNLOAD_URL)}
+            style={styles.download}
+            outlined
+          />
+        )}
         <MessageList
           messages={messages}
           profiles={chatInfo.profiles || []}
           ref={flatListRef}
         />
-        <InputToolbar onSend={onSend} chatid={chatInfo.chatid} />
+        {!web && <InputToolbar onSend={onSend} chatid={chatInfo.chatid} />}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -204,6 +218,11 @@ const getStyles = (theme: Theme) =>
     },
     rightMenu: {
       flexDirection: 'row',
+    },
+    download: {
+      width: 200,
+      alignSelf: 'center',
+      textAlign: 'center',
     },
     iconMenuContainer: {
       paddingLeft: 9,

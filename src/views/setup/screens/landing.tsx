@@ -15,10 +15,6 @@ const Landing: React.FC = () => {
   const styles = getStyles(useTheme());
   const colorScheme = useColorScheme();
 
-  const onPress = () => {
-    Linking.openURL(DOWNLOAD_URL);
-  };
-
   return (
     <View style={styles.container}>
       <Words tag="h1" style={styles.title}>
@@ -36,8 +32,9 @@ const Landing: React.FC = () => {
       <Button
         title="Download beta"
         tag="body"
-        onPress={onPress}
+        onPress={() => Linking.openURL(DOWNLOAD_URL)}
         style={styles.button}
+        outlined
       />
     </View>
   );

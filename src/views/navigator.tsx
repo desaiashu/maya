@@ -27,6 +27,7 @@ import {
   Discussion,
   discussionOptions,
   DiscussionProps,
+  Chat,
 } from '@/views/chat';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
@@ -36,6 +37,7 @@ import { Platform } from 'react-native';
 export type RootStackParamList = {
   ChatList: undefined;
   ChatDrawer: undefined;
+  Chat: undefined;
   NewChat: undefined;
   Profile: undefined;
   Auth: undefined;
@@ -64,10 +66,6 @@ const Navigator: React.FC = () => {
 
   let initialRoute: string = 'Auth';
 
-  if (web) {
-    initialRoute = 'ChatDrawer';
-  }
-
   if (DEV_SCREEN) {
     //Override initialRoute for development
     initialRoute = DEV_SCREEN as string;
@@ -79,6 +77,9 @@ const Navigator: React.FC = () => {
     initialRoute = 'Auth';
   }
 
+  if (web) {
+    initialRoute = 'Chat';
+  }
   console.log('=========');
   console.log(web);
   console.log(Platform.OS);
@@ -114,6 +115,7 @@ const Navigator: React.FC = () => {
           component={Discussion}
           options={({ navigation }) => discussionOptions(navigation, theme)}
         />
+        <Stack.Screen name="Chat" component={Chat} />
       </Stack.Navigator>
     </NavigationContainer>
   );
