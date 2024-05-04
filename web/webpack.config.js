@@ -69,9 +69,17 @@ const fontLoaderConfiguration = {
       loader: 'file-loader',
       options: {
         name: '[name].[ext]',
-        outputPath: 'fonts/', // The directory where fonts will be placed
+        outputPath: 'fonts/',
       },
     },
+  ],
+};
+
+const cssLoaderConfiguration = {
+  test: /\.css$/,
+  use: [
+    'style-loader', // Injects styles into DOM
+    'css-loader', // Translates CSS into CommonJS
   ],
 };
 
@@ -97,12 +105,14 @@ module.exports = {
       babelLoaderConfiguration,
       imageLoaderConfiguration,
       fontLoaderConfiguration,
+      cssLoaderConfiguration,
     ],
   },
 
   resolve: {
     alias: {
       'react-native$': 'react-native-web',
+      '%': path.resolve(appDirectory, 'assets'),
     },
     extensions: [
       '.web.tsx',

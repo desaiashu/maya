@@ -8,8 +8,6 @@ module.exports = {
         allowDeclareFields: true,
       },
     ],
-    '@babel/preset-env', // For ES6+
-    '@babel/preset-react', // For JSX
   ],
   plugins: [
     [
@@ -19,7 +17,6 @@ module.exports = {
         alias: {
           '@': './src',
           '%': './assets',
-          '^react-native$': 'react-native-web',
         },
       },
     ],
