@@ -68,11 +68,6 @@ const Navigator: React.FC = () => {
     initialRoute = 'ChatDrawer';
   }
 
-  console.log('=========');
-  console.log(web);
-  console.log(Platform.OS);
-  console.log(initialRoute);
-
   if (DEV_SCREEN) {
     //Override initialRoute for development
     initialRoute = DEV_SCREEN as string;
@@ -83,6 +78,11 @@ const Navigator: React.FC = () => {
   } else {
     initialRoute = 'Auth';
   }
+
+  console.log('=========');
+  console.log(web);
+  console.log(Platform.OS);
+  console.log(initialRoute);
 
   return (
     <NavigationContainer ref={navigationRef}>

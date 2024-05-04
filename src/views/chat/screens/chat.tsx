@@ -28,6 +28,7 @@ import {
   DEV_SCREEN,
   newCommunityChat,
   hashChatID,
+  WEB_URL,
 } from '@/data';
 import { useNavigation } from '@react-navigation/native';
 import { Message, ChatInfo } from '@/data/types';
@@ -80,7 +81,7 @@ const renderRightMenu = (props: chatOptionsProps) => {
           onPress={() => {
             console.log('share');
             Share.share({
-              url: 'https://seekmaya.com/' + hashChatID(chat.chatid),
+              url: WEB_URL + hashChatID(chat.chatid),
               title: 'Maya Chat',
             });
           }}

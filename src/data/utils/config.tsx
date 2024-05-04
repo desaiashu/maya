@@ -16,7 +16,13 @@ export let RESET_STATE = false;
 //////////////////////////////////
 
 ///// Server URL /////
-export let WS_URL: string;
+
+export let DOMAIN = 'seekmaya.com';
+export let DOWNLOAD_URL = 'https://ashu.xyz';
+export let WEB_URL = 'https://' + DOMAIN + '/';
+export let WS_URL: string = 'wss://' + ENV + '.' + DOMAIN + '/maya/';
+//TODO: update urls for toshbox/dev/prod
+
 switch (ENV as Environment) {
   case 'local':
     WS_URL = 'ws://localhost:8001/maya/';
@@ -28,17 +34,14 @@ switch (ENV as Environment) {
     WS_URL = 'ws://192.168.7.207:8001/maya/';
     break;
   case 'toshbox':
-    WS_URL = 'wss://maya.txtai.co/maya/';
     RESET_STATE = false; //safety measure
     DEV_SCREEN = undefined;
     break;
   case 'dev':
-    WS_URL = 'wss://dev.txtai.co/maya/';
     RESET_STATE = false; //safety measure
     DEV_SCREEN = undefined;
     break;
   case 'prod':
-    WS_URL = 'wss://txtai.co/maya/';
     RESET_STATE = false; //safety measure
     DEV_SCREEN = undefined;
     break;
