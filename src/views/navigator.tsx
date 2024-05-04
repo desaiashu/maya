@@ -31,7 +31,7 @@ import {
 } from '@/views/chat';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
-import { State, useStore, DEV_SCREEN } from '@/data';
+import { State, useStore, DEV_SCREEN, WEB } from '@/data';
 import { Platform } from 'react-native';
 
 export type RootStackParamList = {
@@ -53,8 +53,6 @@ export const navigationRef = createNavigationContainerRef();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const Navigator: React.FC = () => {
-  const web = Platform.OS === 'web';
-
   const theme = useTheme();
 
   const { isAuthenticated, username } = useStore((state: State) => ({
@@ -77,11 +75,11 @@ const Navigator: React.FC = () => {
     initialRoute = 'Auth';
   }
 
-  if (web) {
+  if (WEB) {
     initialRoute = 'Chat';
   }
   console.log('=========');
-  console.log(web);
+  console.log(WEB);
   console.log(Platform.OS);
   console.log(initialRoute);
 

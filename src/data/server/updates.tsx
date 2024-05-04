@@ -8,6 +8,7 @@ import {
   RelatedTopic,
   Confidence,
   SearchResult,
+  ThreadData,
 } from '@/data/types';
 import { LayoutAnimation } from 'react-native';
 
@@ -69,6 +70,15 @@ class ClientUpdate {
       relatedTopics: data,
     });
     console.log('related update');
+  }
+
+  handleThreadUpdate(data: ThreadData) {
+    const state = useStore.getState();
+    state.updateChatInfo(data.chatInfo);
+    state.updateMessages(data.messages);
+    for (let p of data.perspectives) {
+      state.updatePerspective(p.messageid, p.chatid, p);
+    }
   }
 
   handleSuccessUpdate(data: string) {

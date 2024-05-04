@@ -27,6 +27,7 @@ import {
   timestamp,
   dummyMessage,
   DEV_SCREEN,
+  WEB,
   newCommunityChat,
   hashChatID,
   WEB_URL,
@@ -119,7 +120,6 @@ const renderRightMenu = (props: chatOptionsProps) => {
 };
 
 const Chat: React.FC = () => {
-  const web = Platform.OS === 'web';
   const params = useParams();
   params && console.log(params);
   console.log('params=======');
@@ -131,7 +131,7 @@ const Chat: React.FC = () => {
   const route = useRoute();
 
   let [chatInfo, setChatInfo] = useState<ChatInfo>(
-    web ? emptyChat() : (route.params as ChatInfo),
+    WEB ? emptyChat() : (route.params as ChatInfo),
   );
   // let scrollPosition = 0;
   const flatListRef = React.useRef<FlatList>(null);
@@ -187,7 +187,7 @@ const Chat: React.FC = () => {
         behavior={Platform.OS === 'ios' ? 'height' : 'height'}
         style={styles.keyboardAvoid}
       >
-        {web && (
+        {WEB && (
           <Button
             title="Download beta"
             tag="h4"
@@ -201,7 +201,7 @@ const Chat: React.FC = () => {
           profiles={chatInfo.profiles || []}
           ref={flatListRef}
         />
-        {!web && <InputToolbar onSend={onSend} chatid={chatInfo.chatid} />}
+        {!WEB && <InputToolbar onSend={onSend} chatid={chatInfo.chatid} />}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
