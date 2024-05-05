@@ -1,0 +1,24 @@
+/* styles.css */
+@font-face {
+  font-family: 'LibreFranklinRoman-Bold';
+  src: url('LibreFranklin/LibreFranklin-Roman.ttf') format('truetype');
+  font-weight: bold;
+}
+@font-face {
+  font-family: 'LibreFranklinRoman-Medium';
+  src: url('LibreFranklin/LibreFranklin-Roman.ttf') format('truetype');
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'LibreFranklinRoman-Italic';
+  src: url('LibreFranklin/LibreFranklin-Italic.ttf') format('truetype');
+  font-weight: normal;
+}
+/* @font-face {
+  font-family: 'PlayfairDisplay-Regular';
+  src: url('Playfair/PlayfairDisplay-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'PlayfairDisplay-Italic';
+  src: url('Playfair/PlayfairDisplay-Italic.ttf') format('truetype');
+} */
