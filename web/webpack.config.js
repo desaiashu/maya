@@ -69,7 +69,7 @@ const fontLoaderConfiguration = {
       loader: 'file-loader',
       options: {
         name: '[name].[ext]',
-        outputPath: 'fonts/',
+        outputPath: '/',
       },
     },
   ],
@@ -104,7 +104,7 @@ module.exports = {
     rules: [
       babelLoaderConfiguration,
       imageLoaderConfiguration,
-      fontLoaderConfiguration,
+      // fontLoaderConfiguration,
       cssLoaderConfiguration,
     ],
   },
@@ -145,8 +145,8 @@ module.exports = {
     }),
     new webpack.EnvironmentPlugin({ JEST_WORKER_ID: null }),
     new webpack.DefinePlugin({ process: { env: {} } }),
-    new CopyWebpackPlugin({
-      patterns: [{ from: path.resolve(appDirectory, 'assets'), to: 'assets' }],
-    }),
+    // new CopyWebpackPlugin({
+    //   patterns: [{ from: path.resolve(appDirectory, 'assets'), to: 'assets' }],
+    // }),
   ],
 };

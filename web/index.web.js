@@ -3,7 +3,7 @@ import { AppRegistry } from 'react-native';
 import MayaWeb from './maya.web';
 import { name as appName } from '../app.json';
 import ReactDOM from 'react-dom/client'; // Import ReactDOM from react-dom/client
-import '../assets/fonts/fonts.css';
+import '%/fonts/fonts.css';
 
 // Register the app component
 AppRegistry.registerComponent(appName, () => MayaWeb);
