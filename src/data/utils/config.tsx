@@ -5,7 +5,7 @@ import { RootStackParamList } from '@/views/navigator';
 // Overrides for development purposes
 
 ///// Environment /////
-export const ENV: Environment = 'toshbook';
+export const ENV: Environment = 'dev';
 
 ///// Overrides nav stack  /////
 export let DEV_SCREEN: Screen;
@@ -67,9 +67,6 @@ if (['local', 'toshbook'].includes(ENV)) {
 
 export const WEB_URL = HTTP + SSL + DOMAIN + WEB_PORT + '/';
 export const WS_URL = WS + SSL + SUBDOMAIN + DOMAIN + APP_PORT + SLUG + '/';
-
-console.log(WEB_URL);
-console.log(WS_URL);
 
 ///// Logging /////
 LogBox.ignoreAllLogs(true);

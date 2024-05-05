@@ -62,19 +62,6 @@ const imageLoaderConfiguration = {
   },
 };
 
-const fontLoaderConfiguration = {
-  test: /\.(woff|woff2|eot|ttf|otf)$/,
-  use: [
-    {
-      loader: 'file-loader',
-      options: {
-        name: '[name].[ext]',
-        outputPath: '/',
-      },
-    },
-  ],
-};
-
 const cssLoaderConfiguration = {
   test: /\.css$/,
   use: [
@@ -104,7 +91,6 @@ module.exports = {
     rules: [
       babelLoaderConfiguration,
       imageLoaderConfiguration,
-      // fontLoaderConfiguration,
       cssLoaderConfiguration,
     ],
   },
