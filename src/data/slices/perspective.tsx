@@ -25,8 +25,8 @@ export const usePerspectiveState: StateCreator<PerspectiveState> = set => ({
             chatid: chatid,
             confidence: data.confidence || existingData.confidence,
             lastupdated: data.lastupdated || existingData.lastupdated,
-            relatedTopics: data.relatedTopics || existingData.relatedTopics,
-            searchResults: data.searchResults || existingData.searchResults,
+            related: data.related || existingData.related,
+            search: data.search || existingData.search,
           },
         },
       };

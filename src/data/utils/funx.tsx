@@ -40,8 +40,8 @@ export const emptyPerspective = (): PerspectiveData => {
     chatid: '',
     lastupdated: 0,
     confidence: undefined,
-    relatedTopics: [],
-    searchResults: [],
+    related: [],
+    search: [],
   };
 };
 

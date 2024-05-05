@@ -79,6 +79,7 @@ const getStyles = (theme: Theme) =>
       height: 30,
       fontSize: 10,
       marginBottom: 0,
+      overflow: 'hidden',
     },
     url: {
       height: 10,

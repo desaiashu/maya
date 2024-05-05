@@ -60,14 +60,14 @@ class ClientUpdate {
   handleSearchUpdate(data: SearchResult[]) {
     const state = useStore.getState();
     state.updatePerspective(data[0].messageid, data[0].chatid, {
-      searchResults: data,
+      search: data,
     });
   }
 
   handleRelatedUpdate(data: RelatedTopic[]) {
     const state = useStore.getState();
     state.updatePerspective(data[0].messageid, data[0].chatid, {
-      relatedTopics: data,
+      related: data,
     });
     console.log('related update');
   }
@@ -79,6 +79,8 @@ class ClientUpdate {
     for (let p of data.perspectives) {
       state.updatePerspective(p.messageid, p.chatid, p);
     }
+
+    console.log(data);
 
     console.log('SLUG RECEIVED');
   }

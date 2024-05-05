@@ -99,23 +99,23 @@ const Discussion: React.FC = () => {
   }));
 
   const [results, setResults] = useState<SearchResult[]>(
-    perspective ? perspective.searchResults : [],
+    perspective ? perspective.search : [],
   );
   useEffect(() => {
     console.log('updated search');
-    if (perspective && perspective.searchResults.length > 0)
+    if (perspective && perspective.search.length > 0)
       LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-    perspective && setResults(perspective.searchResults);
+    perspective && setResults(perspective.search);
   }, [perspective]);
 
   const [related, setRelated] = useState<RelatedTopic[]>(
-    perspective ? perspective.relatedTopics : [],
+    perspective ? perspective.related : [],
   );
   useEffect(() => {
     console.log('updated topics');
-    if (perspective && perspective.relatedTopics.length > 0)
+    if (perspective && perspective.related.length > 0)
       LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-    perspective && setRelated(perspective.relatedTopics);
+    perspective && setRelated(perspective.related);
   }, [perspective]);
 
   const sendMessage = (message: string) => {
@@ -158,12 +158,14 @@ const Discussion: React.FC = () => {
           </Words> */}
           <Search results={results} />
         </View>
-        <View style={styles.related}>
-          {/* <Words tag="body" style={styles.h2}>
+        {!WEB && (
+          <View style={styles.related}>
+            {/* <Words tag="body" style={styles.h2}>
             {'Related'}
           </Words> */}
-          <Related related={related} onSelect={onRelated} />
-        </View>
+            <Related related={related} onSelect={onRelated} />
+          </View>
+        )}
         <Divider />
         <MessageList
           messages={perspectives}
