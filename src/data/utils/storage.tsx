@@ -1,6 +1,6 @@
 import { MMKV } from 'react-native-mmkv';
 import { StateStorage } from 'zustand/middleware';
-import { RESET_STATE, WEB } from '@/data';
+import { RESET_STATE, WEB } from '@/data/utils/config';
 
 let storage = new MMKV({ id: 'state' });
 

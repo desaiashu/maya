@@ -23,6 +23,7 @@ export const emptyChat = (): ChatInfo => {
   const userid = state.currentUser.userid;
   return {
     chatid: '_',
+    slug: '_',
     creator: userid,
     participants: [userid, 'maya', 'system', 'uncensored', 'oracle'],
     topic: 'new chat',

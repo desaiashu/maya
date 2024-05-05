@@ -121,8 +121,6 @@ const renderRightMenu = (props: chatOptionsProps) => {
 
 const Chat: React.FC = () => {
   const params = useParams();
-  params && console.log(params);
-  console.log('params=======');
 
   const navigation =
     useNavigation<DrawerNavigationProp<RootStackParamList, 'Chat'>>();
@@ -133,6 +131,14 @@ const Chat: React.FC = () => {
   let [chatInfo, setChatInfo] = useState<ChatInfo>(
     WEB ? emptyChat() : (route.params as ChatInfo),
   );
+
+  useEffect(() => {
+    if (WEB && params.slug) {
+      server.getSlug(params.slug);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // let scrollPosition = 0;
   const flatListRef = React.useRef<FlatList>(null);
 
@@ -154,14 +160,19 @@ const Chat: React.FC = () => {
   // For new chats, the chatID will be 'new' and requires update
   // For existing chats, profile updates might come through
   useEffect(() => {
-    const updatedChat = chats.find(c => c.created === chatInfo.created);
-    if (updatedChat) {
-      setChatInfo(updatedChat);
-      navigation.setOptions({
-        headerRight: () =>
-          renderRightMenu({ navigation, theme, chat: updatedChat }),
-        // You can set other header options here based on chatInfo
-      });
+    if (WEB) {
+      const updatedChat = chats.find(c => c.slug === params.slug);
+      if (updatedChat) setChatInfo(updatedChat);
+    } else {
+      const updatedChat = chats.find(c => c.created === chatInfo.created);
+      if (updatedChat) {
+        setChatInfo(updatedChat);
+        navigation.setOptions({
+          headerRight: () =>
+            renderRightMenu({ navigation, theme, chat: updatedChat }),
+          // You can set other header options here based on chatInfo
+        });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chats, chatInfo.created]);

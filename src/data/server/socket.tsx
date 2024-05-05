@@ -22,7 +22,7 @@ class Socket {
       confidence: client.handleConfidenceUpdate,
       related: client.handleRelatedUpdate,
       search: client.handleSearchUpdate,
-      thread: client.handleThreadUpdate,
+      slug: client.handleSlugUpdate,
     };
   }
 

@@ -1,4 +1,4 @@
-import { API_URL, useStore } from '@/data';
+import { useStore } from '@/data';
 import { socket } from '@/data/server';
 import {
   MayaRequest,
@@ -8,8 +8,7 @@ import {
   ChatRequest,
   AnnotationRequest,
   PerspectiveRequest,
-  ThreadUpdate,
-  ThreadRequest,
+  SlugRequest,
 } from '@/data/types';
 import { Message, Auth, Profile, ChatInfo } from '@/data/types';
 
@@ -105,38 +104,15 @@ class ServerRequest {
     socket.sendRequest(request);
   }
 
-  getThread(threadid: string) {
-    let request: ThreadRequest = {
+  getSlug(slug: string) {
+    let request: SlugRequest = {
       userid: '',
       token: '',
-      command: 'thread',
-      data: threadid,
+      command: 'slug',
+      data: slug,
     };
     socket.sendRequest(request);
   }
-
-  // async getThreadHTTP(threadid: string) {
-  //   let request: ThreadRequest = {
-  //     userid: '',
-  //     token: '',
-  //     command: 'thread',
-  //     data: threadid,
-  //   };
-  //   const response = await fetch(API_URL, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(request),
-  //   });
-
-  //   if (!response.ok) {
-  //     throw new Error(`HTTP error! status: ${response.status}`);
-  //   }
-
-  //   const data = (await response.json()) as ThreadUpdate;
-  //   client.handleThreadData(data.data);
-  // }
 }
 
 export const server = new ServerRequest();

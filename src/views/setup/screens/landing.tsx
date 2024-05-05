@@ -59,7 +59,8 @@ const getStyles = (
       minHeight: dims.height,
     },
     title: {
-      marginBottom: 20,
+      marginTop: 50,
+      marginBottom: 10,
     },
     description: {
       marginTop: 30,

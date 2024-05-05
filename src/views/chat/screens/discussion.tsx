@@ -24,6 +24,7 @@ import {
   StreamState,
   useStream,
   timestamp,
+  WEB,
 } from '@/data';
 import {
   MessageList,
@@ -172,7 +173,7 @@ const Discussion: React.FC = () => {
           ref={messagesRef}
         />
 
-        <InputToolbar onSend={onSend} />
+        {!WEB && <InputToolbar onSend={onSend} />}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

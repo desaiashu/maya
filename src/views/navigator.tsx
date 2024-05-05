@@ -1,6 +1,7 @@
 // ChatUI.tsx
 
 import React from 'react';
+import { View, StyleSheet } from 'react-native';
 import {
   NavigationContainer,
   createNavigationContainerRef,
@@ -32,7 +33,6 @@ import {
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
 import { State, useStore, DEV_SCREEN, WEB } from '@/data';
-import { Platform } from 'react-native';
 
 export type RootStackParamList = {
   ChatList: undefined;
@@ -54,6 +54,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const Navigator: React.FC = () => {
   const theme = useTheme();
+  const styles = getStyles();
 
   const { isAuthenticated, username } = useStore((state: State) => ({
     isAuthenticated: state.isAuthenticated,
@@ -78,46 +79,52 @@ const Navigator: React.FC = () => {
   if (WEB) {
     initialRoute = 'Chat';
   }
-  console.log('=========');
-  console.log(WEB);
-  console.log(Platform.OS);
-  console.log(initialRoute);
 
   return (
-    <NavigationContainer ref={navigationRef}>
-      <Stack.Navigator
-        initialRouteName={initialRoute}
-        screenOptions={defaultNavigationOptions(theme)}
-      >
-        <Stack.Screen name="Auth" component={Auth} options={authOptions()} />
-        <Stack.Screen
-          name="Verify"
-          component={Verify}
-          options={({ navigation }) => verifyOptions(navigation, theme)}
-        />
-        <Stack.Screen
-          name="Settings"
-          component={Settings}
-          options={({ navigation, route }) =>
-            settingsOptions(navigation, route, theme)
-          }
-        />
-        <Stack.Screen name="ChatDrawer" component={ChatDrawer} />
-        <Stack.Screen
-          name="Annotation"
-          component={Annotation}
-          options={({ navigation }) => annotationOptions(navigation, theme)}
-        />
-        <Stack.Screen
-          name="Discussion"
-          component={Discussion}
-          options={({ navigation }) => discussionOptions(navigation, theme)}
-        />
-        <Stack.Screen name="Chat" component={Chat} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <View style={styles.container}>
+      <NavigationContainer ref={navigationRef}>
+        <Stack.Navigator
+          initialRouteName={initialRoute}
+          screenOptions={defaultNavigationOptions(theme)}
+        >
+          <Stack.Screen name="Auth" component={Auth} options={authOptions()} />
+          <Stack.Screen
+            name="Verify"
+            component={Verify}
+            options={({ navigation }) => verifyOptions(navigation, theme)}
+          />
+          <Stack.Screen
+            name="Settings"
+            component={Settings}
+            options={({ navigation, route }) =>
+              settingsOptions(navigation, route, theme)
+            }
+          />
+          <Stack.Screen name="ChatDrawer" component={ChatDrawer} />
+          <Stack.Screen
+            name="Annotation"
+            component={Annotation}
+            options={({ navigation }) => annotationOptions(navigation, theme)}
+          />
+          <Stack.Screen
+            name="Discussion"
+            component={Discussion}
+            options={({ navigation }) => discussionOptions(navigation, theme)}
+          />
+          <Stack.Screen name="Chat" component={Chat} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </View>
   );
 };
+
+const getStyles = () =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      maxWidth: 700,
+    },
+  });
 
 const defaultNavigationOptions = (
   theme: Theme,

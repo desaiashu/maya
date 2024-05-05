@@ -2,6 +2,7 @@ import React, { forwardRef } from 'react';
 import { FlatList, ViewStyle, StyleSheet } from 'react-native';
 import { Stream, MessageUI } from '@/views/chat/components';
 import { Message, Profile } from '@/data/types';
+import { WEB } from '@/data';
 
 interface MessageListProps {
   messages: Message[];
@@ -49,15 +50,17 @@ const MessageList = forwardRef<FlatList<any>, MessageListProps>(
       /* Note: FlatList doesn't play well with KeyboardAvoidingView
         unless "inverted" and using messages.reverse().*/
       <FlatList
-        data={messages.reverse()}
-        renderItem={({ item, index }) =>
-          renderMessage(item, messages[index - 1], messages[index + 1])
-        }
+        data={WEB ? messages : messages.reverse()}
+        renderItem={({ item, index }) => {
+          const next = WEB ? messages[index + 1] : messages[index - 1];
+          const prev = WEB ? messages[index - 1] : messages[index + 1];
+          return renderMessage(item, next, prev);
+        }}
         keyExtractor={item => item.timestamp.toString()}
         style={[styles.messagesContainer, style]}
         ref={ref}
         scrollIndicatorInsets={{ right: -3 }}
-        inverted
+        inverted={WEB ? false : true}
       />
     );
   },

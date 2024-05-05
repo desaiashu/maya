@@ -15,7 +15,7 @@ export type WSRequest =
   | "create_chat"
   | "update_group"
   | "update_user"
-  | "thread";
+  | "slug";
 export type WSUpdate =
   | "refresh"
   | "success"
@@ -27,7 +27,7 @@ export type WSUpdate =
   | "confidence"
   | "related"
   | "search"
-  | "thread";
+  | "slug";
 
 export interface AnnotationRequest {
   userid: string;
@@ -48,6 +48,7 @@ export interface Auth {
 }
 export interface ChatInfo {
   chatid: string;
+  slug: string;
   creator: string;
   created: number;
   updated: number;
@@ -190,24 +191,24 @@ export interface SearchUpdate {
   update?: string;
   background?: boolean;
 }
-export interface SuccessUpdate {
-  data: string;
-  update?: string;
-  background?: boolean;
-}
-export interface ThreadData {
+export interface SlugData {
   chatInfo: ChatInfo;
   messages: Message[];
   perspectives: PerspectiveData[];
 }
-export interface ThreadRequest {
+export interface SlugRequest {
   userid: string;
   token: string;
   command: WSRequest;
   data: string;
 }
-export interface ThreadUpdate {
-  data: ThreadData;
+export interface SlugUpdate {
+  data: SlugData;
+  update?: string;
+  background?: boolean;
+}
+export interface SuccessUpdate {
+  data: string;
   update?: string;
   background?: boolean;
 }

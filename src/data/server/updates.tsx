@@ -8,7 +8,7 @@ import {
   RelatedTopic,
   Confidence,
   SearchResult,
-  ThreadData,
+  SlugData,
 } from '@/data/types';
 import { LayoutAnimation } from 'react-native';
 
@@ -72,13 +72,15 @@ class ClientUpdate {
     console.log('related update');
   }
 
-  handleThreadUpdate(data: ThreadData) {
+  handleSlugUpdate(data: SlugData) {
     const state = useStore.getState();
     state.updateChatInfo(data.chatInfo);
     state.updateMessages(data.messages);
     for (let p of data.perspectives) {
       state.updatePerspective(p.messageid, p.chatid, p);
     }
+
+    console.log('SLUG RECEIVED');
   }
 
   handleSuccessUpdate(data: string) {

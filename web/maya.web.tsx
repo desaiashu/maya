@@ -8,13 +8,13 @@ import {
   ScaledSize,
 } from 'react-native';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { ThemeProvider } from '@/ui/theme';
+import { ThemeProvider, useTheme, Theme } from '@/ui/theme';
 import Navigator from '@/views/navigator';
 import { Landing } from '@/views/setup';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 const WebApp = () => {
-  const styles = getStyles(useWindowDimensions());
+  const styles = getStyles(useTheme(), useWindowDimensions());
   return (
     <View style={styles.container}>
       <Navigator />
@@ -38,10 +38,14 @@ const MayaWeb = () => {
   );
 };
 
-const getStyles = (windowDims: ScaledSize) =>
+const getStyles = (theme: Theme, windowDims: ScaledSize) =>
   StyleSheet.create({
     container: {
-      minHeight: windowDims.height,
+      height: windowDims.height + 1,
+      width: windowDims.width,
+      backgroundColor: theme.colors.background,
+      justifyContent: 'center',
+      flexDirection: 'row',
     },
   });
 
