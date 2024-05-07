@@ -37,10 +37,16 @@ const Landing: React.FC = () => {
         style={styles.button}
         outlined
       />
-      <Image
-        source={getImageSource('screenshot', colorScheme)}
-        style={styles.screenshot}
-      />
+      <View style={styles.screenshots}>
+        <Image
+          source={getImageSource('chat_screenshot', colorScheme)}
+          style={styles.screenshot}
+        />
+        <Image
+          source={getImageSource('perspective_screenshot', colorScheme)}
+          style={styles.screenshot}
+        />
+      </View>
     </View>
   );
 };
@@ -69,6 +75,9 @@ const getStyles = (
       marginBottom: 20,
       maxWidth: 500,
     },
+    screenshots: {
+      flexDirection: 'row',
+    },
     screenshot: {
       ...screenshotDims,
     },
@@ -81,8 +90,8 @@ const screenshotDims = (windowDims: ScaledSize) => {
   const windowHeight = windowDims.height;
   const windowWidth = windowDims.width;
 
-  const maxImageHeight = windowHeight * 0.6; // 60% of the window height
-  const maxImageWidth = windowWidth * 0.8; // 80% of the window width
+  const maxImageHeight = Math.max(500, windowHeight); // 60% of the window height
+  const maxImageWidth = Math.min(400, windowWidth * 0.5); // 80% of the window width
 
   const aspectRatio = 930 / 1772; // Replace with the actual aspect ratio of the image
 
