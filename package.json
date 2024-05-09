@@ -9,7 +9,7 @@
     "start": "react-native start",
     "test": "jest",
     "web": "webpack serve --config web/webpack.config.js --mode development",
-    "dist": "webpack --config web/webpack.config.js --mode production"
+    "dist": "ENV=prod webpack --config web/webpack.config.js --mode production"
   },
   "dependencies": {
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",

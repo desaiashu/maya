@@ -5,6 +5,11 @@ import { name as appName } from '../app.json';
 import ReactDOM from 'react-dom/client'; // Import ReactDOM from react-dom/client
 import '%/fonts/fonts.css';
 
+// Disable console.log in production
+if (process.env.NODE_ENV === 'prod') {
+  console.log = function () {};
+}
+
 // Register the app component
 AppRegistry.registerComponent(appName, () => MayaWeb);
 

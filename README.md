@@ -8,7 +8,12 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 
 ### Todos
 
-In progress:
+#### Schema migration:
+
+- Calculate slug for each chatid
+- Change search and results for everything
+
+#### In progress:
 
 - Draft has a bug where it won't reset back to empty when creating a new message
 
@@ -33,12 +38,15 @@ In progress:
   - One LLM needs to be uncensored
 
 - Add perspective data to refresh
-- Share link
+- Share link + web
+  - Save hash in chat on creation
+- Hash phone numbers in DB
 - Stop button
 
 #### Next up:
 
 - Testflight + force update
+- Analytics
 - User prompt
 - Ask clarifying questions to user
 - Webview for sharing
@@ -124,6 +132,7 @@ Way to report bugs
 
 #### Backlog
 
+- Store which model sent which message (maybe in a separate "log" db?)
 - Adjust reading speed in user profile
 - Toggle for streaming vs replying
 - Reduce space for new lines
