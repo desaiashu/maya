@@ -3,7 +3,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const appDirectory = path.resolve(__dirname, '../');
 
@@ -131,6 +131,9 @@ module.exports = {
     }),
     new webpack.EnvironmentPlugin({ JEST_WORKER_ID: null }),
     new webpack.DefinePlugin({ process: { env: {} } }),
+    new CopyPlugin({
+      patterns: [{ from: 'web/_redirects', to: '' }],
+    }),
     // new CopyWebpackPlugin({
     //   patterns: [{ from: path.resolve(appDirectory, 'assets'), to: 'assets' }],
     // }),
