@@ -5,7 +5,8 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import { Message } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
 import { Words } from '@/ui/atoms';
-import { Time } from '@/views/chat/components/timestamp';
+import { Time } from '@/views/chat/components';
+import { WEB } from '@/data';
 
 interface BubbleProps {
   onLongPress?: (context: any, message: any) => void;
@@ -77,21 +78,26 @@ export const Bubble: React.FC<BubbleProps> = props => {
     </View>
   );
 
+  // return renderMessageText();
   return (
-    <View>
+    <View style={styles.base.wrapper}>
       <View style={[styles.base.container, styles[position].container]}>
         <View style={[styles.base.header, styles[position].header]}>
           {messageHeader}
         </View>
       </View>
       <View style={[styles.base.container, styles[position].container]}>
-        <TouchableOpacity
-          onLongPress={handleLongPress}
-          activeOpacity={1}
-          accessibilityRole="text"
-        >
-          {renderMessageText()}
-        </TouchableOpacity>
+        {WEB ? (
+          renderMessageText()
+        ) : (
+          <TouchableOpacity
+            onLongPress={handleLongPress}
+            activeOpacity={1}
+            accessibilityRole="text"
+          >
+            {renderMessageText()}
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -99,6 +105,9 @@ export const Bubble: React.FC<BubbleProps> = props => {
 
 const getStyles = (theme: Theme) => ({
   base: StyleSheet.create({
+    wrapper: {
+      flex: 1,
+    },
     container: {
       flex: 1,
       flexDirection: 'row',
@@ -135,7 +144,7 @@ const getStyles = (theme: Theme) => ({
     container: {
       justifyContent: 'flex-start',
       marginLeft: 8,
-      marginRight: 67, //47,
+      marginRight: 24,
     },
     wrapper: {
       // marginRight: 30, //47,

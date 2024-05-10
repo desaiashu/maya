@@ -22,9 +22,8 @@ export const Stream: React.FC<Props> = props => {
     while (Date.now() - start < 50) {}
   }, [chunks]);
 
-  if (prev && chunks.chatid !== prev.chatid) {
-    return null;
-  }
+  if (prev && chunks.chatid !== prev.chatid) return null;
+
   return (
     <MessageUI
       current={chunks}
@@ -32,7 +31,7 @@ export const Stream: React.FC<Props> = props => {
       prev={prev}
       avatar={avatars[chunks.sender]}
       username={usernames[chunks.sender] || ''}
-      position={'left'}
+      stream={true}
     />
   );
 };

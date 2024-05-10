@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* mayaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* mayaTests.m */; };
-		0C80B921A6F3F58F76C31292 /* libPods-maya.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-maya.a */; };
+		0CB1652A623292191C3535F9 /* libPods-maya-mayaTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CADE932EC7A2C3D8004987B0 /* libPods-maya-mayaTests.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -16,7 +16,7 @@
 		5411648E2B82C01300432CC6 /* transparent.png in Resources */ = {isa = PBXBuildFile; fileRef = 5411648D2B82C01300432CC6 /* transparent.png */; };
 		541164902B82C18900432CC6 /* background.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5411648F2B82C18900432CC6 /* background.xcassets */; };
 		5645D2AA26FA4C079C3D9417 /* LibreFranklin-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B7565A63A50243B0AA93124C /* LibreFranklin-Italic.ttf */; };
-		7699B88040F8A987B510C191 /* libPods-maya-mayaTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-maya-mayaTests.a */; };
+		78037D8EE39CF478281118D2 /* libPods-maya.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4AA71CB5D020927F37BE919 /* libPods-maya.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		994F1D3D4EB94DB18D529F70 /* PlayfairDisplay-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D1E1ED6DB8C143D68DF93E2C /* PlayfairDisplay-Regular.ttf */; };
 		A793D8A8C70A4ABF81936A78 /* LibreFranklin-Roman.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F3D7ECC87EC43789EDB405E /* LibreFranklin-Roman.ttf */; };
@@ -42,20 +42,20 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = maya/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = maya/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = maya/main.m; sourceTree = "<group>"; };
-		19F6CBCC0A4E27FBF8BF4A61 /* libPods-maya-mayaTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-maya-mayaTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3B4392A12AC88292D35C810B /* Pods-maya.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-maya.debug.xcconfig"; path = "Target Support Files/Pods-maya/Pods-maya.debug.xcconfig"; sourceTree = "<group>"; };
+		24B1A17BD7B90DA38F5E950E /* Pods-maya.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-maya.debug.xcconfig"; path = "Target Support Files/Pods-maya/Pods-maya.debug.xcconfig"; sourceTree = "<group>"; };
 		3F3D7ECC87EC43789EDB405E /* LibreFranklin-Roman.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LibreFranklin-Roman.ttf"; path = "../assets/fonts/LibreFranklin/LibreFranklin-Roman.ttf"; sourceTree = "<group>"; };
 		5411648D2B82C01300432CC6 /* transparent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = transparent.png; path = "../assets/app icons/raw/transparent.png"; sourceTree = "<group>"; };
 		5411648F2B82C18900432CC6 /* background.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = background.xcassets; path = maya/background.xcassets; sourceTree = "<group>"; };
-		5709B34CF0A7D63546082F79 /* Pods-maya.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-maya.release.xcconfig"; path = "Target Support Files/Pods-maya/Pods-maya.release.xcconfig"; sourceTree = "<group>"; };
-		5B7EB9410499542E8C5724F5 /* Pods-maya-mayaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-maya-mayaTests.debug.xcconfig"; path = "Target Support Files/Pods-maya-mayaTests/Pods-maya-mayaTests.debug.xcconfig"; sourceTree = "<group>"; };
-		5DCACB8F33CDC322A6C60F78 /* libPods-maya.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-maya.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C07AA8C155EE577E8015AAC /* Pods-maya.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-maya.release.xcconfig"; path = "Target Support Files/Pods-maya/Pods-maya.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = maya/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		89C6BE57DB24E9ADA2F236DE /* Pods-maya-mayaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-maya-mayaTests.release.xcconfig"; path = "Target Support Files/Pods-maya-mayaTests/Pods-maya-mayaTests.release.xcconfig"; sourceTree = "<group>"; };
 		B7565A63A50243B0AA93124C /* LibreFranklin-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LibreFranklin-Italic.ttf"; path = "../assets/fonts/LibreFranklin/LibreFranklin-Italic.ttf"; sourceTree = "<group>"; };
+		CADE932EC7A2C3D8004987B0 /* libPods-maya-mayaTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-maya-mayaTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1E1ED6DB8C143D68DF93E2C /* PlayfairDisplay-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "PlayfairDisplay-Regular.ttf"; path = "../assets/fonts/Playfair/PlayfairDisplay-Regular.ttf"; sourceTree = "<group>"; };
+		D4AA71CB5D020927F37BE919 /* libPods-maya.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-maya.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D636A5B7A1564C81B2B88D0B /* PlayfairDisplay-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "PlayfairDisplay-Italic.ttf"; path = "../assets/fonts/Playfair/PlayfairDisplay-Italic.ttf"; sourceTree = "<group>"; };
+		DD33D2F050D140DFCBBADF07 /* Pods-maya-mayaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-maya-mayaTests.release.xcconfig"; path = "Target Support Files/Pods-maya-mayaTests/Pods-maya-mayaTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F12EB018D4531FD2C6B55A08 /* Pods-maya-mayaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-maya-mayaTests.debug.xcconfig"; path = "Target Support Files/Pods-maya-mayaTests/Pods-maya-mayaTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,7 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7699B88040F8A987B510C191 /* libPods-maya-mayaTests.a in Frameworks */,
+				0CB1652A623292191C3535F9 /* libPods-maya-mayaTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,7 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C80B921A6F3F58F76C31292 /* libPods-maya.a in Frameworks */,
+				78037D8EE39CF478281118D2 /* libPods-maya.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,8 +114,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				5DCACB8F33CDC322A6C60F78 /* libPods-maya.a */,
-				19F6CBCC0A4E27FBF8BF4A61 /* libPods-maya-mayaTests.a */,
+				D4AA71CB5D020927F37BE919 /* libPods-maya.a */,
+				CADE932EC7A2C3D8004987B0 /* libPods-maya-mayaTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -166,10 +166,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				3B4392A12AC88292D35C810B /* Pods-maya.debug.xcconfig */,
-				5709B34CF0A7D63546082F79 /* Pods-maya.release.xcconfig */,
-				5B7EB9410499542E8C5724F5 /* Pods-maya-mayaTests.debug.xcconfig */,
-				89C6BE57DB24E9ADA2F236DE /* Pods-maya-mayaTests.release.xcconfig */,
+				24B1A17BD7B90DA38F5E950E /* Pods-maya.debug.xcconfig */,
+				6C07AA8C155EE577E8015AAC /* Pods-maya.release.xcconfig */,
+				F12EB018D4531FD2C6B55A08 /* Pods-maya-mayaTests.debug.xcconfig */,
+				DD33D2F050D140DFCBBADF07 /* Pods-maya-mayaTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -181,12 +181,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "mayaTests" */;
 			buildPhases = (
-				A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */,
+				09FB4E10D06E4E83B2E4865F /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */,
-				F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */,
+				956F37FE5D20232C96680890 /* [CP] Embed Pods Frameworks */,
+				C0FA6CA5DBEC75EEDE157AEB /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -202,13 +202,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "maya" */;
 			buildPhases = (
-				C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */,
+				506DCC7A35F9CD2D47E6E92F /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
-				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
+				4F61CFABE64570B50EDC83A8 /* [CP] Embed Pods Frameworks */,
+				D4A7FAD42020E4FE163EEA73 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -297,24 +297,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-maya/Pods-maya-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-maya/Pods-maya-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-maya/Pods-maya-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
+		09FB4E10D06E4E83B2E4865F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -336,7 +319,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
+		4F61CFABE64570B50EDC83A8 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-maya/Pods-maya-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-maya/Pods-maya-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-maya/Pods-maya-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		506DCC7A35F9CD2D47E6E92F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -358,7 +358,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */ = {
+		956F37FE5D20232C96680890 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -375,24 +375,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-maya-mayaTests/Pods-maya-mayaTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E235C05ADACE081382539298 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-maya/Pods-maya-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-maya/Pods-maya-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-maya/Pods-maya-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
+		C0FA6CA5DBEC75EEDE157AEB /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -407,6 +390,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-maya-mayaTests/Pods-maya-mayaTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D4A7FAD42020E4FE163EEA73 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-maya/Pods-maya-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-maya/Pods-maya-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-maya/Pods-maya-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -442,7 +442,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-maya-mayaTests.debug.xcconfig */;
+			baseConfigurationReference = F12EB018D4531FD2C6B55A08 /* Pods-maya-mayaTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -469,7 +469,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-maya-mayaTests.release.xcconfig */;
+			baseConfigurationReference = DD33D2F050D140DFCBBADF07 /* Pods-maya-mayaTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -493,7 +493,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-maya.debug.xcconfig */;
+			baseConfigurationReference = 24B1A17BD7B90DA38F5E950E /* Pods-maya.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -521,7 +521,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-maya.release.xcconfig */;
+			baseConfigurationReference = 6C07AA8C155EE577E8015AAC /* Pods-maya.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

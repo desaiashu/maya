@@ -1,11 +1,21 @@
 import { useStore, useStream } from '@/data';
-import { User, RefreshData, ChatInfo, Message, Chunk } from '@/data/types';
+import {
+  User,
+  RefreshData,
+  ChatInfo,
+  Message,
+  Chunk,
+  RelatedTopic,
+  Confidence,
+  SearchResult,
+  SlugData,
+} from '@/data/types';
 import { LayoutAnimation } from 'react-native';
 
 class ClientUpdate {
   handleRefreshUpdate(data: RefreshData) {
     // Seems to be messing with the navigation stack
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     const state = useStore.getState();
     state.updateChats(data.chatlist);
     state.updateMessages(data.messages);
@@ -39,6 +49,40 @@ class ClientUpdate {
     // Pass message to stream state. If it's relevant, it will be handled
     const streamState = useStream.getState();
     streamState.handleMessage(data);
+    console.log('message update');
+  }
+
+  handleConfidenceUpdate(data: Confidence) {
+    const state = useStore.getState();
+    state.updatePerspective(data.messageid, data.chatid, { confidence: data });
+  }
+
+  handleSearchUpdate(data: SearchResult[]) {
+    const state = useStore.getState();
+    state.updatePerspective(data[0].messageid, data[0].chatid, {
+      search: data,
+    });
+  }
+
+  handleRelatedUpdate(data: RelatedTopic[]) {
+    const state = useStore.getState();
+    state.updatePerspective(data[0].messageid, data[0].chatid, {
+      related: data,
+    });
+    console.log('related update');
+  }
+
+  handleSlugUpdate(data: SlugData) {
+    const state = useStore.getState();
+    state.updateChatInfo(data.chatInfo);
+    state.updateMessages(data.messages);
+    for (let p of data.perspectives) {
+      state.updatePerspective(p.messageid, p.chatid, p);
+    }
+
+    console.log(data);
+
+    console.log('SLUG RECEIVED');
   }
 
   handleSuccessUpdate(data: string) {

@@ -31,23 +31,29 @@ export const settingsOptions = (
   const styles = getStyles(theme);
   return {
     title: 'settings',
+    headerTitle: '',
     presentation: route.params?.presentation || 'card',
     headerShown: route.params ? true : false,
     headerTransparent: true,
     headerStyle: {
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.transparent,
     },
     headerLeft: route.params
       ? () => (
           <IconButton
             icon="close"
             onPress={() => navigation.goBack()}
-            style={styles.close}
+            containerStyle={styles.iconCloseContainer}
+            style={styles.iconClose}
           />
         )
       : () => <View />,
   };
 };
+
+export interface SettingsProps {
+  presentation: 'modal';
+}
 
 const Settings: React.FC = () => {
   const styles = getStyles(useTheme());
@@ -106,7 +112,7 @@ const Settings: React.FC = () => {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: 'ChatList' }],
+          routes: [{ name: 'ChatDrawer' }],
         }),
       );
     } else {
@@ -204,6 +210,24 @@ const getStyles = (theme: Theme) =>
       // marginBottom: 40,
     },
     save: {},
+    iconCloseContainer: {
+      backgroundColor: theme.colors.background,
+      paddingLeft: 1,
+      paddingTop: 1,
+      paddingBottom: 1,
+      paddingRight: 1,
+      marginTop: 5,
+      marginLeft: -3,
+      borderRadius: 20,
+      shadowColor: theme.colors.outline,
+      shadowOpacity: 0.6,
+      shadowOffset: { width: 0, height: 0 },
+      shadowRadius: 1,
+    },
+    iconClose: {
+      width: 33,
+      height: 33,
+    },
   });
 
 export default Settings;

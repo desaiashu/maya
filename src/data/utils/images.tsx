@@ -116,4 +116,36 @@ export const icons: RequireConverter = {
     light: require('%/icons/light/back.png'),
     dark: require('%/icons/dark/back.png'),
   },
+  menu: {
+    light: require('%/icons/light/menu.png'),
+    dark: require('%/icons/dark/menu.png'),
+  },
+  share: {
+    light: require('%/icons/light/share.png'),
+    dark: require('%/icons/dark/share.png'),
+  },
+  closex: {
+    light: require('%/icons/light/closex.png'),
+    dark: require('%/icons/dark/closex.png'),
+  },
+  backarrow: {
+    light: require('%/icons/light/backarrow.png'),
+    dark: require('%/icons/dark/backarrow.png'),
+  },
+  thumbsup: {
+    light: require('%/icons/light/thumbsup.png'),
+    dark: require('%/icons/dark/thumbsup.png'),
+  },
+  thumbsdown: {
+    light: require('%/icons/light/thumbsdown.png'),
+    dark: require('%/icons/dark/thumbsdown.png'),
+  },
+  chat_screenshot: {
+    light: require('%/misc/light/chat_screenshot.png'),
+    dark: require('%/misc/dark/chat_screenshot.png'),
+  },
+  perspective_screenshot: {
+    light: require('%/misc/light/perspective_screenshot.png'),
+    dark: require('%/misc/dark/perspective_screenshot.png'),
+  },
 };

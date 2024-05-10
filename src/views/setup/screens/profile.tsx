@@ -1,38 +1,45 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+// import { StackNavigationProp } from '@react-navigation/stack';
+// import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import {
+  DrawerNavigationProp,
+  DrawerNavigationOptions,
+} from '@react-navigation/drawer';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
 import { IconButton, Words, Avatar } from '@/ui/atoms';
 import { State, useStore } from '@/data';
 
 export const profileOptions = (
-  navigation: StackNavigationProp<RootStackParamList, 'Profile'>,
+  navigation: DrawerNavigationProp<RootStackParamList, 'Profile'>,
   theme: Theme,
-): NativeStackNavigationOptions => {
+): DrawerNavigationOptions => {
   const styles = getStyles(theme);
   return {
     title: 'profile',
+    headerTitle: '',
     headerTransparent: true,
     headerStyle: {
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.transparent,
     },
-    presentation: 'modal',
+    // presentation: 'modal',
     headerLeft: () => (
       <IconButton
-        icon="close"
-        onPress={() => navigation.goBack()}
-        style={styles.close}
+        icon="menu"
+        onPress={() => navigation.toggleDrawer()}
+        containerStyle={styles.iconMenuContainer}
+        style={styles.iconMenu}
       />
     ),
     headerRight: () => (
       <IconButton
         icon="settings"
-        onPress={() =>
-          navigation.navigate('Settings', { presentation: 'modal' })
-        }
-        style={styles.settings}
+        onPress={() => {
+          navigation.navigate('Settings', { presentation: 'modal' });
+        }}
+        containerStyle={styles.iconSettingsContainer}
+        style={styles.iconSettings}
       />
     ),
   };
@@ -84,14 +91,16 @@ const getStyles = (theme: Theme) =>
       marginTop: 70,
     },
     close: {
-      marginLeft: -10,
+      marginLeft: 3,
       marginTop: 1,
+      width: 28,
+      height: 28,
     },
     settings: {
       width: 28,
       height: 28,
       marginTop: 4,
-      marginRight: -3,
+      marginRight: 10,
     },
     profileInfo: {
       justifyContent: 'center',
@@ -104,6 +113,40 @@ const getStyles = (theme: Theme) =>
     phoneNumber: {
       marginTop: 26,
       fontSize: 18,
+    },
+    iconMenuContainer: {
+      backgroundColor: theme.colors.background,
+      paddingLeft: 9,
+      paddingTop: 9,
+      paddingBottom: 9,
+      paddingRight: 9,
+      marginLeft: 15,
+      borderRadius: 20,
+      shadowColor: theme.colors.outline,
+      shadowOpacity: 0.6,
+      shadowOffset: { width: 0, height: 0 },
+      shadowRadius: 1,
+    },
+    iconMenu: {
+      width: 18,
+      height: 18,
+    },
+    iconSettingsContainer: {
+      backgroundColor: theme.colors.background,
+      paddingLeft: 9,
+      paddingTop: 9,
+      paddingBottom: 9,
+      paddingRight: 9,
+      marginRight: 14,
+      borderRadius: 20,
+      shadowColor: theme.colors.outline,
+      shadowOpacity: 0.6,
+      shadowOffset: { width: 0, height: 0 },
+      shadowRadius: 1,
+    },
+    iconSettings: {
+      width: 20,
+      height: 20,
     },
   });
 

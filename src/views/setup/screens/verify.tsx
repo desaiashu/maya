@@ -30,6 +30,7 @@ export const verifyOptions = (
     headerStyle: {
       backgroundColor: theme.colors.background,
     },
+    headerShown: true,
     headerTransparent: true,
     headerLeft: () => (
       <IconButton
@@ -41,6 +42,10 @@ export const verifyOptions = (
     ),
   };
 };
+
+export interface VerifyProps {
+  phoneNumber: string;
+}
 
 const Verify: React.FC = () => {
   const styles = getStyles(useTheme());
@@ -65,7 +70,7 @@ const Verify: React.FC = () => {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: 'ChatList' }],
+          routes: [{ name: 'ChatDrawer' }],
         }),
       );
     }

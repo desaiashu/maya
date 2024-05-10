@@ -65,7 +65,6 @@ const NewChat: React.FC = () => {
       created: timestamp(),
       updated: timestamp(),
     };
-    console.log(chat);
     server.createChat(chat);
     navigation.goBack();
     navigation.navigate('Chat', chat);

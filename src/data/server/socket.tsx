@@ -1,12 +1,13 @@
 import { useStore } from '@/data';
-import { MayaRequest, MayaUpdate } from '@/data/types';
+import { MayaRequest, MayaUpdate, WSUpdate } from '@/data/types';
 import { hashPhoneNumber } from '@/data';
 import { client } from '@/data/server/updates';
-import { WS_URL } from '@/data';
+import { WS_URL, WEB } from '@/data';
+import { v4 as uuidv4 } from 'uuid';
 
 class Socket {
   private socket: WebSocket;
-  private updateHandlers: Record<string, (data: any) => void>;
+  private updateHandlers: Record<WSUpdate, (data: any) => void>;
 
   constructor() {
     this.socket = this.initializeWebSocket();
@@ -18,14 +19,20 @@ class Socket {
       message: client.handleMessageUpdate,
       chatinfo: client.handleChatInfoUpdate,
       user: client.handleUserUpdate,
+      confidence: client.handleConfidenceUpdate,
+      related: client.handleRelatedUpdate,
+      search: client.handleSearchUpdate,
+      slug: client.handleSlugUpdate,
     };
   }
 
   private initializeWebSocket = (): WebSocket => {
     console.log('WebSocket starting');
     const state = useStore.getState();
-    const phone_hash = hashPhoneNumber(state.currentUser.userid);
-    const socket = new WebSocket(WS_URL + phone_hash);
+    const user_hash = WEB
+      ? uuidv4()
+      : hashPhoneNumber(state.currentUser.userid);
+    const socket = new WebSocket(WS_URL + user_hash);
 
     socket.onmessage = event => {
       const update: MayaUpdate = JSON.parse(event.data);

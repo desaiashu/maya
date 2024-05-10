@@ -5,8 +5,10 @@ import {
   ColorSchemeName,
   View,
   StyleProp,
+  Image,
+  ImageStyle,
 } from 'react-native';
-import FastImage, { ImageStyle } from 'react-native-fast-image';
+// import FastImage, { ImageStyle } from 'react-native-fast-image';
 import { getImageSource } from '@/data';
 import { Theme, useTheme } from '@/ui/theme';
 
@@ -28,7 +30,8 @@ const Avatar: React.FC<AvatarProps> = props => {
 
   return (
     <View style={styles.container}>
-      <FastImage
+      {/* <FastImage */}
+      <Image
         source={getAvatarSource(avatar ?? defaultAvatar, colorScheme)}
         defaultSource={getAvatarSource(defaultAvatar, colorScheme)} // Default avatar before remote image loads
         style={[styles.base, styles[position ?? 'regular'], style]}

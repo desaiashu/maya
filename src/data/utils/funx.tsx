@@ -1,14 +1,62 @@
 import CryptoJS from 'crypto-js';
 import { ColorSchemeName, LayoutAnimation, Platform } from 'react-native';
-import { icons, botAvatars, humanAvatars } from '@/data';
-import { Message, Chunk } from '@/data/types';
+import { icons, botAvatars, humanAvatars, useStore, server } from '@/data';
+import { Message, Chunk, ChatInfo, PerspectiveData } from '@/data/types';
 
 export function hashPhoneNumber(phoneNumber: string): string {
   const phoneHash = CryptoJS.SHA256(phoneNumber).toString(CryptoJS.enc.Hex);
   return phoneHash;
 }
 
+export function hashChatID(chatid: string): string {
+  const chatHash = CryptoJS.SHA256(chatid).toString(CryptoJS.enc.Base64url);
+  return chatHash.substring(0, 10);
+}
+
 export const timestamp = () => new Date().getTime();
+
+export const threadid = (chatid: string, messid: number) =>
+  chatid + '_' + messid.toString();
+
+export const emptyChat = (): ChatInfo => {
+  const state = useStore.getState();
+  const userid = state.currentUser.userid;
+  return {
+    chatid: '_',
+    slug: '_',
+    creator: userid,
+    participants: [userid, 'maya', 'system', 'uncensored', 'oracle'],
+    topic: 'new chat',
+    protocol: 'maya',
+    profiles: [],
+    created: timestamp(),
+    updated: timestamp(),
+  };
+};
+
+export const emptyPerspective = (): PerspectiveData => {
+  return {
+    messageid: 0,
+    chatid: '',
+    lastupdated: 0,
+    confidence: undefined,
+    related: [],
+    search: [],
+  };
+};
+
+export const newCommunityChat = () => {
+  const state = useStore.getState();
+  const lastChat = state.chats[0];
+
+  if (lastChat && lastChat.topic === 'new chat') {
+    return lastChat;
+  } else {
+    const chat: ChatInfo = emptyChat();
+    server.createChat(chat);
+    return chat;
+  }
+};
 
 export const isSameDay = (
   message1: Message | undefined,

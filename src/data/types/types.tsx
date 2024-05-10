@@ -5,6 +5,42 @@
 /* Do not modify it by hand - just update the pydantic models and then re-run the script
 */
 
+export type WSRequest =
+  | "auth"
+  | "verify"
+  | "refresh"
+  | "message"
+  | "annotation"
+  | "perspective"
+  | "create_chat"
+  | "update_group"
+  | "update_user"
+  | "slug";
+export type WSUpdate =
+  | "refresh"
+  | "success"
+  | "error"
+  | "chunk"
+  | "message"
+  | "chatinfo"
+  | "user"
+  | "confidence"
+  | "related"
+  | "search"
+  | "slug";
+
+export interface AnnotationRequest {
+  userid: string;
+  token: string;
+  command: WSRequest;
+  data: Message[];
+}
+export interface Message {
+  content: string;
+  chatid: string;
+  sender: string;
+  timestamp: number;
+}
 export interface Auth {
   userid: string;
   token: string;
@@ -12,6 +48,7 @@ export interface Auth {
 }
 export interface ChatInfo {
   chatid: string;
+  slug: string;
   creator: string;
   created: number;
   updated: number;
@@ -33,7 +70,7 @@ export interface ChatInfoUpdate {
 export interface ChatRequest {
   userid: string;
   token: string;
-  command: string;
+  command: WSRequest;
   data: ChatInfo;
 }
 export interface Chunk {
@@ -44,6 +81,19 @@ export interface Chunk {
 }
 export interface ChunkUpdate {
   data: Chunk;
+  update?: string;
+  background?: boolean;
+}
+export interface Confidence {
+  content: string;
+  chatid: string;
+  sender: string;
+  timestamp: number;
+  messageid: number;
+  value: number;
+}
+export interface ConfidenceUpdate {
+  data: Confidence;
   update?: string;
   background?: boolean;
 }
@@ -68,24 +118,18 @@ export interface LastRefresh {
 export interface MayaRequest {
   userid: string;
   token: string;
-  command: string;
+  command: WSRequest;
   data?: unknown;
 }
 export interface MayaUpdate {
   data?: unknown;
-  update: string;
+  update: WSUpdate;
   background?: boolean;
-}
-export interface Message {
-  content: string;
-  chatid: string;
-  sender: string;
-  timestamp: number;
 }
 export interface MessageRequest {
   userid: string;
   token: string;
-  command: string;
+  command: WSRequest;
   data: Message;
 }
 export interface MessageUpdate {
@@ -94,6 +138,31 @@ export interface MessageUpdate {
   background?: boolean;
 }
 export interface MongoModel {}
+export interface PerspectiveData {
+  chatid: string;
+  messageid: number;
+  lastupdated: number;
+  confidence?: Confidence;
+  related: RelatedTopic[];
+  search: SearchResult[];
+}
+export interface RelatedTopic {
+  chatid: string;
+  messageid: number;
+  topic: string;
+}
+export interface SearchResult {
+  chatid: string;
+  messageid: number;
+  title: string;
+  url: string;
+}
+export interface PerspectiveRequest {
+  userid: string;
+  token: string;
+  command: WSRequest;
+  data: Message[];
+}
 export interface RefreshData {
   chatlist: ChatInfo[];
   messages: Message[];
@@ -104,11 +173,37 @@ export interface RefreshData {
 export interface RefreshRequest {
   userid: string;
   token: string;
-  command: string;
+  command: WSRequest;
   data: LastRefresh;
 }
 export interface RefreshUpdate {
   data: RefreshData;
+  update?: string;
+  background?: boolean;
+}
+export interface RelatedUpdate {
+  data: RelatedTopic[];
+  update?: string;
+  background?: boolean;
+}
+export interface SearchUpdate {
+  data: SearchResult[];
+  update?: string;
+  background?: boolean;
+}
+export interface SlugData {
+  chatInfo: ChatInfo;
+  messages: Message[];
+  perspectives: PerspectiveData[];
+}
+export interface SlugRequest {
+  userid: string;
+  token: string;
+  command: WSRequest;
+  data: string;
+}
+export interface SlugUpdate {
+  data: SlugData;
   update?: string;
   background?: boolean;
 }
@@ -123,11 +218,14 @@ export interface User {
   avatar: string;
   contacts: string[];
   bot: boolean;
+  streaming?: boolean;
+  plan?: string;
+  readspeed?: number;
 }
 export interface UserRequest {
   userid: string;
   token: string;
-  command: string;
+  command: WSRequest;
   data: User;
 }
 export interface UserUpdate {

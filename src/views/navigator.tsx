@@ -1,6 +1,7 @@
 // ChatUI.tsx
 
 import React from 'react';
+import { View, StyleSheet } from 'react-native';
 import {
   NavigationContainer,
   createNavigationContainerRef,
@@ -9,36 +10,43 @@ import {
   createNativeStackNavigator,
   NativeStackNavigationOptions,
 } from '@react-navigation/native-stack';
+import ChatDrawer from '@/views/drawer';
 import {
-  Chat,
-  chatOptions,
-  ChatList,
-  chatListOptions,
-  NewChat,
-  newChatOptions,
-} from '@/views/chat';
-import {
-  Profile,
-  profileOptions,
   Auth,
   authOptions,
   Verify,
   verifyOptions,
+  VerifyProps,
   Settings,
   settingsOptions,
+  SettingsProps,
 } from '@/views/setup';
+import {
+  Annotation,
+  annotationOptions,
+  AnnotationProps,
+  Discussion,
+  discussionOptions,
+  DiscussionProps,
+  Chat,
+} from '@/views/chat';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
-import { State, useStore, DEV_SCREEN } from '@/data';
+import { State, useStore, DEV_SCREEN, WEB } from '@/data';
 
 export type RootStackParamList = {
   ChatList: undefined;
-  Chat: ChatInfo;
+  ChatDrawer: undefined;
+  Chat: undefined;
   NewChat: undefined;
   Profile: undefined;
   Auth: undefined;
-  Verify: { phoneNumber: string };
-  Settings: { presentation: 'modal' } | undefined;
+  Verify: VerifyProps;
+  Annotation: AnnotationProps;
+  Discussion: DiscussionProps;
+  Settings: SettingsProps | undefined;
+} & {
+  [key: string]: ChatInfo;
 };
 
 export const navigationRef = createNavigationContainerRef();
@@ -46,6 +54,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const Navigator: React.FC = () => {
   const theme = useTheme();
+  const styles = getStyles();
 
   const { isAuthenticated, username } = useStore((state: State) => ({
     isAuthenticated: state.isAuthenticated,
@@ -54,62 +63,68 @@ const Navigator: React.FC = () => {
 
   const userCreated = username !== '';
 
-  let initialRoute: keyof RootStackParamList = 'Auth';
+  let initialRoute: string = 'Auth';
 
   if (DEV_SCREEN) {
     //Override initialRoute for development
-    initialRoute = DEV_SCREEN;
+    initialRoute = DEV_SCREEN as string;
   } else if (isAuthenticated && userCreated) {
-    initialRoute = 'ChatList';
+    initialRoute = 'ChatDrawer';
   } else if (isAuthenticated && !userCreated) {
     initialRoute = 'Settings';
   } else {
     initialRoute = 'Auth';
   }
 
+  if (WEB) {
+    initialRoute = 'Chat';
+  }
+
   return (
-    <NavigationContainer ref={navigationRef}>
-      <Stack.Navigator
-        initialRouteName={initialRoute}
-        screenOptions={defaultNavigationOptions(theme)}
-      >
-        <Stack.Screen
-          name="ChatList"
-          component={ChatList}
-          options={({ navigation }) => chatListOptions(navigation, theme)}
-        />
-        <Stack.Screen
-          name="NewChat"
-          component={NewChat}
-          options={({ navigation }) => newChatOptions(navigation, theme)}
-        />
-        <Stack.Screen
-          name="Chat"
-          component={Chat}
-          options={({ navigation }) => chatOptions(navigation, theme)}
-        />
-        <Stack.Screen
-          name="Profile"
-          component={Profile}
-          options={({ navigation }) => profileOptions(navigation, theme)}
-        />
-        <Stack.Screen
-          name="Settings"
-          component={Settings}
-          options={({ navigation, route }) =>
-            settingsOptions(navigation, route, theme)
-          }
-        />
-        <Stack.Screen name="Auth" component={Auth} options={authOptions()} />
-        <Stack.Screen
-          name="Verify"
-          component={Verify}
-          options={({ navigation }) => verifyOptions(navigation, theme)}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <View style={styles.container}>
+      <NavigationContainer ref={navigationRef}>
+        <Stack.Navigator
+          initialRouteName={initialRoute}
+          screenOptions={defaultNavigationOptions(theme)}
+        >
+          <Stack.Screen name="Auth" component={Auth} options={authOptions()} />
+          <Stack.Screen
+            name="Verify"
+            component={Verify}
+            options={({ navigation }) => verifyOptions(navigation, theme)}
+          />
+          <Stack.Screen
+            name="Settings"
+            component={Settings}
+            options={({ navigation, route }) =>
+              settingsOptions(navigation, route, theme)
+            }
+          />
+          <Stack.Screen name="ChatDrawer" component={ChatDrawer} />
+          <Stack.Screen
+            name="Annotation"
+            component={Annotation}
+            options={({ navigation }) => annotationOptions(navigation, theme)}
+          />
+          <Stack.Screen
+            name="Discussion"
+            component={Discussion}
+            options={({ navigation }) => discussionOptions(navigation, theme)}
+          />
+          <Stack.Screen name="Chat" component={Chat} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </View>
   );
 };
+
+const getStyles = () =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      maxWidth: 700,
+    },
+  });
 
 const defaultNavigationOptions = (
   theme: Theme,
@@ -117,6 +132,7 @@ const defaultNavigationOptions = (
   headerStyle: {
     backgroundColor: theme.colors.header, // Your custom background color
   },
+  headerShown: false,
   headerTintColor: theme.colors.text.primary, // Your custom color for back button and title
   headerTitleStyle: {
     fontFamily: theme.fonts.h3.fontFamily,

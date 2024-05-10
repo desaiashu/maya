@@ -7,9 +7,15 @@ import {
   KeyboardAvoidingView,
   FlatList,
   LayoutAnimation,
+  View,
+  StyleSheet,
+  Share,
+  Linking,
 } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import {
+  DrawerNavigationProp,
+  DrawerNavigationOptions,
+} from '@react-navigation/drawer';
 import { RootStackParamList } from '@/views/navigator';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
@@ -21,76 +27,154 @@ import {
   timestamp,
   dummyMessage,
   DEV_SCREEN,
+  WEB,
+  newCommunityChat,
+  hashChatID,
+  WEB_URL,
+  DOWNLOAD_URL,
+  emptyChat,
 } from '@/data';
+import { useNavigation } from '@react-navigation/native';
 import { Message, ChatInfo } from '@/data/types';
-import { MessageUI, InputToolbar, Stream } from '@/views/chat/components';
+import { MessageList, InputToolbar } from '@/views/chat/components';
 import { Theme, useTheme } from '@/ui/theme';
-import { IconButton } from '@/ui/atoms';
+import { IconButton, Button } from '@/ui/atoms';
+import { useParams } from 'react-router-dom';
+
+interface chatOptionsProps {
+  navigation: DrawerNavigationProp<RootStackParamList, 'Chat'>;
+  theme: Theme;
+  chat: ChatInfo | undefined;
+}
 
 export const chatOptions = (
-  navigation: StackNavigationProp<RootStackParamList, 'Chat'>,
-  theme: Theme,
-): NativeStackNavigationOptions => {
+  props: chatOptionsProps,
+): DrawerNavigationOptions => {
+  const { navigation, theme, chat } = props;
   const styles = getStyles(theme);
   return {
-    title: '',
+    title: chat ? chat.chatid : 'new chat',
+    headerTitle: '',
     headerTransparent: true,
     headerStyle: {
       backgroundColor: theme.colors.transparent,
     },
     headerLeft: () => (
       <IconButton
-        icon="back"
-        onPress={() => navigation.goBack()}
-        containerStyle={styles.iconBackContainer}
-        style={styles.iconBack}
+        icon="menu"
+        onPress={() => navigation.toggleDrawer()}
+        containerStyle={styles.iconMenuContainer}
+        style={styles.iconMenu}
+        round
+        shadow
       />
     ),
+    headerRight: () => renderRightMenu(props),
   };
 };
 
+const renderRightMenu = (props: chatOptionsProps) => {
+  const { navigation, theme, chat } = props;
+  const styles = getStyles(theme);
+
+  const renderShare = () => {
+    return (
+      chat && (
+        <IconButton
+          icon="share"
+          onPress={() => {
+            console.log('share');
+            Share.share({
+              url: WEB_URL + hashChatID(chat.chatid),
+              title: 'Maya Chat',
+            });
+          }}
+          containerStyle={styles.iconShareContainer}
+          style={styles.iconShare}
+          round
+          shadow
+        />
+      )
+    );
+  };
+
+  return (
+    <View style={styles.rightMenu}>
+      {chat && renderShare()}
+      <IconButton
+        icon="compose"
+        onPress={() => {
+          const newChat = newCommunityChat();
+          navigation.reset({
+            index: 0,
+            routes: [{ name: newChat.chatid + newChat.topic, params: newChat }],
+          });
+        }}
+        containerStyle={styles.iconComposeContainer}
+        style={styles.iconCompose}
+        round
+        shadow
+      />
+    </View>
+  );
+};
+
 const Chat: React.FC = () => {
+  const params = useParams();
+
+  const navigation =
+    useNavigation<DrawerNavigationProp<RootStackParamList, 'Chat'>>();
   const theme = useTheme();
   const styles = getStyles(theme);
   const route = useRoute();
-  let [chatInfo, setChatInfo] = useState<ChatInfo>(route.params as ChatInfo);
+
+  let [chatInfo, setChatInfo] = useState<ChatInfo>(
+    WEB ? emptyChat() : (route.params as ChatInfo),
+  );
+
+  useEffect(() => {
+    if (WEB && params.slug) {
+      server.getSlug(params.slug);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // let scrollPosition = 0;
   const flatListRef = React.useRef<FlatList>(null);
 
   const chats = useStore((state: State) => state.chats);
+
   //Dev screen override won't have route params
-  if (DEV_SCREEN) {
-    chatInfo = chats[0]; //Setting directly to execute before next 2 commands
-  }
+  if (DEV_SCREEN) chatInfo = chats[0]; //Setting directly to execute before next 2 commands
 
   const isStreaming = useStream((state: StreamState) => state.isStreaming);
   const { messages, user, addMessage } = useStore((state: State) => ({
     user: state.currentUser,
     addMessage: state.addMessage,
-    messages: isStreaming
-      ? [
-          ...state.messages.filter(
-            message => message.chatid === chatInfo.chatid,
-          ),
-          dummyMessage,
-        ]
-      : state.messages.filter(message => message.chatid === chatInfo.chatid),
+    messages: [
+      ...state.messages.filter(message => message.chatid === chatInfo.chatid),
+      ...(isStreaming ? [dummyMessage] : []),
+    ],
   }));
-
-  const avatars: Record<string, string> = {};
-  const usernames: Record<string, string> = {};
-  for (let profile of chatInfo.profiles || []) {
-    avatars[profile.userid] = profile.avatar;
-    usernames[profile.userid] = profile.username;
-  }
 
   // For new chats, the chatID will be 'new' and requires update
   // For existing chats, profile updates might come through
   useEffect(() => {
-    const updatedChat = chats.find(c => c.created === chatInfo.created);
-    if (updatedChat) {
-      setChatInfo(updatedChat);
+    if (WEB) {
+      const updatedChat = chats.find(c => c.slug === params.slug);
+      if (updatedChat) setChatInfo(updatedChat);
+    } else {
+      const updatedChat = chats.find(c => c.created === chatInfo.created);
+      if (updatedChat) {
+        setChatInfo(updatedChat);
+        navigation.setOptions({
+          headerRight: () =>
+            renderRightMenu({ navigation, theme, chat: updatedChat }),
+          // You can set other header options here based on chatInfo
+        });
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chats, chatInfo.created]);
 
   const onSend = (message: string) => {
@@ -108,91 +192,87 @@ const Chat: React.FC = () => {
     server.sendMessage(newMessage);
   };
 
-  const renderMessage = (current: Message, next?: Message, prev?: Message) => {
-    if (current.chatid === 'stream') {
-      return <Stream prev={prev} avatars={avatars} usernames={usernames} />;
-    } else {
-      return (
-        <MessageUI
-          current={current}
-          next={next}
-          prev={prev}
-          avatar={avatars[current.sender]}
-          username={usernames[current.sender] || ''}
-          position={'left'} //user.userid === current.sender ? 'right' : 'left'}
-        />
-      );
-    }
-  };
-
   return (
     <SafeAreaView edges={['top']} style={styles.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'height' : 'height'}
         style={styles.keyboardAvoid}
       >
-        {/* Note: FlatList doesn't play well with KeyboardAvoidingView
-        unless "inverted" and using messages.reverse().*/}
-        <FlatList
-          data={messages.reverse()}
-          renderItem={({ item, index }) =>
-            renderMessage(item, messages[index - 1], messages[index + 1])
-          }
-          keyExtractor={item => item.timestamp.toString()}
-          style={styles.messagesContainer}
+        {WEB && (
+          <Button
+            title="Download beta"
+            tag="h4"
+            onPress={() => Linking.openURL(DOWNLOAD_URL)}
+            style={styles.download}
+            outlined
+          />
+        )}
+        <MessageList
+          messages={messages}
+          profiles={chatInfo.profiles || []}
           ref={flatListRef}
-          scrollIndicatorInsets={{ right: -3 }}
-          inverted
         />
-        <InputToolbar onSend={onSend} chatid={chatInfo.chatid} />
+        {!WEB && <InputToolbar onSend={onSend} chatid={chatInfo.chatid} />}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
 
-const getStyles = (theme: Theme) => ({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  },
-  keyboardAvoid: {
-    flex: 1,
-  },
-  messagesContainer: {
-    flex: 1,
-    marginTop: -8,
-    marginBottom: 0,
-  },
-  back: {
-    backgroundColor: theme.colors.background,
-    paddingLeft: 11,
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingRight: 3,
-    borderRadius: 20,
-    shadowColor: theme.colors.outline,
-    shadowOpacity: 0.6,
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 1,
-    fontWeight: 'bold',
-  },
-  iconBackContainer: {
-    backgroundColor: theme.colors.background,
-    paddingLeft: 7,
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingRight: 9,
-    marginLeft: -1,
-    borderRadius: 20,
-    shadowColor: theme.colors.outline,
-    shadowOpacity: 0.6,
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 1,
-  },
-  iconBack: {
-    width: 20,
-    height: 20,
-  },
-});
+const getStyles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+    },
+    keyboardAvoid: {
+      flex: 1,
+    },
+    rightMenu: {
+      flexDirection: 'row',
+    },
+    download: {
+      width: 200,
+      alignSelf: 'center',
+      textAlign: 'center',
+    },
+    iconMenuContainer: {
+      paddingLeft: 9,
+      paddingTop: 9,
+      paddingBottom: 9,
+      paddingRight: 9,
+      marginLeft: 15,
+    },
+    iconMenu: {
+      width: 18,
+      height: 18,
+    },
+    iconShareContainer: {
+      paddingLeft: 8,
+      paddingTop: 11,
+      paddingBottom: 7,
+      paddingRight: 10,
+      marginRight: 14,
+    },
+    iconShare: {
+      width: 18,
+      height: 18,
+    },
+    iconComposeContainer: {
+      paddingLeft: 9,
+      paddingTop: 9,
+      paddingBottom: 9,
+      paddingRight: 9,
+      marginRight: 14,
+      borderRadius: 20,
+      shadowColor: theme.colors.outline,
+      shadowOpacity: 0.6,
+      shadowOffset: { width: 0, height: 0 },
+      shadowRadius: 1,
+    },
+    iconCompose: {
+      width: 20,
+      height: 20,
+    },
+  });
 
 export default Chat;
