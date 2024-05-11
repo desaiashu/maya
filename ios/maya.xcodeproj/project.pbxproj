@@ -501,11 +501,13 @@
 				DEVELOPMENT_TEAM = 92JVKG2EZK;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = maya/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Maya;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -528,11 +530,13 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 92JVKG2EZK;
 				INFOPLIST_FILE = maya/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Maya;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
