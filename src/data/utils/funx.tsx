@@ -1,7 +1,21 @@
 import CryptoJS from 'crypto-js';
-import { ColorSchemeName, LayoutAnimation, Platform } from 'react-native';
-import { icons, botAvatars, humanAvatars, useStore, server } from '@/data';
+import {
+  ColorSchemeName,
+  LayoutAnimation,
+  Platform,
+  Alert,
+  Linking,
+} from 'react-native';
+import {
+  icons,
+  botAvatars,
+  humanAvatars,
+  useStore,
+  server,
+  WEB_URL,
+} from '@/data';
 import { Message, Chunk, ChatInfo, PerspectiveData } from '@/data/types';
+import * as amplitude from '@amplitude/analytics-react-native';
 
 export function hashPhoneNumber(phoneNumber: string): string {
   const phoneHash = CryptoJS.SHA256(phoneNumber).toString(CryptoJS.enc.Hex);
@@ -14,6 +28,8 @@ export function hashChatID(chatid: string): string {
 }
 
 export const timestamp = () => new Date().getTime();
+
+export const track_event = (event: string) => amplitude.track(event);
 
 export const threadid = (chatid: string, messid: number) =>
   chatid + '_' + messid.toString();
@@ -107,6 +123,20 @@ export const messageFromChunk = (chunk: Chunk): Message => {
     timestamp: chunk.timestamp,
   };
   return message;
+};
+
+export const forceUpdate = (url: string = WEB_URL) => {
+  Alert.alert(
+    'Update required',
+    'Sorry for the hassle :)',
+    [
+      {
+        text: 'Download update',
+        onPress: () => Linking.openURL(url),
+      },
+    ],
+    { cancelable: false },
+  );
 };
 
 export const cancelLayoutAnimation = () => {

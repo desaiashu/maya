@@ -1,4 +1,4 @@
-import { useStore, useStream } from '@/data';
+import { useStore, useStream, forceUpdate } from '@/data';
 import {
   User,
   RefreshData,
@@ -9,6 +9,7 @@ import {
   Confidence,
   SearchResult,
   SlugData,
+  UpdateInfo,
 } from '@/data/types';
 import { LayoutAnimation } from 'react-native';
 
@@ -79,19 +80,17 @@ class ClientUpdate {
     for (let p of data.perspectives) {
       state.updatePerspective(p.messageid, p.chatid, p);
     }
-
-    console.log(data);
-
-    console.log('SLUG RECEIVED');
   }
 
-  handleSuccessUpdate(data: string) {
-    console.log('Success:', data);
+  handleSuccessUpdate(data: UpdateInfo) {
+    console.log('Success:', data.code);
   }
 
-  handleErrorUpdate(data: string) {
+  handleErrorUpdate(data: UpdateInfo) {
     console.error('Error:', data);
-    if (data === 'verification failed') {
+    if (data.code === 'version outdated') {
+      forceUpdate(data.info);
+    } else if (data.code === 'verification failed') {
       const state = useStore.getState();
       state.clearUser();
     }

@@ -6,57 +6,87 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 
 ---
 
+### Run
+
+Backend - `heroku local -f Procfile.local` _(lsof -i :8001)_
+React - `npx react-native start --experimental-debugger`
+iOS - `npx run-ios`
+Types - `./scripts/types.sh`
+Web - `npm run web`
+
+### Deploy
+
+iOS - xcode release build
+Android - ??
+Web - `npm run dist` _(push web branch)_
+Backend - _(push dev/main)_
+
+---
+
 ### Todos
 
-#### Schema migration:
+#### 0.1.0 build:
 
-- Calculate slug for each chatid
-- Change search and results for everything
+- Analytics
 
-#### In progress:
+  - Set user - setUserId('user@amplitude.com');
+  - Buttons/success for each step of onboarding
+  - New chat
+  - Share
+  - Message send
+  - Tap on points of view
+  - Tap on search result
+  - Tap on related
+  - Tap on sidebar
+  - Tap on chat
+  - Tap on profile
+  - Web view analytics
 
-- Draft has a bug where it won't reset back to empty when creating a new message
+- Inflection.ai for third model
 
-- Save context on perspectives, retrieve context from subthreads
-- Update and test summarization code to handle perspective contexts
+- Hash phone numbers in DB
+- Save phone => hash in auth DB
+
+- Give feedback (report bug / request feature)
+
+- Welcome / disclaimer
+
+  - We store messages with an anonymous userid, encrypted at rest
+  - We will use anonymized data to improve responses
+  - Questions: ashu@desaidata.com
+
+- Testflight
+
+- Strip newline / whitespace from end of message
+
+- App Icons
+- Favicon
+- Sharing stuff for website
 
 - Enable messaging in discussion (maya + alternate between two others)
-- Make search results smaller
-- Hide search + related when keyboard is open
-- Figure out whether to stream the secondary responses - why so slow?
 
 - Refresh needs to load the other data
 - Don't request new perspective every time
 
-- Create concept of "thread" that is linked to chatid + messageid but is it's own chat
-  - Use this to update messages
-  - Use protocol to differentiate
-- Markdown
-- Perspectives FE
-- Perspectives BE
-
-  - One LLM needs to be uncensored
-
 - Add perspective data to refresh
-- Share link + web
-  - Save hash in chat on creation
-- Hash phone numbers in DB
-- Stop button
 
-#### Next up:
+#### 0.1.0 test:
 
-- Testflight + force update
-- Analytics
-- User prompt
-- Ask clarifying questions to user
-- Webview for sharing
-- Deeplinking for sharing
-- Invite to chat
-- Privacy terms (allow ppl to keep data private? on thread basis?)
-- Render markdown
-- Thumbs up / thumbs down data saving
-- Analytics
-- Finetune chatbot on my Make School emails?
+- Test updated user data model
+
+- Save context on perspectives, retrieve context from subthreads
+- Update and test summarization code to handle perspective contexts
+
+- Hide search + related when keyboard is open?
+
+- Diff screen sizes
+- Header for perspectives page
+
+- Cancel button to stop stream (also stop stream on server? kill web socket and restart it?)
+
+### After 0.1.0:
+
+#### Schema changes
 
 #### User feedback
 
@@ -69,36 +99,22 @@ Way to report bugs
 
 - Handle rapid chats - ie. if you message a string of messages the server should wait, adjust and not double respond
 - Add test for contexts
-- Oracle summary issue
+- Oracle summary issue (?)
 - Websockets issues: 1. always reopen when app opens, 2. see why it keeps closing
 - Websocket server to client sending on a multi-worker server
-
-#### Pre-launch:
-
-- Share functionality w/ web based viewer of chatid
-- Indicators for success/failure/loading - message send, chat creation, profile update, etc
-- Visual bug where some messages show with an extra empty line
-- Lastrefresh functionality, so it doesn't reload chats all the time
-- Hash/encrypt phone numbers
-- Tests for oracle
-- Ensure websocket isn't created before userid exists on client
-- Cancel button to stop stream (also stop stream on server? kill web socket and restart it?)
-- Create default "welcome" message for user
-- OTA updates (expo?)
-- Background data updates
-- Update "last-refresh"
-- App Icons
 
 #### Personalization
 
 - Per user context / preferences
 - Reading speed
 - Turn off streaming
+- Privacy terms (allow ppl to keep data private? on thread basis?)
 
 #### Confidence / annotations
 
 - Confidence FE
 - Confidence BE
+  - Pull confidence out of perspectivedata?
 - Annotation submission/retrieval
 - NEED TO FIGURE OUT WHERE TO STORE CONFIDENCES IN DB (separate from perspectivedata?)
 - Annotations BE
@@ -106,6 +122,35 @@ Way to report bugs
   - Top contributors can earn?
     Dont tell them, just give them gifts
     Don’t want ppl to contribute in order to get paid
+
+#### Social / virality
+
+- Invite to chat
+- Trending topics in "new chat" page?
+
+#### Data / model improvements
+
+- Thumbs up / thumbs down data saving
+- Experiment with deeper trained bots
+
+#### Server comms
+
+- Background data updates
+- Update "last-refresh" to paginate data loading
+- Lastrefresh functionality, so it doesn't reload chats all the time
+- Ensure websocket isn't created before userid exists on client?
+
+#### UI improvements:
+
+- Markdown
+- First stream response w/ bounce?
+- Indicators for success/failure/loading - message send, chat creation, profile update, etc?
+
+#### Experimental:
+
+- Build web demo on maya url
+- Build web editor for chatagents (login via sms code, add python for agents, or add webhooks for people to build/host their own)
+- Finetune chatbot on my Make School emails?
 
 #### Group chats
 
@@ -115,20 +160,11 @@ Way to report bugs
 - Force participant set for certain protocols, allow others
 - Adding other humans in chat
 - Build group protocols
-- Experiment with deeper trained bots
 
-#### Social features
+#### Tests:
 
-- Trending topics in "new chat" page?
-
-#### UI improvements:
-
-- First stream response w/ bounce?
-
-#### Experimental:
-
-- Build web demo on maya url
-- Build web editor for chatagents (login via sms code, add python for agents, or add webhooks for people to build/host their own)
+- Tests for oracle
+- Update tests
 
 #### Backlog
 
@@ -149,9 +185,19 @@ Way to report bugs
 - Host on maya url rather than txtai.co
 - Expire login codes
 - Enable multiple dynos via redis/pubsub
+  - Needed for real time group chats
+- OTA updates (expo?)
 
-Done
+####################################################
 
+#### Done
+
+- Create concept of "thread" that is linked to chatid + messageid but is it's own chat
+  - Use this to update messages
+  - Use protocol to differentiate
+- Make search results smaller
+- Perspectives FE
+- Perspectives BE
 - Chatlist refresh, doing so in drawer screws with animation
 - New chat doesn't work yet due to the way sidebar is rendered
 - Sidebar is reverse chronological
@@ -171,6 +217,17 @@ Done
 - Run on actual phone
 - Create new message, select protocol, select AIs
 - 1:1 format list maps bot ID to protocol
+- Calculate slug for each chatid
+- Change search and results for everything
+- One LLM needs to be uncensored
+- Share link + web
+  - Save hash in chat on creation
+- Force update
+- Don't stream the secondary responses - why so slow?
+- Share functionality w/ web based viewer of chatid
+- User prompt
+- Ask clarifying questions to user
+- Draft has a bug where it won't reset back to empty when creating a new message
 
 ---
 

@@ -1,4 +1,4 @@
-import { useStore } from '@/data';
+import { useStore, VERSION } from '@/data';
 import { socket } from '@/data/server';
 import {
   MayaRequest,
@@ -17,11 +17,19 @@ class ServerRequest {
     socket.reinitalizeWebSocket();
   }
 
+  baseParams() {
+    const state = useStore.getState();
+    return {
+      userid: state.currentUser.userid,
+      token: state.token,
+      version: VERSION,
+    };
+  }
+
   refreshChatlist() {
     const state = useStore.getState();
     let request: RefreshRequest = {
-      userid: state.currentUser.userid,
-      token: state.token,
+      ...this.baseParams(),
       command: 'refresh',
       data: {
         time: state.lastRefresh,
@@ -31,10 +39,8 @@ class ServerRequest {
   }
 
   sendMessage(message: Message) {
-    const state = useStore.getState();
     let request: MessageRequest = {
-      userid: state.currentUser.userid,
-      token: state.token,
+      ...this.baseParams(),
       command: 'message',
       data: message,
     };
@@ -42,10 +48,8 @@ class ServerRequest {
   }
 
   getPerspectives(messages: Message[]) {
-    const state = useStore.getState();
     let request: PerspectiveRequest = {
-      userid: state.currentUser.userid,
-      token: state.token,
+      ...this.baseParams(),
       command: 'perspective',
       data: messages,
     };
@@ -53,10 +57,8 @@ class ServerRequest {
   }
 
   getAnnotations(messages: Message[]) {
-    const state = useStore.getState();
     let request: AnnotationRequest = {
-      userid: state.currentUser.userid,
-      token: state.token,
+      ...this.baseParams(),
       command: 'annotation',
       data: messages,
     };
@@ -64,10 +66,8 @@ class ServerRequest {
   }
 
   createChat(chat: ChatInfo) {
-    const state = useStore.getState();
     let request: ChatRequest = {
-      userid: state.currentUser.userid,
-      token: state.token,
+      ...this.baseParams(),
       command: 'create_chat',
       data: chat,
     };
@@ -78,8 +78,7 @@ class ServerRequest {
     const state = useStore.getState();
     let newUser = { ...state.currentUser, ...profile };
     let request: UserRequest = {
-      userid: state.currentUser.userid,
-      token: state.token,
+      ...this.baseParams(),
       command: 'update_user',
       data: newUser,
     };
@@ -88,8 +87,8 @@ class ServerRequest {
 
   authUser(userid: string) {
     let request: MayaRequest = {
+      ...this.baseParams(),
       userid: userid,
-      token: '',
       command: 'auth',
     };
     socket.sendRequest(request);
@@ -97,6 +96,7 @@ class ServerRequest {
 
   verifyUser(auth: Auth) {
     let request: MayaRequest = {
+      ...this.baseParams(),
       userid: auth.userid,
       token: auth.token,
       command: 'verify',
@@ -106,8 +106,7 @@ class ServerRequest {
 
   getSlug(slug: string) {
     let request: SlugRequest = {
-      userid: '',
-      token: '',
+      ...this.baseParams(),
       command: 'slug',
       data: slug,
     };

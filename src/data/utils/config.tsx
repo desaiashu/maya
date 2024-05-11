@@ -1,11 +1,13 @@
 import { LogBox, Platform } from 'react-native';
 import { RootStackParamList } from '@/views/navigator';
+import DeviceInfo from 'react-native-device-info';
+import * as amplitude from '@amplitude/analytics-react-native';
 
 //////////////////////////////////
 // Overrides for development purposes
 
 ///// Environment /////
-export const ENV: Environment = 'dev'; //(process.env.ENV as Environment) || 'dev';
+export const ENV: Environment = (process.env.ENV as Environment) || 'local';
 
 ///// Overrides nav stack  /////
 export let DEV_SCREEN: Screen;
@@ -17,6 +19,10 @@ export let RESET_STATE = false;
 
 ///// Platform /////
 export const WEB = Platform.OS === 'web';
+export const ANDROID = Platform.OS === 'android';
+
+///// Version /////
+export const VERSION = DeviceInfo.getVersion();
 
 ///// Server URL /////
 
@@ -70,6 +76,11 @@ export const WS_URL = WS + SSL + SUBDOMAIN + DOMAIN + APP_PORT + SLUG + '/';
 
 console.log(WEB_URL);
 console.log(WS_URL);
+
+///// Analytics /////
+// if (ENV === 'prod') amplitude.init('5b959d5270a05b890d1b957c92cd7fae');
+// else
+amplitude.init('1e239f3793b699a7c77df6782b5f233c');
 
 ///// Logging /////
 LogBox.ignoreAllLogs(true);

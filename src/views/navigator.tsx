@@ -37,7 +37,7 @@ import { State, useStore, DEV_SCREEN, WEB } from '@/data';
 export type RootStackParamList = {
   ChatList: undefined;
   ChatDrawer: undefined;
-  Chat: undefined;
+  Chat: ChatInfo | undefined;
   NewChat: undefined;
   Profile: undefined;
   Auth: undefined;

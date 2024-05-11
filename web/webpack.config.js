@@ -124,6 +124,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(appDirectory, 'web/index.html'),
+      favicon: path.join(appDirectory, 'assets/app icons/web/favicon.ico'),
     }),
     new webpack.HotModuleReplacementPlugin(), // Enable HMR
     new webpack.DefinePlugin({
@@ -132,7 +133,10 @@ module.exports = {
     new webpack.EnvironmentPlugin({ JEST_WORKER_ID: null }),
     new webpack.DefinePlugin({ process: { env: {} } }),
     new CopyPlugin({
-      patterns: [{ from: 'web/_redirects', to: '' }],
+      patterns: [
+        { from: 'web/_redirects', to: '' },
+        { from: 'assets/app icons/web/icon-512-maskable.png', to: '' },
+      ],
     }),
     // new CopyWebpackPlugin({
     //   patterns: [{ from: path.resolve(appDirectory, 'assets'), to: 'assets' }],

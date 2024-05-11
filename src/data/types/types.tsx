@@ -28,10 +28,20 @@ export type WSUpdate =
   | "related"
   | "search"
   | "slug";
+export type SuccessCode =
+  | "success"
+  | "token sent"
+  | "message sent"
+  | "perspective requested"
+  | "annotation requested"
+  | "updated user";
+export type ErrorCode = "error" | "verification failed" | "version outdated" | "command not found" | "chat not found";
+export type SubscriptionPlan = "free" | "open" | "sota";
 
 export interface AnnotationRequest {
   userid: string;
   token: string;
+  version: string;
   command: WSRequest;
   data: Message[];
 }
@@ -64,12 +74,13 @@ export interface Profile {
 }
 export interface ChatInfoUpdate {
   data: ChatInfo;
-  update?: string;
+  update?: WSUpdate & string;
   background?: boolean;
 }
 export interface ChatRequest {
   userid: string;
   token: string;
+  version: string;
   command: WSRequest;
   data: ChatInfo;
 }
@@ -81,7 +92,7 @@ export interface Chunk {
 }
 export interface ChunkUpdate {
   data: Chunk;
-  update?: string;
+  update?: WSUpdate & string;
   background?: boolean;
 }
 export interface Confidence {
@@ -94,7 +105,7 @@ export interface Confidence {
 }
 export interface ConfidenceUpdate {
   data: Confidence;
-  update?: string;
+  update?: WSUpdate & string;
   background?: boolean;
 }
 export interface Context {
@@ -107,9 +118,13 @@ export interface Context {
   timestamp: number;
 }
 export interface ErrorUpdate {
-  data: string;
-  update?: string;
+  data: UpdateInfo;
+  update?: WSUpdate & string;
   background?: boolean;
+}
+export interface UpdateInfo {
+  code: SuccessCode | ErrorCode | WSRequest | WSUpdate;
+  info?: string;
 }
 export interface JsonableModel {}
 export interface LastRefresh {
@@ -118,6 +133,7 @@ export interface LastRefresh {
 export interface MayaRequest {
   userid: string;
   token: string;
+  version: string;
   command: WSRequest;
   data?: unknown;
 }
@@ -129,12 +145,13 @@ export interface MayaUpdate {
 export interface MessageRequest {
   userid: string;
   token: string;
+  version: string;
   command: WSRequest;
   data: Message;
 }
 export interface MessageUpdate {
   data: Message;
-  update?: string;
+  update?: WSUpdate & string;
   background?: boolean;
 }
 export interface MongoModel {}
@@ -160,8 +177,15 @@ export interface SearchResult {
 export interface PerspectiveRequest {
   userid: string;
   token: string;
+  version: string;
   command: WSRequest;
   data: Message[];
+}
+export interface Quota {
+  alltime?: number;
+  monthly?: number;
+  remaining?: number;
+  reset?: number;
 }
 export interface RefreshData {
   chatlist: ChatInfo[];
@@ -173,22 +197,23 @@ export interface RefreshData {
 export interface RefreshRequest {
   userid: string;
   token: string;
+  version: string;
   command: WSRequest;
   data: LastRefresh;
 }
 export interface RefreshUpdate {
   data: RefreshData;
-  update?: string;
+  update?: WSUpdate & string;
   background?: boolean;
 }
 export interface RelatedUpdate {
   data: RelatedTopic[];
-  update?: string;
+  update?: WSUpdate & string;
   background?: boolean;
 }
 export interface SearchUpdate {
   data: SearchResult[];
-  update?: string;
+  update?: WSUpdate & string;
   background?: boolean;
 }
 export interface SlugData {
@@ -199,17 +224,18 @@ export interface SlugData {
 export interface SlugRequest {
   userid: string;
   token: string;
+  version: string;
   command: WSRequest;
   data: string;
 }
 export interface SlugUpdate {
   data: SlugData;
-  update?: string;
+  update?: WSUpdate & string;
   background?: boolean;
 }
 export interface SuccessUpdate {
-  data: string;
-  update?: string;
+  data: UpdateInfo;
+  update?: WSUpdate & string;
   background?: boolean;
 }
 export interface User {
@@ -219,17 +245,20 @@ export interface User {
   contacts: string[];
   bot: boolean;
   streaming?: boolean;
-  plan?: string;
+  plan?: SubscriptionPlan & string;
   readspeed?: number;
+  quota?: Quota;
+  created?: number;
 }
 export interface UserRequest {
   userid: string;
   token: string;
+  version: string;
   command: WSRequest;
   data: User;
 }
 export interface UserUpdate {
   data?: User;
-  update?: string;
+  update?: WSUpdate & string;
   background?: boolean;
 }
