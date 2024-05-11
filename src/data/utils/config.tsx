@@ -12,7 +12,7 @@ export const ENV: Environment = (process.env.ENV as Environment) || 'local';
 export let DEV_SCREEN: Screen;
 
 // Reset local state & storage on app load
-export let RESET_STATE = false;
+export let RESET_STATE = true;
 
 //////////////////////////////////
 
@@ -38,9 +38,6 @@ let DOMAIN = 'seekmaya.com';
 let APP_PORT = '';
 let WEB_PORT = '';
 const SLUG = '/maya';
-
-// export let API_URL = 'https://' + ENV + '.' + DOMAIN + '/maya/';
-//TODO: update urls for toshbox/dev/prod
 
 switch (ENV as Environment) {
   case 'local':

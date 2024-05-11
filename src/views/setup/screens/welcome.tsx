@@ -29,35 +29,37 @@ const Welcome: React.FC = () => {
   return (
     <View style={styles.container}>
       <Words tag="h2" style={styles.title}>
-        Meet Maya! (beta)
+        Hello, friend!
       </Words>
       <Words tag="small" style={styles.description}>
-        Maya is an app to help you learn and discover new perspectives.
+        Maya is an app to help you learn and discover new perspectives. Thank
+        you for participating in the beta!
         {'\n'}
-        {'\n'}We're building on top of LLMs to improve the UX of knowledge
-        transfer between humans past, present, and future.
+        {'\n'}I'm building on top of LLMs to improve knowledge transfer between
+        humans past, present, and future.
         {'\n'}
-        {'\n'}Maya refers to the "illusion" of reality, recognizing that no
-        single perspective represents ground truth.
+        {'\n'}Maya refers to the "illusion" of reality, suggesting that no
+        single perspective fully captures ground truth.
         {'\n'}
-        {'\n'}Our roadmap includes community knowledge contributions, bias
-        detection, and multi-user chats.
+        {'\n'}The roadmap includes community knowledge contributions, bias
+        detection, multi-user chats, and additional personas.
         {'\n'}
         {'\n'}- All data is encrypted in transit and at rest
-        {'\n'}- We store messages with an anonymous userid
-        {'\n'}- We will use anonymized data to improve responses
+        {'\n'}- Messages are stored with an anonymous userid
+        {'\n'}- I'll use anonymized data to improve responses
         {'\n'}
-        {'\n'}We don't serve ads and we don't have shareholders. Our obligation
-        is to our users alone.
+        {'\n'}I don't like ads or venture capitalists. I want to build a more
+        "human" internet, free from third party incentives. This is a free
+        preview, I'll soon charge for use :)
         {'\n'}
         {'\n'}Questions / feedback?
         {'\n'}In the app or ashu@desaidata.com
         {'\n'}
-        {'\n'}With {'<3'}
+        {'\n'}with {'<3'}
         {'\n'}ashutosh
       </Words>
       <Button
-        title="Explore Maya"
+        title="Enter Maya"
         tag="body"
         onPress={go}
         style={styles.button}
@@ -77,7 +79,7 @@ const getStyles = (theme: Theme) =>
     },
     title: {
       marginTop: 50,
-      marginBottom: 10,
+      marginBottom: 0,
     },
     description: {
       margin: 30,

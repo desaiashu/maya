@@ -27,11 +27,7 @@ Backend - _(push dev/main)_
 
 #### 0.1.0 build:
 
-- Inflection.ai for third model
-
 - Give feedback (report bug / request feature) - include analytics
-
-- Testflight
 
 - Strip newline / whitespace from end of message
 
@@ -41,12 +37,11 @@ Backend - _(push dev/main)_
 - Refresh needs to load the other data (eg. perspective)
 - Don't request new perspective every time
 
+- Make search boxes bigger on web
+
 #### 0.1.0 test:
 
 - Test updated user data model
-
-- Save context on perspectives, retrieve context from subthreads
-- Update and test summarization code to handle perspective contexts
 
 - Hide search + related when keyboard is open?
 
@@ -55,7 +50,19 @@ Backend - _(push dev/main)_
 
 - Cancel button to stop stream (also stop stream on server? kill web socket and restart it?)
 
+#### 0.1.0 ship:
+
+Clear prod DB + set up bot users
+Testflight!
+Test prod settings on web
+Android ?
+
 ### After 0.1.0:
+
+- Make sure context is truncated properly for uncensored local model
+- Inflection.ai for third model
+- Toggle streaming
+- Read speed
 
 #### Schema changes
 
@@ -89,18 +96,25 @@ Way to report bugs
 - Annotation submission/retrieval
 - NEED TO FIGURE OUT WHERE TO STORE CONFIDENCES IN DB (separate from perspectivedata?)
 - Annotations BE
+
   - Dedicated collection
   - Top contributors can earn?
     Dont tell them, just give them gifts
     Don’t want ppl to contribute in order to get paid
+
+- RAG w/ community notes
+- Embeddings w/ bias
 
 #### Social / virality
 
 - Invite to chat
 - Trending topics in "new chat" page?
 
-#### Data / model improvements
+#### Data / context / model improvements
 
+- Improve context handling, to handle chat / perspective contexts differently wrt summarization. It should prefer context from the perspective or main chat, and cleverly truncate from the core
+- Relationship between agents that gets summarized and added to context?
+- Relationship with user that gets summarized and added to context? Ability to clear
 - Thumbs up / thumbs down data saving
 - Experiment with deeper trained bots
 
@@ -111,6 +125,11 @@ Way to report bugs
 - Lastrefresh functionality, so it doesn't reload chats all the time
 - Ensure websocket isn't created before userid exists on client?
 
+#### Performance
+
+- Metrics for server request throughput
+- Reduce bundle size for web
+
 #### UI improvements:
 
 - Markdown
@@ -120,6 +139,7 @@ Way to report bugs
 #### Experimental:
 
 - Build web demo on maya url
+- Add additional or customizeable perspectives/personas
 - Build web editor for chatagents (login via sms code, add python for agents, or add webhooks for people to build/host their own)
 - Finetune chatbot on my Make School emails?
 
@@ -163,6 +183,8 @@ Way to report bugs
 
 #### Done
 
+- Save context on perspectives, retrieve context from subthreads
+- Update and test summarization code to handle perspective contexts
 - Analytics
   - Set user - setUserId('user@amplitude.com');
   - Buttons/success for each step of onboarding
