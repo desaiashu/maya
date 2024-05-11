@@ -2,6 +2,7 @@ import CryptoJS from 'crypto-js';
 import {
   ColorSchemeName,
   LayoutAnimation,
+  LayoutAnimationConfig,
   Platform,
   Alert,
   Linking,
@@ -132,6 +133,17 @@ export const forceUpdate = (url: string = WEB_URL) => {
     ],
     { cancelable: false },
   );
+};
+
+export const fastAnimation: LayoutAnimationConfig = {
+  duration: 200, // specify the duration in milliseconds
+  create: {
+    type: LayoutAnimation.Types.easeInEaseOut,
+    property: LayoutAnimation.Properties.opacity,
+  },
+  update: {
+    type: LayoutAnimation.Types.easeInEaseOut,
+  },
 };
 
 export const cancelLayoutAnimation = () => {

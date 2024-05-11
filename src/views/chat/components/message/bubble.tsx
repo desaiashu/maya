@@ -47,7 +47,7 @@ export const Bubble: React.FC<BubbleProps> = props => {
         tag="body"
         style={[styles.base.primaryText, styles.base.messageText]}
       >
-        {message.content}
+        {message.content.trim()}
       </Words>
     );
   };

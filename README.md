@@ -29,19 +29,13 @@ Backend - _(push dev/main)_
 
 - Give feedback (report bug / request feature) - include analytics
 
-- Strip newline / whitespace from end of message
-
 - Update messaging in discussion (maya + alternate between two others)
 - Update related with latest messages
 
 - Refresh needs to load the other data (eg. perspective)
 - Don't request new perspective every time
 
-- Make search boxes bigger on web
-
 #### 0.1.0 test:
-
-- Test updated user data model
 
 - Hide search + related when keyboard is open?
 
@@ -183,6 +177,9 @@ Way to report bugs
 
 #### Done
 
+- Test updated user data model
+- Make search boxes bigger on web
+- Strip newline / whitespace from end of message
 - Save context on perspectives, retrieve context from subthreads
 - Update and test summarization code to handle perspective contexts
 - Analytics

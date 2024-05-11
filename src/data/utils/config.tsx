@@ -12,7 +12,7 @@ export const ENV: Environment = (process.env.ENV as Environment) || 'local';
 export let DEV_SCREEN: Screen;
 
 // Reset local state & storage on app load
-export let RESET_STATE = true;
+export let RESET_STATE = false;
 
 //////////////////////////////////
 

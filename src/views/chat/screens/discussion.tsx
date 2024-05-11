@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   LayoutAnimation,
   FlatList,
+  Keyboard,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -26,6 +27,7 @@ import {
   timestamp,
   WEB,
   analytics,
+  fastAnimation,
 } from '@/data';
 import {
   MessageList,
@@ -89,6 +91,30 @@ const Discussion: React.FC = () => {
       ...(isStreaming ? [dummyMessage] : []),
     ],
   }));
+
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardWillShowListener = Keyboard.addListener(
+      'keyboardWillShow',
+      () => {
+        LayoutAnimation.configureNext(fastAnimation);
+        setKeyboardVisible(true); // or set whatever state you want
+      },
+    );
+    const keyboardWillHideListener = Keyboard.addListener(
+      'keyboardWillHide',
+      () => {
+        LayoutAnimation.configureNext(fastAnimation);
+        setKeyboardVisible(false); // or set whatever state you want
+      },
+    );
+
+    return () => {
+      keyboardWillHideListener.remove();
+      keyboardWillShowListener.remove();
+    };
+  }, []);
 
   const perspectives: Message[] = messages;
 
@@ -155,16 +181,20 @@ const Discussion: React.FC = () => {
         behavior={Platform.OS === 'ios' ? 'height' : 'height'}
         style={styles.keyboardAvoid}
       >
-        <View style={styles.header}>
-          <Words tag="h2">{'Points of view'}</Words>
-        </View>
-        <View style={styles.search}>
-          {/* <Words tag="body" style={styles.h2}>
+        {!keyboardVisible && (
+          <>
+            <View style={styles.header}>
+              <Words tag="h2">{'Points of view'}</Words>
+            </View>
+            <View style={styles.search}>
+              {/* <Words tag="body" style={styles.h2}>
             {'Web'}
           </Words> */}
-          <Search results={results} />
-        </View>
-        {!WEB && (
+              <Search results={results} />
+            </View>
+          </>
+        )}
+        {!WEB && !keyboardVisible && (
           <View style={styles.related}>
             {/* <Words tag="body" style={styles.h2}>
             {'Related'}
@@ -198,7 +228,7 @@ const getStyles = (theme: Theme) =>
     },
     header: {
       alignItems: 'center',
-      marginTop: 8,
+      marginTop: 6,
     },
     h2: {
       marginBottom: 0,
@@ -223,7 +253,7 @@ const getStyles = (theme: Theme) =>
       paddingTop: 1,
       paddingBottom: 1,
       paddingRight: 1,
-      marginTop: 5,
+      // marginTop: 5,
       marginLeft: -3,
       borderRadius: 20,
       shadowColor: theme.colors.outline,
