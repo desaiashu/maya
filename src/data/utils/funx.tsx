@@ -17,13 +17,11 @@ import {
 import { Message, Chunk, ChatInfo, PerspectiveData } from '@/data/types';
 import * as amplitude from '@amplitude/analytics-react-native';
 
-export function hashPhoneNumber(phoneNumber: string): string {
-  const phoneHash = CryptoJS.SHA256(phoneNumber).toString(CryptoJS.enc.Hex);
-  return phoneHash;
-}
-
 export function hashChatID(chatid: string): string {
-  const chatHash = CryptoJS.SHA256(chatid).toString(CryptoJS.enc.Base64url);
+  const chatHash = CryptoJS.SHA256(chatid)
+    .toString(CryptoJS.enc.Base64url)
+    .replace('_', '')
+    .replace('-', '');
   return chatHash.substring(0, 10);
 }
 

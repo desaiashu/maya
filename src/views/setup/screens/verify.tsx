@@ -58,7 +58,7 @@ const Verify: React.FC = () => {
   const { isAuthenticated, userCreated, updateToken } = useStore(
     (state: State) => ({
       isAuthenticated: state.isAuthenticated,
-      userCreated: state.currentUser.username !== '',
+      userCreated: state.currentUser.userid !== '_',
       updateToken: state.updateToken,
     }),
   );
@@ -77,8 +77,10 @@ const Verify: React.FC = () => {
   }, [navigation, isAuthenticated, userCreated]);
 
   const handleValidateToken = () => {
+    console.log('fooooo');
     server.verifyUser({
-      userid: phoneNumber,
+      userid: '_',
+      phone: phoneNumber,
       token: token,
       timestamp: new Date().getTime(),
     });

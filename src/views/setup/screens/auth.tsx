@@ -10,7 +10,7 @@ import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { Input, Button, Words } from '@/ui/atoms';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
-import { server, useStore, State } from '@/data';
+import { server, useStore, State, analytics } from '@/data';
 
 export const authOptions = (): NativeStackNavigationOptions => ({
   title: '',
@@ -27,8 +27,8 @@ const Auth: React.FC = () => {
 
   const sendToken = () => {
     setPhone(phoneNumber);
-    server.reinitialize();
     server.authUser(phoneNumber);
+    analytics.track('auth_user');
     navigation.navigate('Verify', { phoneNumber });
   };
 

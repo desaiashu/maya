@@ -21,6 +21,7 @@ class ServerRequest {
     const state = useStore.getState();
     return {
       userid: state.currentUser.userid,
+      phone: state.phone,
       token: state.token,
       version: VERSION,
     };
@@ -85,10 +86,10 @@ class ServerRequest {
     socket.sendRequest(request);
   }
 
-  authUser(userid: string) {
+  authUser(phone: string) {
     let request: MayaRequest = {
       ...this.baseParams(),
-      userid: userid,
+      phone: phone,
       command: 'auth',
     };
     socket.sendRequest(request);
@@ -97,7 +98,7 @@ class ServerRequest {
   verifyUser(auth: Auth) {
     let request: MayaRequest = {
       ...this.baseParams(),
-      userid: auth.userid,
+      phone: auth.phone,
       token: auth.token,
       command: 'verify',
     };

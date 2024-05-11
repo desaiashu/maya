@@ -1,4 +1,4 @@
-import { useStore, useStream, forceUpdate } from '@/data';
+import { useStore, useStream, forceUpdate, server, analytics } from '@/data';
 import {
   User,
   RefreshData,
@@ -29,8 +29,12 @@ class ClientUpdate {
     const state = useStore.getState();
     if (data) {
       state.setUser(data);
+      console.log('set user');
+      server.reinitialize();
+      analytics.set_user(data.userid);
     }
     state.authenticate();
+    console.log('user update');
   }
 
   handleChatInfoUpdate(data: ChatInfo) {

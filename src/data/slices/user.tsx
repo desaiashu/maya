@@ -7,6 +7,7 @@ export interface UserState {
   currentUser: User;
   isAuthenticated: boolean;
   token: string;
+  phone: string;
   setPhone: (userid: string) => void;
   updateToken: (token: string) => void;
   authenticate: () => void;
@@ -17,7 +18,7 @@ export interface UserState {
 }
 
 const emptyUser: User = {
-  userid: '',
+  userid: '_',
   username: '',
   avatar: '',
   contacts: [],
@@ -28,9 +29,9 @@ export const useUserState: StateCreator<UserState> = set => ({
   currentUser: emptyUser,
   isAuthenticated: false,
   token: '',
+  phone: '',
 
-  setPhone: (userid: string) =>
-    set(state => ({ currentUser: { ...state.currentUser, userid } })),
+  setPhone: (phone: string) => set({ phone }),
   updateToken: (token: string) => set({ token }),
   authenticate: () => set({ isAuthenticated: true }),
   setUser: (user: User) => set({ currentUser: user }),

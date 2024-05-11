@@ -1,45 +1,49 @@
-/* tslint:disable */
-/* eslint-disable */
 /**
 /* This file was automatically generated from pydantic models by running pydantic2ts.
 /* Do not modify it by hand - just update the pydantic models and then re-run the script
 */
 
 export type WSRequest =
-  | "auth"
-  | "verify"
-  | "refresh"
-  | "message"
-  | "annotation"
-  | "perspective"
-  | "create_chat"
-  | "update_group"
-  | "update_user"
-  | "slug";
+  | 'auth'
+  | 'verify'
+  | 'refresh'
+  | 'message'
+  | 'annotation'
+  | 'perspective'
+  | 'create_chat'
+  | 'update_group'
+  | 'update_user'
+  | 'slug';
 export type WSUpdate =
-  | "refresh"
-  | "success"
-  | "error"
-  | "chunk"
-  | "message"
-  | "chatinfo"
-  | "user"
-  | "confidence"
-  | "related"
-  | "search"
-  | "slug";
+  | 'refresh'
+  | 'success'
+  | 'error'
+  | 'chunk'
+  | 'message'
+  | 'chatinfo'
+  | 'user'
+  | 'confidence'
+  | 'related'
+  | 'search'
+  | 'slug';
 export type SuccessCode =
-  | "success"
-  | "token sent"
-  | "message sent"
-  | "perspective requested"
-  | "annotation requested"
-  | "updated user";
-export type ErrorCode = "error" | "verification failed" | "version outdated" | "command not found" | "chat not found";
-export type SubscriptionPlan = "free" | "open" | "sota";
+  | 'success'
+  | 'token sent'
+  | 'message sent'
+  | 'perspective requested'
+  | 'annotation requested'
+  | 'updated user';
+export type ErrorCode =
+  | 'error'
+  | 'verification failed'
+  | 'version outdated'
+  | 'command not found'
+  | 'chat not found';
+export type SubscriptionPlan = 'free' | 'open' | 'sota';
 
 export interface AnnotationRequest {
   userid: string;
+  phone: string;
   token: string;
   version: string;
   command: WSRequest;
@@ -53,6 +57,7 @@ export interface Message {
 }
 export interface Auth {
   userid: string;
+  phone: string;
   token: string;
   timestamp: number;
 }
@@ -79,6 +84,7 @@ export interface ChatInfoUpdate {
 }
 export interface ChatRequest {
   userid: string;
+  phone: string;
   token: string;
   version: string;
   command: WSRequest;
@@ -132,6 +138,7 @@ export interface LastRefresh {
 }
 export interface MayaRequest {
   userid: string;
+  phone: string;
   token: string;
   version: string;
   command: WSRequest;
@@ -144,6 +151,7 @@ export interface MayaUpdate {
 }
 export interface MessageRequest {
   userid: string;
+  phone: string;
   token: string;
   version: string;
   command: WSRequest;
@@ -176,6 +184,7 @@ export interface SearchResult {
 }
 export interface PerspectiveRequest {
   userid: string;
+  phone: string;
   token: string;
   version: string;
   command: WSRequest;
@@ -196,6 +205,7 @@ export interface RefreshData {
 }
 export interface RefreshRequest {
   userid: string;
+  phone: string;
   token: string;
   version: string;
   command: WSRequest;
@@ -223,6 +233,7 @@ export interface SlugData {
 }
 export interface SlugRequest {
   userid: string;
+  phone: string;
   token: string;
   version: string;
   command: WSRequest;
@@ -252,6 +263,7 @@ export interface User {
 }
 export interface UserRequest {
   userid: string;
+  phone: string;
   token: string;
   version: string;
   command: WSRequest;

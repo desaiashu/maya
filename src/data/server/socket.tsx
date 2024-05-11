@@ -1,8 +1,8 @@
 import { useStore } from '@/data';
 import { MayaRequest, MayaUpdate, WSUpdate } from '@/data/types';
-import { hashPhoneNumber } from '@/data';
 import { client } from '@/data/server/updates';
 import { WS_URL, WEB } from '@/data';
+import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
 class Socket {
@@ -29,10 +29,11 @@ class Socket {
   private initializeWebSocket = (): WebSocket => {
     console.log('WebSocket starting');
     const state = useStore.getState();
-    const user_hash = WEB
-      ? uuidv4()
-      : hashPhoneNumber(state.currentUser.userid);
-    const socket = new WebSocket(WS_URL + user_hash);
+    const user_slug =
+      WEB || state.currentUser.userid === '_'
+        ? uuidv4()
+        : state.currentUser.userid;
+    const socket = new WebSocket(WS_URL + user_slug);
 
     socket.onmessage = event => {
       const update: MayaUpdate = JSON.parse(event.data);

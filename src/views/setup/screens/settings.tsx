@@ -91,6 +91,20 @@ const Settings: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (user.userid !== '_' && !params) {
+      console.log('authd!');
+      console.log(user);
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'ChatDrawer' }],
+        }),
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user.userid]);
+
   if (user === null) {
     return null;
   }
@@ -108,14 +122,7 @@ const Settings: React.FC = () => {
     setUserProfile(newUser);
     updateUserChats(newUser);
     server.updateUserProfile(newUser);
-    if (!params) {
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: 'ChatDrawer' }],
-        }),
-      );
-    } else {
+    if (params) {
       navigation.goBack();
     }
   };

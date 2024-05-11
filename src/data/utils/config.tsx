@@ -1,7 +1,6 @@
 import { LogBox, Platform } from 'react-native';
 import { RootStackParamList } from '@/views/navigator';
 import DeviceInfo from 'react-native-device-info';
-import * as amplitude from '@amplitude/analytics-react-native';
 
 //////////////////////////////////
 // Overrides for development purposes
@@ -13,7 +12,7 @@ export const ENV: Environment = (process.env.ENV as Environment) || 'local';
 export let DEV_SCREEN: Screen;
 
 // Reset local state & storage on app load
-export let RESET_STATE = false;
+export let RESET_STATE = true;
 
 //////////////////////////////////
 
@@ -24,8 +23,10 @@ export const ANDROID = Platform.OS === 'android';
 ///// Version /////
 export const VERSION = DeviceInfo.getVersion();
 
-///// Server URL /////
+///// Analytics /////
+export let AMPLITUDE_KEY = '1e239f3793b699a7c77df6782b5f233c';
 
+///// Server URL /////
 export let DOWNLOAD_URL = 'https://ashu.xyz';
 
 let WS = 'ws';
@@ -61,6 +62,7 @@ switch (ENV as Environment) {
   case 'prod':
     RESET_STATE = false; //safety measure
     DEV_SCREEN = undefined;
+    // AMPLITUDE_KEY = '5b959d5270a05b890d1b957c92cd7fae';
     break;
 }
 
@@ -76,11 +78,6 @@ export const WS_URL = WS + SSL + SUBDOMAIN + DOMAIN + APP_PORT + SLUG + '/';
 
 console.log(WEB_URL);
 console.log(WS_URL);
-
-///// Analytics /////
-// if (ENV === 'prod') amplitude.init('5b959d5270a05b890d1b957c92cd7fae');
-// else
-amplitude.init('1e239f3793b699a7c77df6782b5f233c');
 
 ///// Logging /////
 LogBox.ignoreAllLogs(true);

@@ -60,8 +60,6 @@ Backend - _(push dev/main)_
 - Strip newline / whitespace from end of message
 
 - App Icons
-- Favicon
-- Sharing stuff for website
 
 - Enable messaging in discussion (maya + alternate between two others)
 
@@ -192,6 +190,8 @@ Way to report bugs
 
 #### Done
 
+- Favicon
+- Sharing stuff for website
 - Create concept of "thread" that is linked to chatid + messageid but is it's own chat
   - Use this to update messages
   - Use protocol to differentiate
