@@ -12,7 +12,7 @@ export const ENV: Environment = (process.env.ENV as Environment) || 'local';
 export let DEV_SCREEN: Screen;
 
 // Reset local state & storage on app load
-export let RESET_STATE = true;
+export let RESET_STATE = false;
 
 //////////////////////////////////
 
@@ -21,7 +21,8 @@ export const WEB = Platform.OS === 'web';
 export const ANDROID = Platform.OS === 'android';
 
 ///// Version /////
-export const VERSION = DeviceInfo.getVersion();
+export const VERSION = WEB ? '0.1.0' : DeviceInfo.getVersion();
+console.log(VERSION);
 
 ///// Analytics /////
 export let AMPLITUDE_KEY = '1e239f3793b699a7c77df6782b5f233c';
@@ -62,7 +63,7 @@ switch (ENV as Environment) {
   case 'prod':
     RESET_STATE = false; //safety measure
     DEV_SCREEN = undefined;
-    // AMPLITUDE_KEY = '5b959d5270a05b890d1b957c92cd7fae';
+    AMPLITUDE_KEY = '5b959d5270a05b890d1b957c92cd7fae';
     break;
 }
 

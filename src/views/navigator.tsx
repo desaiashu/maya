@@ -12,6 +12,8 @@ import {
 } from '@react-navigation/native-stack';
 import ChatDrawer from '@/views/drawer';
 import {
+  Welcome,
+  welcomeOptions,
   Auth,
   authOptions,
   Verify,
@@ -63,7 +65,7 @@ const Navigator: React.FC = () => {
 
   const userCreated = username !== '';
 
-  let initialRoute: string = 'Auth';
+  let initialRoute: string = 'Welcome';
 
   if (DEV_SCREEN) {
     //Override initialRoute for development
@@ -73,7 +75,7 @@ const Navigator: React.FC = () => {
   } else if (isAuthenticated && !userCreated) {
     initialRoute = 'Settings';
   } else {
-    initialRoute = 'Auth';
+    initialRoute = 'Welcome';
   }
 
   if (WEB) {
@@ -87,6 +89,11 @@ const Navigator: React.FC = () => {
           initialRouteName={initialRoute}
           screenOptions={defaultNavigationOptions(theme)}
         >
+          <Stack.Screen
+            name="Welcome"
+            component={Welcome}
+            options={welcomeOptions()}
+          />
           <Stack.Screen name="Auth" component={Auth} options={authOptions()} />
           <Stack.Screen
             name="Verify"

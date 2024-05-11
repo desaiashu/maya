@@ -8,7 +8,14 @@ import {
   Perspective,
 } from '@/views/chat/components';
 import { Avatar, IconButton } from '@/ui/atoms';
-import { isSameUser, isSameDay, State, useStore, threadid } from '@/data';
+import {
+  isSameUser,
+  isSameDay,
+  State,
+  useStore,
+  threadid,
+  analytics,
+} from '@/data';
 import { RootStackParamList } from '@/views/navigator';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { AnnotationProps, DiscussionProps } from '@/views/chat';
@@ -66,6 +73,7 @@ const MessageUI: React.FC<MessageProps> = props => {
 
   const openAnnotation = () => {
     console.log('annotate');
+    analytics.track('open_annotation');
     const p: AnnotationProps = {
       prompt: prev!,
       response: current,
@@ -77,6 +85,7 @@ const MessageUI: React.FC<MessageProps> = props => {
 
   const openDiscussion = () => {
     console.log('discuss');
+    analytics.track('explore_perspective');
     const p: DiscussionProps = {
       prompt: prev!,
       response: current,
@@ -104,7 +113,10 @@ const MessageUI: React.FC<MessageProps> = props => {
                   styles.base.thumbsContainer,
                   styles.base.thumbsDown,
                 ]}
-                onPress={() => thumbs('down')}
+                onPress={() => {
+                  thumbs('down');
+                  analytics.track('thumbs_down');
+                }}
               />
               <IconButton
                 round
@@ -115,7 +127,10 @@ const MessageUI: React.FC<MessageProps> = props => {
                   styles.base.thumbsContainer,
                   styles.base.thumbsUp,
                 ]}
-                onPress={() => thumbs('up')}
+                onPress={() => {
+                  thumbs('up');
+                  analytics.track('thumbs_up');
+                }}
               />
             </>
           )}

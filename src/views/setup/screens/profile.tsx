@@ -9,7 +9,7 @@ import {
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
 import { IconButton, Words, Avatar } from '@/ui/atoms';
-import { State, useStore } from '@/data';
+import { State, useStore, analytics } from '@/data';
 
 export const profileOptions = (
   navigation: DrawerNavigationProp<RootStackParamList, 'Profile'>,
@@ -36,6 +36,7 @@ export const profileOptions = (
       <IconButton
         icon="settings"
         onPress={() => {
+          analytics.track('open_settings');
           navigation.navigate('Settings', { presentation: 'modal' });
         }}
         containerStyle={styles.iconSettingsContainer}
@@ -64,7 +65,7 @@ const Profile: React.FC = () => {
           {user.username}
         </Words>
         <Words tag="h4" style={styles.info}>
-          phone
+          userid
         </Words>
         <Words tag="body" style={styles.phoneNumber}>
           {user.userid}

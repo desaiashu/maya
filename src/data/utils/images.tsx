@@ -89,6 +89,10 @@ export const botAvatars: RequireConverter = {
     light: require('%/avatars/light/butler.png'),
     dark: require('%/avatars/dark/butler.png'),
   },
+  'local://maya.png': {
+    light: require('%/avatars/light/maya.png'),
+    dark: require('%/avatars/dark/maya.png'),
+  },
 };
 
 export const icons: RequireConverter = {

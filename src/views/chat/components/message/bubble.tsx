@@ -6,7 +6,7 @@ import { Message } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
 import { Words } from '@/ui/atoms';
 import { Time } from '@/views/chat/components';
-import { WEB } from '@/data';
+import { WEB, analytics } from '@/data';
 
 interface BubbleProps {
   onLongPress?: (context: any, message: any) => void;
@@ -35,6 +35,7 @@ export const Bubble: React.FC<BubbleProps> = props => {
       (i?: number) => {
         if (i === 0) {
           Clipboard.setString(message.content);
+          analytics.track('message_copied');
         }
       },
     );

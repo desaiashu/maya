@@ -18,7 +18,7 @@ import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
 import { Words, Input, Button, IconButton } from '@/ui/atoms';
-import { State, useStore, server } from '@/data';
+import { State, useStore, server, analytics } from '@/data';
 
 export const verifyOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'Verify'>,
@@ -35,7 +35,10 @@ export const verifyOptions = (
     headerLeft: () => (
       <IconButton
         icon="back"
-        onPress={() => navigation.goBack()}
+        onPress={() => {
+          analytics.track('verify_back');
+          navigation.goBack();
+        }}
         style={styles.iconBack}
         containerStyle={styles.iconBackContainer}
       />
@@ -65,8 +68,10 @@ const Verify: React.FC = () => {
 
   useEffect(() => {
     if (isAuthenticated && !userCreated) {
+      analytics.track('authenticated');
       navigation.navigate('Settings');
     } else if (isAuthenticated) {
+      analytics.track('authenticated');
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
@@ -85,10 +90,12 @@ const Verify: React.FC = () => {
       timestamp: new Date().getTime(),
     });
     updateToken(token);
+    analytics.track('verify_token');
   };
 
   const sendAgain = () => {
     server.authUser(phoneNumber);
+    analytics.track('resend_token');
   };
 
   return (

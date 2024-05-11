@@ -1,5 +1,6 @@
 import * as amplitude from '@amplitude/analytics-react-native';
 import { AMPLITUDE_KEY } from './config';
+import { Platform } from 'react-native';
 
 class AnalyticsClient {
   constructor() {
@@ -18,7 +19,7 @@ class AnalyticsClient {
     event: amplitude.Types.BaseEvent | string,
     props?: Record<string, any>,
   ) {
-    amplitude.track(event, props);
+    amplitude.track(event, { ...props, platform: Platform.OS });
   }
 }
 

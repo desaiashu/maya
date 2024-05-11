@@ -19,7 +19,7 @@ import {
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
 import { Button, IconButton, Input, Words } from '@/ui/atoms';
-import { State, useStore, server } from '@/data';
+import { State, useStore, server, analytics } from '@/data';
 import { Profile } from '@/data/types';
 import { AvatarSelect } from '@/ui/molecules';
 
@@ -93,8 +93,7 @@ const Settings: React.FC = () => {
 
   useEffect(() => {
     if (user.userid !== '_' && !params) {
-      console.log('authd!');
-      console.log(user);
+      analytics.track('user_created');
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
@@ -123,6 +122,7 @@ const Settings: React.FC = () => {
     updateUserChats(newUser);
     server.updateUserProfile(newUser);
     if (params) {
+      analytics.track('save_settings');
       navigation.goBack();
     }
   };

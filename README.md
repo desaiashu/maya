@@ -27,46 +27,19 @@ Backend - _(push dev/main)_
 
 #### 0.1.0 build:
 
-- Analytics
-
-  - Set user - setUserId('user@amplitude.com');
-  - Buttons/success for each step of onboarding
-  - New chat
-  - Share
-  - Message send
-  - Tap on points of view
-  - Tap on search result
-  - Tap on related
-  - Tap on sidebar
-  - Tap on chat
-  - Tap on profile
-  - Web view analytics
-
 - Inflection.ai for third model
 
-- Hash phone numbers in DB
-- Save phone => hash in auth DB
-
-- Give feedback (report bug / request feature)
-
-- Welcome / disclaimer
-
-  - We store messages with an anonymous userid, encrypted at rest
-  - We will use anonymized data to improve responses
-  - Questions: ashu@desaidata.com
+- Give feedback (report bug / request feature) - include analytics
 
 - Testflight
 
 - Strip newline / whitespace from end of message
 
-- App Icons
+- Update messaging in discussion (maya + alternate between two others)
+- Update related with latest messages
 
-- Enable messaging in discussion (maya + alternate between two others)
-
-- Refresh needs to load the other data
+- Refresh needs to load the other data (eg. perspective)
 - Don't request new perspective every time
-
-- Add perspective data to refresh
 
 #### 0.1.0 test:
 
@@ -190,6 +163,25 @@ Way to report bugs
 
 #### Done
 
+- Analytics
+  - Set user - setUserId('user@amplitude.com');
+  - Buttons/success for each step of onboarding
+  - New chat
+  - Share
+  - Message send
+  - Tap on points of view
+  - Tap on search result
+  - Tap on related
+  - Tap on sidebar
+  - Tap on chat
+  - Tap on profile
+  - Web view analytics
+- Hash phone numbers in DB
+- Save phone => hash in auth DB
+- Welcome / disclaimer
+  - We store messages with an anonymous userid, encrypted at rest
+  - We will use anonymized data to improve responses
+  - Questions: ashu@desaidata.com
 - Favicon
 - Sharing stuff for website
 - Create concept of "thread" that is linked to chatid + messageid but is it's own chat

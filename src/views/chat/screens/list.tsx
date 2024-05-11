@@ -6,11 +6,16 @@ import {
   useFocusEffect,
 } from '@react-navigation/native';
 import { RootStackParamList } from '@/views/navigator';
-import { State, useStore, server, newCommunityChat } from '@/data';
+import {
+  State,
+  useStore,
+  server,
+  newCommunityChat,
+  cancelLayoutAnimation,
+} from '@/data';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
 import { IconButton, Words, Avatar } from '@/ui/atoms';
-import { cancelLayoutAnimation } from '@/data';
 import {
   DrawerNavigationProp,
   DrawerNavigationOptions,

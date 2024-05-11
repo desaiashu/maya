@@ -8,7 +8,7 @@ import {
   useDrawerStatus,
 } from '@react-navigation/drawer';
 import { RootStackParamList } from '@/views/navigator';
-import { State, useStore, newCommunityChat, server } from '@/data';
+import { State, useStore, newCommunityChat, server, analytics } from '@/data';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
 import {
@@ -186,6 +186,7 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
                 focused={selected}
                 activeTintColor={theme.colors.outline}
                 onPress={() => {
+                  analytics.track('select_chat');
                   props.navigation.navigate(route.name);
                 }}
               />
@@ -197,6 +198,7 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
         <DrawerItem
           label="Profile"
           onPress={() => {
+            analytics.track('view_profile');
             props.navigation.navigate('Profile');
           }}
           labelStyle={[theme.fonts.h3, styles.optionsText]}

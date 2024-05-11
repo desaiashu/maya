@@ -1081,7 +1081,7 @@ PODS:
     - React-Core
   - RNLocalize (3.1.0):
     - React-Core
-  - RNReanimated (3.10.0):
+  - RNReanimated (3.11.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1357,7 +1357,7 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 42aadf1282ffa0a88dc38a504a7be145eb010dfa
   RNGestureHandler: 73c6f550a659dada33d43ad732df3370777f4444
   RNLocalize: e8694475db034bf601e17bd3dfa8986565e769eb
-  RNReanimated: ffa9614c45d3e088b60c78dedfc176fb37002dac
+  RNReanimated: 071599dab9e3769c03b84c984c87dc79087fef2f
   RNScreens: 79c1020e7f52f4edde5ad96540f6e33c8b9b3b6c
   RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17

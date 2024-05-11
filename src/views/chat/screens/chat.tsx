@@ -33,6 +33,7 @@ import {
   WEB_URL,
   DOWNLOAD_URL,
   emptyChat,
+  analytics,
 } from '@/data';
 import { useNavigation } from '@react-navigation/native';
 import { Message, ChatInfo } from '@/data/types';
@@ -62,7 +63,10 @@ export const chatOptions = (
     headerLeft: () => (
       <IconButton
         icon="menu"
-        onPress={() => navigation.toggleDrawer()}
+        onPress={() => {
+          analytics.track('open_drawer');
+          navigation.toggleDrawer();
+        }}
         containerStyle={styles.iconMenuContainer}
         style={styles.iconMenu}
         round
@@ -83,11 +87,11 @@ const renderRightMenu = (props: chatOptionsProps) => {
         <IconButton
           icon="share"
           onPress={() => {
-            console.log('share');
             Share.share({
               url: WEB_URL + hashChatID(chat.chatid),
               title: 'Maya Chat',
             });
+            analytics.track('share_chat');
           }}
           containerStyle={styles.iconShareContainer}
           style={styles.iconShare}
@@ -104,6 +108,7 @@ const renderRightMenu = (props: chatOptionsProps) => {
       <IconButton
         icon="compose"
         onPress={() => {
+          analytics.track('new_chat');
           const newChat = newCommunityChat();
           navigation.reset({
             index: 0,
@@ -135,6 +140,7 @@ const Chat: React.FC = () => {
   useEffect(() => {
     if (WEB && params.slug) {
       server.getSlug(params.slug);
+      analytics.track('visit_chat_page', { slug: params.slug });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -163,6 +169,7 @@ const Chat: React.FC = () => {
     if (WEB) {
       const updatedChat = chats.find(c => c.slug === params.slug);
       if (updatedChat) setChatInfo(updatedChat);
+      analytics.track('loaded_chat', { slug: params.slug });
     } else {
       const updatedChat = chats.find(c => c.created === chatInfo.created);
       if (updatedChat) {
@@ -190,6 +197,7 @@ const Chat: React.FC = () => {
       flatListRef?.current?.scrollToIndex({ index: 0, animated: true });
     }
     server.sendMessage(newMessage);
+    analytics.track('send_message');
   };
 
   return (
@@ -202,7 +210,10 @@ const Chat: React.FC = () => {
           <Button
             title="Download beta"
             tag="h4"
-            onPress={() => Linking.openURL(DOWNLOAD_URL)}
+            onPress={() => {
+              Linking.openURL(DOWNLOAD_URL);
+              analytics.track('chat_download_clicked');
+            }}
             style={styles.download}
             outlined
           />

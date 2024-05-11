@@ -15,7 +15,6 @@ import {
   WEB_URL,
 } from '@/data';
 import { Message, Chunk, ChatInfo, PerspectiveData } from '@/data/types';
-import * as amplitude from '@amplitude/analytics-react-native';
 
 export function hashChatID(chatid: string): string {
   const chatHash = CryptoJS.SHA256(chatid)
@@ -26,8 +25,6 @@ export function hashChatID(chatid: string): string {
 }
 
 export const timestamp = () => new Date().getTime();
-
-export const track_event = (event: string) => amplitude.track(event);
 
 export const threadid = (chatid: string, messid: number) =>
   chatid + '_' + messid.toString();

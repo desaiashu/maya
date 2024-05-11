@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -11,14 +11,16 @@ import {
 } from 'react-native';
 import { Theme, useTheme } from '@/ui/theme';
 import { Words, Button } from '@/ui/atoms';
-import { DOWNLOAD_URL, getImageSource } from '@/data';
+import { DOWNLOAD_URL, getImageSource, analytics } from '@/data';
 
 const Landing: React.FC = () => {
   const windowDims = useWindowDimensions();
   const styles = getStyles(useTheme(), windowDims, screenshotDims(windowDims));
   const colorScheme = useColorScheme();
 
-  console.log(getImageSource('screenshot', colorScheme));
+  useEffect(() => {
+    analytics.track('visit_landing_page');
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -33,7 +35,10 @@ const Landing: React.FC = () => {
       <Button
         title="Download beta"
         tag="body"
-        onPress={() => Linking.openURL(DOWNLOAD_URL)}
+        onPress={() => {
+          Linking.openURL(DOWNLOAD_URL);
+          analytics.track('landing_download_clicked');
+        }}
         style={styles.button}
         outlined
       />

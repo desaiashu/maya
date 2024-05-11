@@ -28,7 +28,7 @@ const Auth: React.FC = () => {
   const sendToken = () => {
     setPhone(phoneNumber);
     server.authUser(phoneNumber);
-    analytics.track('auth_user');
+    analytics.track('get_token');
     navigation.navigate('Verify', { phoneNumber });
   };
 

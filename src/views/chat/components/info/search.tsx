@@ -3,6 +3,7 @@ import { StyleSheet, View, TouchableOpacity, Linking } from 'react-native';
 import { Words } from '@/ui/atoms';
 import { SearchResult } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
+import { analytics } from '@/data';
 
 interface ResultProps {
   results: SearchResult[];
@@ -13,6 +14,7 @@ const Search: React.FC<ResultProps> = props => {
   const styles = getStyles(useTheme());
 
   const onPress = (r: SearchResult) => {
+    analytics.track('open_search');
     Linking.openURL(r.url);
   };
 

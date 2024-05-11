@@ -88,21 +88,19 @@ const Annotation: React.FC = () => {
             style={styles.confidence}
           />
           <Words tag="small" style={styles.explainer}>
-            {` 
-Confidence ratings are on a 0-100 scale
-
-A high confidence means the answer has
-- A lower chance of bias
-- A lower chance of hallucination
-- A lower chance of misinformation
-
-Our goal is to present a holistic perspective 
-on info and seek ground truth, reducing 
-cultural, political, and financial bias
-    
-Please feel free to contribute more 
-information on the topic at hand
-            `}
+            Confidence ratings are on a 0-100 scale
+            {'\n'}
+            {'\n'}A high confidence means the answer has
+            {'\n'}- A lower chance of bias
+            {'\n'}- A lower chance of hallucination
+            {'\n'}- A lower chance of misinformation
+            {'\n'}
+            {'\n'}Our goal is to present a holistic perspective
+            {'\n'}on info and seek ground truth, reducing
+            {'\n'}cultural, political, and financial bias
+            {'\n'}
+            {'\n'}Please feel free to contribute more
+            {'\n'}information on the topic at hand
           </Words>
           {/* We calculate bias using embeddings, identify hallucinations using
           secondary LLMs, and flag potential misinformation using community

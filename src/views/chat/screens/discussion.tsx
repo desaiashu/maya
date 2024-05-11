@@ -25,6 +25,7 @@ import {
   useStream,
   timestamp,
   WEB,
+  analytics,
 } from '@/data';
 import {
   MessageList,
@@ -50,7 +51,10 @@ export const discussionOptions = (
     headerLeft: () => (
       <IconButton
         icon="backarrow"
-        onPress={() => navigation.goBack()}
+        onPress={() => {
+          analytics.track('back_to_chat');
+          navigation.goBack();
+        }}
         containerStyle={styles.iconCloseContainer}
         style={styles.iconClose}
       />
@@ -89,7 +93,7 @@ const Discussion: React.FC = () => {
   const perspectives: Message[] = messages;
 
   useEffect(() => {
-    server.getPerspectives([prompt, response]);
+    if (!WEB) server.getPerspectives([prompt, response]);
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -135,11 +139,13 @@ const Discussion: React.FC = () => {
 
   const onSend = (message: string) => {
     sendMessage(message);
+    analytics.track('send_message_perspective');
   };
 
   const onRelated = (topic: string) => {
     console.log(topic);
     sendMessage(topic);
+    analytics.track('tap_related');
     // Additional logic for handling the selected topic
   };
 
