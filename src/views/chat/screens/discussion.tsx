@@ -240,7 +240,7 @@ const getStyles = (theme: Theme) =>
     },
     header: {
       alignItems: 'center',
-      marginTop: WEB_DESKTOP ? 24 : 7,
+      marginTop: WEB ? (WEB_DESKTOP ? 24 : 17) : 7,
     },
     h2: {
       marginBottom: 0,
@@ -249,7 +249,7 @@ const getStyles = (theme: Theme) =>
     },
     search: {
       marginLeft: '5%',
-      marginTop: WEB_DESKTOP ? 20 : 16,
+      marginTop: WEB ? (WEB_DESKTOP ? 20 : 14) : 16,
       marginBottom: WEB_DESKTOP ? 10 : 0,
     },
     related: {
@@ -266,7 +266,7 @@ const getStyles = (theme: Theme) =>
       paddingTop: 1,
       paddingBottom: 1,
       paddingRight: 1,
-      marginTop: WEB_DESKTOP ? 12 : 2,
+      marginTop: WEB ? (WEB_DESKTOP ? 12 : -5) : 2,
       marginLeft: WEB_MOBILE ? 16 : -3,
       borderRadius: 20,
       shadowColor: theme.colors.outline,

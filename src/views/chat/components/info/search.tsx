@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity, Linking } from 'react-native';
 import { Words } from '@/ui/atoms';
 import { SearchResult } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
-import { analytics, WEB } from '@/data';
+import { analytics, WEB_DESKTOP } from '@/data';
 
 interface ResultProps {
   results: SearchResult[];
@@ -78,17 +78,17 @@ const getStyles = (theme: Theme) =>
       shadowRadius: 1,
     },
     title: {
-      height: WEB ? 50 : 30,
-      fontSize: WEB ? 12 : 10,
-      marginTop: WEB ? 3 : 0,
+      height: WEB_DESKTOP ? 50 : 30,
+      fontSize: WEB_DESKTOP ? 12 : 10,
+      marginTop: WEB_DESKTOP ? 3 : 0,
       marginBottom: 0,
       overflow: 'hidden',
     },
     url: {
       height: 10,
-      marginTop: WEB ? 5 : 0,
-      marginBottom: WEB ? 5 : 0,
-      fontSize: WEB ? 9 : 7,
+      marginTop: WEB_DESKTOP ? 5 : 0,
+      marginBottom: WEB_DESKTOP ? 5 : 0,
+      fontSize: WEB_DESKTOP ? 9 : 7,
     },
   });
 

@@ -31,10 +31,6 @@ Backend - _(push dev/main)_
 
 #### 0.1.0 ship:
 
-Clear prod DB + set up bot users
-Testflight!
-Test prod settings on web
-
 ### After 0.1.0:
 
 - Android ?
@@ -125,6 +121,7 @@ Introduce plans / IAPs
 
 #### UI improvements:
 
+- Try once more to cache the stream locally. Perhaps use a background clock. That was smoother performance
 - Markdown
 - First stream response w/ bounce?
 - Indicators for success/failure/loading - message send, chat creation, profile update, etc?
@@ -176,6 +173,8 @@ Introduce plans / IAPs
 
 #### Done
 
+- Left arrow key is misplaced on web mobile
+- Search margin / height only make sense on web desktop
 - Diff screen sizes
 - Give feedback (report bug / request feature) - include analytics
 - Refresh needs to load the other data (eg. perspective)

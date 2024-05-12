@@ -244,8 +244,8 @@ const getStyles = (theme: Theme) =>
       flexDirection: 'row',
     },
     download: {
-      marginTop: WEB_DESKTOP ? 25 : 0,
-      marginBottom: WEB_DESKTOP ? 20 : 0,
+      marginTop: WEB_DESKTOP ? 25 : 15,
+      marginBottom: WEB_DESKTOP ? 20 : 15,
       width: 200,
       alignSelf: 'center',
       textAlign: 'center',
