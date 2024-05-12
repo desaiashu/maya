@@ -25,6 +25,8 @@ import {
   useStream,
   timestamp,
   WEB,
+  WEB_DESKTOP,
+  WEB_MOBILE,
   analytics,
   prepAnimation,
   fastAnimation,
@@ -238,7 +240,7 @@ const getStyles = (theme: Theme) =>
     },
     header: {
       alignItems: 'center',
-      marginTop: WEB ? 24 : 7,
+      marginTop: WEB_DESKTOP ? 24 : 7,
     },
     h2: {
       marginBottom: 0,
@@ -247,8 +249,8 @@ const getStyles = (theme: Theme) =>
     },
     search: {
       marginLeft: '5%',
-      marginTop: WEB ? 20 : 16,
-      marginBottom: WEB ? 10 : 0,
+      marginTop: WEB_DESKTOP ? 20 : 16,
+      marginBottom: WEB_DESKTOP ? 10 : 0,
     },
     related: {
       marginTop: 5,
@@ -264,8 +266,8 @@ const getStyles = (theme: Theme) =>
       paddingTop: 1,
       paddingBottom: 1,
       paddingRight: 1,
-      marginTop: WEB ? 12 : 2,
-      marginLeft: -3,
+      marginTop: WEB_DESKTOP ? 12 : 2,
+      marginLeft: WEB_MOBILE ? 16 : -3,
       borderRadius: 20,
       shadowColor: theme.colors.outline,
       shadowOpacity: 0.6,

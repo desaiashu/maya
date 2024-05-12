@@ -18,6 +18,8 @@ export let RESET_STATE = false;
 
 ///// Platform /////
 export const WEB = Platform.OS === 'web';
+export const WEB_DESKTOP = WEB && window.innerWidth > 768;
+export const WEB_MOBILE = WEB && !WEB_DESKTOP;
 export const ANDROID = Platform.OS === 'android';
 
 ///// Version /////
