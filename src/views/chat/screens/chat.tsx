@@ -27,6 +27,7 @@ import {
   dummyMessage,
   DEV_SCREEN,
   WEB,
+  WEB_DESKTOP,
   newCommunityChat,
   hashChatID,
   WEB_URL,
@@ -243,8 +244,8 @@ const getStyles = (theme: Theme) =>
       flexDirection: 'row',
     },
     download: {
-      marginTop: 25,
-      marginBottom: 20,
+      marginTop: WEB_DESKTOP ? 25 : 0,
+      marginBottom: WEB_DESKTOP ? 20 : 0,
       width: 200,
       alignSelf: 'center',
       textAlign: 'center',
