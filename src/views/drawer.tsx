@@ -32,6 +32,7 @@ const Drawer = createDrawerNavigator<RootStackParamList>();
 
 const ChatDrawer: React.FC = () => {
   const theme = useTheme();
+  const userid = useStore((state: State) => state.currentUser.userid);
 
   const { chats } = useStore((state: State) => ({
     chats: state.chats,
@@ -44,6 +45,8 @@ const ChatDrawer: React.FC = () => {
     }
   }, [chats]);
 
+  const feedbackChat = chats.find(chat => chat.chatid === userid);
+
   return (
     <Drawer.Navigator
       initialRouteName={chats[0] ? chats[0].chatid : '_new chat'}
@@ -51,10 +54,11 @@ const ChatDrawer: React.FC = () => {
       drawerContent={renderCustomDrawer(theme)}
     >
       {chats
+        .filter(chat => chat.chatid !== userid)
         .sort((a, b) => b.updated - a.updated)
         .map(chat => (
           <Drawer.Screen
-            name={chat.chatid + (chat.topic || 'new chat')}
+            name={chat.chatid + '_' + (chat.topic || 'new chat')}
             key={chat.chatid}
             component={Chat}
             options={({ navigation }) =>
@@ -73,6 +77,15 @@ const ChatDrawer: React.FC = () => {
         initialParams={newChat}
       />
       <Drawer.Screen
+        name={'Feedback'}
+        key={feedbackChat?.chatid}
+        component={Chat}
+        options={({ navigation }) =>
+          chatOptions({ navigation, theme, chat: feedbackChat })
+        }
+        initialParams={feedbackChat}
+      />
+      <Drawer.Screen
         name="Profile"
         component={Profile}
         options={({ navigation }) => profileOptions(navigation, theme)}
@@ -83,8 +96,8 @@ const ChatDrawer: React.FC = () => {
 
 const renderCustomDrawer =
   (theme: Theme) => (props: DrawerContentComponentProps) => {
-    const newChatScreen = props.state.routes[props.state.routes.length - 2];
-    const excluded = ['Profile', '_new chat']; // Add the route names you want to exclude
+    const newChatScreen = props.state.routes[props.state.routes.length - 3];
+    const excluded = ['Profile', '_new chat', 'Feedback']; // Add the route names you want to exclude
     const filteredProps = {
       ...props,
       state: {
@@ -196,14 +209,26 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
       </DrawerContentScrollView>
       <View style={styles.options}>
         <DrawerItem
+          label="Give Feedback"
+          onPress={() => {
+            analytics.track('open_feedback');
+            props.navigation.navigate('Feedback');
+          }}
+          labelStyle={[theme.fonts.h4, styles.optionsText]}
+          focused={state.index === routes.length + 1}
+          activeTintColor={theme.colors.outline}
+          style={styles.footerItem}
+        />
+        <DrawerItem
           label="Profile"
           onPress={() => {
             analytics.track('view_profile');
             props.navigation.navigate('Profile');
           }}
-          labelStyle={[theme.fonts.h3, styles.optionsText]}
-          focused={state.index === routes.length + 1}
+          labelStyle={[theme.fonts.h4, styles.optionsText]}
+          focused={state.index === routes.length + 2}
           activeTintColor={theme.colors.outline}
+          style={styles.footerItem}
         />
       </View>
     </SafeAreaView>
@@ -242,9 +267,16 @@ const getStyles = (theme: Theme) =>
     chatsText: {
       marginLeft: 10,
     },
+    footerItem: {
+      marginTop: 0,
+      paddingTop: 0,
+      paddingBottom: 0,
+      marginBottom: 0,
+    },
     options: {
       marginBottom: 30,
       marginLeft: 0,
+      paddingTop: 10,
       borderTopWidth: 1,
       borderColor: theme.colors.outline,
     },

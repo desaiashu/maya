@@ -27,9 +27,6 @@ Backend - _(push dev/main)_
 
 #### 0.1.0 build:
 
-- Give feedback (report bug / request feature) - include analytics
-- Refresh needs to load the other data (eg. perspective)
-
 #### 0.1.0 test:
 
 - Diff screen sizes
@@ -39,9 +36,10 @@ Backend - _(push dev/main)_
 Clear prod DB + set up bot users
 Testflight!
 Test prod settings on web
-Android ?
 
 ### After 0.1.0:
+
+- Android ?
 
 - Index DB
 - Improve performance of refresh command
@@ -180,6 +178,8 @@ Introduce plans / IAPs
 
 #### Done
 
+- Give feedback (report bug / request feature) - include analytics
+- Refresh needs to load the other data (eg. perspective)
 - Header for perspectives page
 - Don't request new perspective every time
 - Update related with latest messages
