@@ -41,7 +41,8 @@ const MayaWeb = () => {
 const getStyles = (theme: Theme, windowDims: ScaledSize) =>
   StyleSheet.create({
     container: {
-      height: windowDims.height, //+ 1,
+      height:
+        windowDims.width >= 768 ? windowDims.height : windowDims.height + 1, //+ 1,
       width: windowDims.width,
       backgroundColor: theme.colors.background,
       justifyContent: 'center',

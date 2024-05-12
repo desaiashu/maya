@@ -29,8 +29,6 @@ Backend - _(push dev/main)_
 
 #### 0.1.0 test:
 
-- Diff screen sizes
-
 #### 0.1.0 ship:
 
 Clear prod DB + set up bot users
@@ -178,6 +176,7 @@ Introduce plans / IAPs
 
 #### Done
 
+- Diff screen sizes
 - Give feedback (report bug / request feature) - include analytics
 - Refresh needs to load the other data (eg. perspective)
 - Header for perspectives page

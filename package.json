@@ -9,7 +9,7 @@
     "start": "react-native start",
     "test": "jest",
     "web": "webpack serve --config web/webpack.config.js --mode development",
-    "dist": "ENV=prod webpack --config web/webpack.config.js --mode production"
+    "dist": "webpack --config web/webpack.config.js --mode production"
   },
   "dependencies": {
     "@amplitude/analytics-react-native": "^1.4.8",

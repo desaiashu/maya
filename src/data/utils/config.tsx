@@ -6,7 +6,7 @@ import DeviceInfo from 'react-native-device-info';
 // Overrides for development purposes
 
 ///// Environment /////
-export const ENV: Environment = (process.env.ENV as Environment) || 'local';
+export const ENV: Environment = 'prod';
 
 ///// Overrides nav stack  /////
 export let DEV_SCREEN: Screen;

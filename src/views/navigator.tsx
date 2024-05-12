@@ -129,7 +129,7 @@ const getStyles = () =>
   StyleSheet.create({
     container: {
       flex: 1,
-      maxWidth: 700,
+      maxWidth: 768,
     },
   });
 
