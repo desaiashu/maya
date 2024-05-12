@@ -20,8 +20,8 @@ import { Message, Chunk, ChatInfo, PerspectiveData } from '@/data/types';
 export function hashChatID(chatid: string): string {
   const chatHash = CryptoJS.SHA256(chatid)
     .toString(CryptoJS.enc.Base64url)
-    .replace('_', '')
-    .replace('-', '');
+    .replace(/_/g, '')
+    .replace(/-/g, '');
   return chatHash.substring(0, 10);
 }
 
