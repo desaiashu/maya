@@ -28,18 +28,11 @@ Backend - _(push dev/main)_
 #### 0.1.0 build:
 
 - Give feedback (report bug / request feature) - include analytics
-
-- Update related with latest messages
-
 - Refresh needs to load the other data (eg. perspective)
-- Don't request new perspective every time
-
-- Cancel button to stop stream (also stop stream on server? kill web socket and restart it?)
 
 #### 0.1.0 test:
 
 - Diff screen sizes
-- Header for perspectives page
 
 #### 0.1.0 ship:
 
@@ -50,9 +43,10 @@ Android ?
 
 ### After 0.1.0:
 
-- Improve streaming
-- Stop should stop server
-- Ideally stream doesn't delay the full message collection
+- Index DB
+- Improve performance of refresh command
+
+- Ideally stream doesn't delay the full message collection // loading of points of view
 
 - Make sure context is truncated properly for uncensored local model
 - Inflection.ai for third model
@@ -67,6 +61,13 @@ Way to request features (so I can add ideas)
 “Add wisdom” to integrate into our knowledge base
 “Add ideas” for the app
 Way to report bugs
+
+#### Unit economics
+
+Introduce plans / IAPs
+
+- Delay perspective until "points of view" tapped? Only for cheaper tiers?
+  - Make sure it's not requested every time someone taps "points of view"
 
 #### QA:
 
@@ -179,6 +180,10 @@ Way to report bugs
 
 #### Done
 
+- Header for perspectives page
+- Don't request new perspective every time
+- Update related with latest messages
+- Cancel button to stop stream (also stop stream on server? kill web socket and restart it?)
 - Update messaging in discussion (maya + alternate between two others)
 - Hide search + related when keyboard is open?
 - Test updated user data model

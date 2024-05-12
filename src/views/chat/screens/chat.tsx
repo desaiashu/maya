@@ -242,6 +242,8 @@ const getStyles = (theme: Theme) =>
       flexDirection: 'row',
     },
     download: {
+      marginTop: 25,
+      marginBottom: 20,
       width: 200,
       alignSelf: 'center',
       textAlign: 'center',

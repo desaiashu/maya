@@ -22,13 +22,14 @@ import {
 class ClientUpdate {
   handleRefreshUpdate(data: RefreshData) {
     // Seems to be messing with the navigation stack
-    // prepAnimation(LayoutAnimation.Presets.spring);
+    // prepAnimation('spring');
     const state = useStore.getState();
     state.updateChats(data.chatlist);
     state.updateMessages(data.messages);
     state.updateProtocols(data.protocols);
     state.updateBots(data.bots);
     state.updateHumans(data.contacts);
+    state.updatePerspectives(data.perspectives);
   }
 
   handleUserUpdate(data: User | undefined) {

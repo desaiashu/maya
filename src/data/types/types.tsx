@@ -201,6 +201,7 @@ export interface RefreshData {
   protocols: string[];
   contacts: Profile[];
   bots: Profile[];
+  perspectives: PerspectiveData[];
 }
 export interface RefreshRequest {
   userid: string;

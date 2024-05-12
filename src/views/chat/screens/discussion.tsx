@@ -119,18 +119,19 @@ const Discussion: React.FC = () => {
   const perspectives: Message[] = messages;
 
   useEffect(() => {
-    if (!WEB) server.getPerspectives([prompt, response]);
-
-    setTimeout(() => {
-      if (messagesRef.current) {
-        if (messages.length > 0) {
-          messagesRef.current.scrollToIndex({
-            index: messages.length - 1,
-            animated: false,
-          });
+    if (!WEB) {
+      server.getPerspectives([prompt, response]);
+      setTimeout(() => {
+        if (messagesRef.current) {
+          if (messages.length > 0) {
+            messagesRef.current.scrollToIndex({
+              index: messages.length - 1,
+              animated: false,
+            });
+          }
         }
-      }
-    }, 100); // Delay of 1 second
+      }, 100); // Delay of 1 second
+    }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -236,7 +237,7 @@ const getStyles = (theme: Theme) =>
     },
     header: {
       alignItems: 'center',
-      marginTop: 6,
+      marginTop: WEB ? 24 : 7,
     },
     h2: {
       marginBottom: 0,
@@ -245,7 +246,8 @@ const getStyles = (theme: Theme) =>
     },
     search: {
       marginLeft: '5%',
-      marginTop: 20,
+      marginTop: WEB ? 20 : 16,
+      marginBottom: WEB ? 10 : 0,
     },
     related: {
       marginTop: 5,
@@ -261,7 +263,7 @@ const getStyles = (theme: Theme) =>
       paddingTop: 1,
       paddingBottom: 1,
       paddingRight: 1,
-      // marginTop: 5,
+      marginTop: WEB ? 12 : 2,
       marginLeft: -3,
       borderRadius: 20,
       shadowColor: theme.colors.outline,

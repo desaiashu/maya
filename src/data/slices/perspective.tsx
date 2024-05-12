@@ -9,9 +9,13 @@ export interface PerspectiveState {
     chatid: string,
     data: Partial<PerspectiveData>,
   ) => void;
+  updatePerspectives: (data: PerspectiveData[]) => void;
 }
 
-export const usePerspectiveState: StateCreator<PerspectiveState> = set => ({
+export const usePerspectiveState: StateCreator<PerspectiveState> = (
+  set,
+  get,
+) => ({
   perspectives: {},
   updatePerspective: (messageid, chatid, data) =>
     set(state => {
@@ -31,4 +35,14 @@ export const usePerspectiveState: StateCreator<PerspectiveState> = set => ({
         },
       };
     }),
+  updatePerspectives: (data: PerspectiveData[]) => {
+    const updated = data.reduce(
+      (acc, p) => {
+        acc[threadid(p.chatid, p.messageid)] = p;
+        return acc;
+      },
+      { ...get().perspectives },
+    );
+    set({ perspectives: updated });
+  },
 });
