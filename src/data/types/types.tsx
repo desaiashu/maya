@@ -1,45 +1,44 @@
+/* tslint:disable */
+/* eslint-disable */
 /**
 /* This file was automatically generated from pydantic models by running pydantic2ts.
 /* Do not modify it by hand - just update the pydantic models and then re-run the script
 */
 
 export type WSRequest =
-  | 'auth'
-  | 'verify'
-  | 'refresh'
-  | 'message'
-  | 'annotation'
-  | 'perspective'
-  | 'create_chat'
-  | 'update_group'
-  | 'update_user'
-  | 'slug';
+  | "auth"
+  | "verify"
+  | "refresh"
+  | "message"
+  | "annotation"
+  | "perspective"
+  | "create_chat"
+  | "update_group"
+  | "update_user"
+  | "slug"
+  | "stop";
 export type WSUpdate =
-  | 'refresh'
-  | 'success'
-  | 'error'
-  | 'chunk'
-  | 'message'
-  | 'chatinfo'
-  | 'user'
-  | 'confidence'
-  | 'related'
-  | 'search'
-  | 'slug';
+  | "refresh"
+  | "success"
+  | "error"
+  | "chunk"
+  | "message"
+  | "chatinfo"
+  | "user"
+  | "confidence"
+  | "related"
+  | "search"
+  | "slug";
 export type SuccessCode =
-  | 'success'
-  | 'token sent'
-  | 'message sent'
-  | 'perspective requested'
-  | 'annotation requested'
-  | 'updated user';
-export type ErrorCode =
-  | 'error'
-  | 'verification failed'
-  | 'version outdated'
-  | 'command not found'
-  | 'chat not found';
-export type SubscriptionPlan = 'free' | 'open' | 'sota';
+  | "success"
+  | "token sent"
+  | "message sent"
+  | "perspective requested"
+  | "annotation requested"
+  | "updated user"
+  | "stream stopped";
+export type ErrorCode = "error" | "verification failed" | "version outdated" | "command not found" | "chat not found";
+export type SubscriptionPlan = "free" | "open" | "sota" | "extcontext";
 
 export interface AnnotationRequest {
   userid: string;
@@ -243,6 +242,14 @@ export interface SlugUpdate {
   data: SlugData;
   update?: WSUpdate & string;
   background?: boolean;
+}
+export interface StopRequest {
+  userid: string;
+  phone: string;
+  token: string;
+  version: string;
+  command: WSRequest;
+  data: Message;
 }
 export interface SuccessUpdate {
   data: UpdateInfo;

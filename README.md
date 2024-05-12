@@ -29,20 +29,17 @@ Backend - _(push dev/main)_
 
 - Give feedback (report bug / request feature) - include analytics
 
-- Update messaging in discussion (maya + alternate between two others)
 - Update related with latest messages
 
 - Refresh needs to load the other data (eg. perspective)
 - Don't request new perspective every time
 
-#### 0.1.0 test:
+- Cancel button to stop stream (also stop stream on server? kill web socket and restart it?)
 
-- Hide search + related when keyboard is open?
+#### 0.1.0 test:
 
 - Diff screen sizes
 - Header for perspectives page
-
-- Cancel button to stop stream (also stop stream on server? kill web socket and restart it?)
 
 #### 0.1.0 ship:
 
@@ -52,6 +49,10 @@ Test prod settings on web
 Android ?
 
 ### After 0.1.0:
+
+- Improve streaming
+- Stop should stop server
+- Ideally stream doesn't delay the full message collection
 
 - Make sure context is truncated properly for uncensored local model
 - Inflection.ai for third model
@@ -69,6 +70,7 @@ Way to report bugs
 
 #### QA:
 
+- Font bug in body
 - Handle rapid chats - ie. if you message a string of messages the server should wait, adjust and not double respond
 - Add test for contexts
 - Oracle summary issue (?)
@@ -177,6 +179,8 @@ Way to report bugs
 
 #### Done
 
+- Update messaging in discussion (maya + alternate between two others)
+- Hide search + related when keyboard is open?
 - Test updated user data model
 - Make search boxes bigger on web
 - Strip newline / whitespace from end of message

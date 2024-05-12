@@ -9,6 +9,7 @@ import {
   AnnotationRequest,
   PerspectiveRequest,
   SlugRequest,
+  StopRequest,
 } from '@/data/types';
 import { Message, Auth, Profile, ChatInfo } from '@/data/types';
 
@@ -110,6 +111,15 @@ class ServerRequest {
       ...this.baseParams(),
       command: 'slug',
       data: slug,
+    };
+    socket.sendRequest(request);
+  }
+
+  stopStream(message: Message) {
+    let request: StopRequest = {
+      ...this.baseParams(),
+      command: 'stop',
+      data: message,
     };
     socket.sendRequest(request);
   }

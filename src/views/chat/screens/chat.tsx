@@ -6,7 +6,6 @@ import {
   Platform,
   KeyboardAvoidingView,
   FlatList,
-  LayoutAnimation,
   View,
   StyleSheet,
   Share,
@@ -34,6 +33,7 @@ import {
   DOWNLOAD_URL,
   emptyChat,
   analytics,
+  prepAnimation,
 } from '@/data';
 import { useNavigation } from '@react-navigation/native';
 import { Message, ChatInfo } from '@/data/types';
@@ -191,7 +191,7 @@ const Chat: React.FC = () => {
       sender: user.userid,
       timestamp: timestamp(),
     };
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    prepAnimation('spring');
     addMessage(newMessage);
     if (messages.length > 0) {
       flatListRef?.current?.scrollToIndex({ index: 0, animated: true });

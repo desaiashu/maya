@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Platform,
   KeyboardAvoidingView,
-  LayoutAnimation,
   FlatList,
   Keyboard,
 } from 'react-native';
@@ -27,6 +26,7 @@ import {
   timestamp,
   WEB,
   analytics,
+  prepAnimation,
   fastAnimation,
 } from '@/data';
 import {
@@ -98,14 +98,14 @@ const Discussion: React.FC = () => {
     const keyboardWillShowListener = Keyboard.addListener(
       'keyboardWillShow',
       () => {
-        LayoutAnimation.configureNext(fastAnimation);
+        prepAnimation(fastAnimation);
         setKeyboardVisible(true); // or set whatever state you want
       },
     );
     const keyboardWillHideListener = Keyboard.addListener(
       'keyboardWillHide',
       () => {
-        LayoutAnimation.configureNext(fastAnimation);
+        prepAnimation(fastAnimation);
         setKeyboardVisible(false); // or set whatever state you want
       },
     );
@@ -120,6 +120,17 @@ const Discussion: React.FC = () => {
 
   useEffect(() => {
     if (!WEB) server.getPerspectives([prompt, response]);
+
+    setTimeout(() => {
+      if (messagesRef.current) {
+        if (messages.length > 0) {
+          messagesRef.current.scrollToIndex({
+            index: messages.length - 1,
+            animated: false,
+          });
+        }
+      }
+    }, 100); // Delay of 1 second
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -133,8 +144,7 @@ const Discussion: React.FC = () => {
   );
   useEffect(() => {
     console.log('updated search');
-    if (perspective && perspective.search.length > 0)
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    if (perspective && perspective.search.length > 0) prepAnimation('spring');
     perspective && setResults(perspective.search);
   }, [perspective]);
 
@@ -143,8 +153,7 @@ const Discussion: React.FC = () => {
   );
   useEffect(() => {
     console.log('updated topics');
-    if (perspective && perspective.related.length > 0)
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    if (perspective && perspective.related.length > 0) prepAnimation('spring');
     perspective && setRelated(perspective.related);
   }, [perspective]);
 
@@ -155,7 +164,7 @@ const Discussion: React.FC = () => {
       sender: user.userid,
       timestamp: timestamp(),
     };
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    prepAnimation('spring');
     addMessage(newMessage);
     if (messages.length > 0) {
       messagesRef?.current?.scrollToIndex({ index: 0, animated: true });
@@ -169,7 +178,6 @@ const Discussion: React.FC = () => {
   };
 
   const onRelated = (topic: string) => {
-    console.log(topic);
     sendMessage(topic);
     analytics.track('tap_related');
     // Additional logic for handling the selected topic

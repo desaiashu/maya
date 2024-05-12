@@ -146,7 +146,27 @@ export const fastAnimation: LayoutAnimationConfig = {
   },
 };
 
-export const cancelLayoutAnimation = () => {
+export const prepAnimation = (config: LayoutAnimationConfig | string) => {
+  if (typeof config === 'string') {
+    switch (config) {
+      case 'ease':
+        config = LayoutAnimation.Presets.easeInEaseOut;
+        break;
+      case 'spring':
+        config = LayoutAnimation.Presets.spring;
+        break;
+      case 'linear':
+        config = LayoutAnimation.Presets.linear;
+        break;
+      default:
+        config = LayoutAnimation.Presets.linear;
+        break;
+    }
+  }
+  LayoutAnimation.configureNext(config);
+};
+
+export const cancelAnimation = () => {
   if (Platform.OS === 'android') {
     // For Android, use a supported animation type or disable animation
     LayoutAnimation.configureNext({ duration: 0 });

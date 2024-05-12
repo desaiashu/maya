@@ -1,4 +1,11 @@
-import { useStore, useStream, forceUpdate, server, analytics } from '@/data';
+import {
+  useStore,
+  useStream,
+  forceUpdate,
+  server,
+  analytics,
+  prepAnimation,
+} from '@/data';
 import {
   User,
   RefreshData,
@@ -11,12 +18,11 @@ import {
   SlugData,
   UpdateInfo,
 } from '@/data/types';
-import { LayoutAnimation } from 'react-native';
 
 class ClientUpdate {
   handleRefreshUpdate(data: RefreshData) {
     // Seems to be messing with the navigation stack
-    // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    // prepAnimation(LayoutAnimation.Presets.spring);
     const state = useStore.getState();
     state.updateChats(data.chatlist);
     state.updateMessages(data.messages);
@@ -48,7 +54,7 @@ class ClientUpdate {
   }
 
   handleMessageUpdate(data: Message) {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    prepAnimation('spring');
     const state = useStore.getState();
     state.updateMessages([data]);
     // Pass message to stream state. If it's relevant, it will be handled

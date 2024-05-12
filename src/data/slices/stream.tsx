@@ -1,13 +1,20 @@
 import { create } from 'zustand';
 import { Chunk, Message } from '@/data/types';
-import { timestamp } from '@/data';
-import { FIVE_MINS } from '@/data';
+import {
+  timestamp,
+  FIVE_MINS,
+  cancelAnimation,
+  server,
+  useStore,
+} from '@/data';
 
 export interface StreamState {
   chunks: Message;
   isStreaming: boolean;
+  stopTime: number;
   handleChunk: (chunk: Chunk) => void;
   handleMessage: (message: Message) => void;
+  stopStream: () => void;
   resetStream: () => void;
 }
 
@@ -21,18 +28,21 @@ export const dummyMessage: Message = {
 export const useStream = create<StreamState>((set, get) => ({
   chunks: dummyMessage,
   isStreaming: false,
+  stopTime: 0,
 
   handleChunk: (incoming: Chunk) => {
     const s = get();
     if (!s.isStreaming || isCurrentStream(s, incoming) || isStale(s)) {
-      set(state => ({
-        ...state,
-        chunks: {
-          ...incoming,
-          content: s.chunks.content + incoming.content,
-        },
-        isStreaming: true,
-      }));
+      if (s.stopTime < incoming.timestamp) {
+        set(state => ({
+          ...state,
+          chunks: {
+            ...incoming,
+            content: s.chunks.content + incoming.content,
+          },
+          isStreaming: true,
+        }));
+      }
     }
   },
 
@@ -40,9 +50,19 @@ export const useStream = create<StreamState>((set, get) => ({
   //even unrelated to active stream
   handleMessage: (incoming: Message) => {
     const s = get();
-    if (isCurrentStream(s, incoming)) {
+    if (isCurrentStream(get(), incoming)) {
+      cancelAnimation();
       s.resetStream();
     }
+  },
+
+  stopStream: () => {
+    const chunks = get().chunks;
+    server.stopStream(chunks);
+    set(state => ({ ...state, stopTime: timestamp() }));
+    get().resetStream();
+    const zstate = useStore.getState();
+    zstate.updateMessages([chunks]);
   },
 
   resetStream: () =>

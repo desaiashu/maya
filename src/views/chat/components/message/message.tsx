@@ -194,7 +194,7 @@ const getStyles = () => ({
       marginBottom: 30,
     },
     first: {
-      marginTop: 50,
+      marginTop: 20,
     },
     final: {
       marginBottom: 30,

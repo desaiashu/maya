@@ -11,7 +11,7 @@ import {
   useStore,
   server,
   newCommunityChat,
-  cancelLayoutAnimation,
+  cancelAnimation,
 } from '@/data';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
@@ -74,7 +74,7 @@ const ChatList: React.FC = () => {
   }, [chatList]);
 
   const handleSelectChat = (chatInfo: ChatInfo) => {
-    cancelLayoutAnimation();
+    cancelAnimation();
     navigation.navigate('Chat', chatInfo);
   };
 

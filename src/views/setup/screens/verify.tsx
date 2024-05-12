@@ -82,7 +82,6 @@ const Verify: React.FC = () => {
   }, [navigation, isAuthenticated, userCreated]);
 
   const handleValidateToken = () => {
-    console.log('fooooo');
     server.verifyUser({
       userid: '_',
       phone: phoneNumber,

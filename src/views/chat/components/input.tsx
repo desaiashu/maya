@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TextInput, Platform, Keyboard } from 'react-native';
 import { Button } from '@/ui/atoms';
 import { Theme, useTheme } from '@/ui/theme';
-import { useStore, State } from '@/data';
+import { useStore, State, useStream, StreamState } from '@/data';
 
 interface InputToolbarProps {
   onSend: (text: string) => void;
@@ -23,6 +23,11 @@ const InputToolbar: React.FC<InputToolbarProps> = ({
   const updateDraft = useStore((state: State) => state.updateDraft);
   const [text, setText] = useState(draft);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+  const { isStreaming, stopStream } = useStream((state: StreamState) => ({
+    isStreaming: state.isStreaming,
+    stopStream: state.stopStream,
+  }));
 
   useEffect(() => {
     const keyboardWillShowListener = Keyboard.addListener(
@@ -55,6 +60,10 @@ const InputToolbar: React.FC<InputToolbarProps> = ({
     setText('');
   };
 
+  const onStopPress = () => {
+    stopStream();
+  };
+
   return (
     <View
       style={[styles.container, keyboardVisible && styles.keyboard]}
@@ -74,15 +83,25 @@ const InputToolbar: React.FC<InputToolbarProps> = ({
           cursorColor={theme.colors.text.secondary}
           selectionColor={theme.colors.text.secondary}
         />
-        {text.length > 0 && (
+        {isStreaming ? (
           <Button
             bare
             tag="h4"
-            style={styles.sendContainer}
-            title="Send"
-            onPress={onSendPress}
-            disabled={chatid === 'new' ? true : false}
+            style={styles.stopContainer} // Update this with your stop button styles
+            title="stop"
+            onPress={onStopPress} // Update this with your stop function
           />
+        ) : (
+          text.length > 0 && (
+            <Button
+              bare
+              tag="h4"
+              style={styles.sendContainer}
+              title="Send"
+              onPress={onSendPress}
+              disabled={chatid === 'new' ? true : false}
+            />
+          )
         )}
       </View>
     </View>
@@ -117,6 +136,12 @@ const getStyles = (theme: Theme) =>
     primary: {
       flexDirection: 'row',
       alignItems: 'flex-end',
+    },
+    stopContainer: {
+      height: 44,
+      justifyContent: 'center',
+      marginRight: 13,
+      marginBottom: 4,
     },
     sendContainer: {
       height: 44,

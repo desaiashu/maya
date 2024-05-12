@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { LayoutAnimation } from 'react-native';
 import { Message } from '@/data/types';
 import { MessageUI } from '@/views/chat/components';
-import { StreamState, useStream } from '@/data';
+import { StreamState, useStream, prepAnimation } from '@/data';
 
 interface Props {
   prev?: Message;
@@ -16,10 +15,10 @@ export const Stream: React.FC<Props> = props => {
   const chunks = useStream((state: StreamState) => state.chunks);
 
   useEffect(() => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    prepAnimation('ease');
     //Intentionally slow down the rendering to be legible
-    const start = Date.now();
-    while (Date.now() - start < 50) {}
+    // const start = Date.now();
+    // while (Date.now() - start < 50) {}
   }, [chunks]);
 
   if (prev && chunks.chatid !== prev.chatid) return null;
