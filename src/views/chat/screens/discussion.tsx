@@ -130,7 +130,7 @@ const Discussion: React.FC = () => {
             });
           }
         }
-      }, 100); // Delay of 1 second
+      }, 150); // Delay of 1 second
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -217,6 +217,7 @@ const Discussion: React.FC = () => {
           profiles={profiles}
           style={styles.messages}
           info
+          chatid={messageid}
           ref={messagesRef}
         />
 

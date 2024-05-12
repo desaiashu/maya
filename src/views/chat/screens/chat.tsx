@@ -222,6 +222,7 @@ const Chat: React.FC = () => {
           messages={messages}
           profiles={chatInfo.profiles || []}
           ref={flatListRef}
+          chatid={chatInfo.chatid}
         />
         {!WEB && <InputToolbar onSend={onSend} chatid={chatInfo.chatid} />}
       </KeyboardAvoidingView>

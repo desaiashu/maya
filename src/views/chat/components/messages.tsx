@@ -9,11 +9,12 @@ interface MessageListProps {
   profiles: Profile[];
   style?: ViewStyle;
   info?: boolean;
+  chatid: string;
 }
 
 const MessageList = forwardRef<FlatList<any>, MessageListProps>(
   (props, ref) => {
-    const { messages, profiles, style, info = false } = props;
+    const { messages, profiles, style, chatid, info = false } = props;
 
     const styles = getStyles();
 
@@ -30,7 +31,14 @@ const MessageList = forwardRef<FlatList<any>, MessageListProps>(
       prev?: Message,
     ) => {
       if (current.chatid === 'stream') {
-        return <Stream prev={prev} avatars={avatars} usernames={usernames} />;
+        return (
+          <Stream
+            prev={prev}
+            avatars={avatars}
+            usernames={usernames}
+            chatid={chatid}
+          />
+        );
       } else {
         return (
           <MessageUI

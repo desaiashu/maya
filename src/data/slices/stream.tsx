@@ -60,6 +60,7 @@ export const useStream = create<StreamState>((set, get) => ({
     const chunks = get().chunks;
     server.stopStream(chunks);
     set(state => ({ ...state, stopTime: timestamp() }));
+    cancelAnimation();
     get().resetStream();
     const zstate = useStore.getState();
     zstate.updateMessages([chunks]);

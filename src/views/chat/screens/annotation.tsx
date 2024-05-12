@@ -118,6 +118,7 @@ const Annotation: React.FC = () => {
           style={styles.messages}
           messages={notes}
           profiles={profiles}
+          chatid={prompt.chatid}
           info
         />
         <InputToolbar

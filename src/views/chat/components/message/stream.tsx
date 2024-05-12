@@ -7,21 +7,19 @@ interface Props {
   prev?: Message;
   avatars: Record<string, string>;
   usernames: Record<string, string>;
+  chatid: string;
 }
 
 export const Stream: React.FC<Props> = props => {
-  const { prev, avatars, usernames } = props;
+  const { prev, avatars, usernames, chatid } = props;
 
   const chunks = useStream((state: StreamState) => state.chunks);
 
   useEffect(() => {
     prepAnimation('ease');
-    //Intentionally slow down the rendering to be legible
-    // const start = Date.now();
-    // while (Date.now() - start < 50) {}
   }, [chunks]);
 
-  if (prev && chunks.chatid !== prev.chatid) return null;
+  if (chunks.chatid !== chatid) return null;
 
   return (
     <MessageUI
