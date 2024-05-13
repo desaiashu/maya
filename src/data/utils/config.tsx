@@ -30,7 +30,7 @@ console.log(VERSION);
 export let AMPLITUDE_KEY = '1e239f3793b699a7c77df6782b5f233c';
 
 ///// Server URL /////
-export let DOWNLOAD_URL = 'https://ashu.xyz';
+export let DOWNLOAD_URL = 'https://testflight.apple.com/join/7N48ay4u';
 
 let WS = 'ws';
 let HTTP = 'http';

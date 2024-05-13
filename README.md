@@ -35,6 +35,8 @@ Backend - _(push dev/main)_
 
 - Android ?
 
+- Figure out how to add meta tags (title/desc) to individual chat pages
+
 - Index DB
 - Improve performance of refresh command
 
