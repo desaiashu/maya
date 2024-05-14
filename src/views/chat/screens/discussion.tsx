@@ -27,6 +27,7 @@ import {
   WEB,
   WEB_DESKTOP,
   WEB_MOBILE,
+  ANDROID,
   analytics,
   prepAnimation,
   fastAnimation,
@@ -61,6 +62,8 @@ export const discussionOptions = (
         }}
         containerStyle={styles.iconCloseContainer}
         style={styles.iconClose}
+        round
+        shadow
       />
     ),
   };
@@ -123,16 +126,19 @@ const Discussion: React.FC = () => {
   useEffect(() => {
     if (!WEB) {
       server.getPerspectives([prompt, response]);
-      setTimeout(() => {
-        if (messagesRef.current) {
-          if (messages.length > 0) {
-            messagesRef.current.scrollToIndex({
-              index: messages.length - 1,
-              animated: false,
-            });
+      setTimeout(
+        () => {
+          if (messagesRef.current) {
+            if (messages.length > 0) {
+              messagesRef.current.scrollToIndex({
+                index: messages.length - 1,
+                animated: false,
+              });
+            }
           }
-        }
-      }, 150); // Delay of 1 second
+        },
+        ANDROID ? 50 : 150,
+      ); // Delay of 1 second
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -240,7 +246,7 @@ const getStyles = (theme: Theme) =>
     },
     header: {
       alignItems: 'center',
-      marginTop: WEB ? (WEB_DESKTOP ? 24 : 17) : 7,
+      marginTop: WEB ? (WEB_DESKTOP ? 24 : 17) : ANDROID ? 14 : 7,
     },
     h2: {
       marginBottom: 0,
@@ -262,17 +268,12 @@ const getStyles = (theme: Theme) =>
     save: {},
     iconCloseContainer: {
       backgroundColor: theme.colors.background,
-      paddingLeft: 1,
-      paddingTop: 1,
+      paddingLeft: ANDROID ? 2 : 1,
+      paddingTop: ANDROID ? 2 : 1,
       paddingBottom: 1,
       paddingRight: 1,
       marginTop: WEB ? (WEB_DESKTOP ? 12 : -5) : 2,
       marginLeft: WEB_MOBILE ? 16 : -3,
-      borderRadius: 20,
-      shadowColor: theme.colors.outline,
-      shadowOpacity: 0.6,
-      shadowOffset: { width: 0, height: 0 },
-      shadowRadius: 1,
       width: 35,
       height: 35,
     },

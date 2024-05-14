@@ -1,4 +1,5 @@
 import { TextStyle } from 'react-native';
+import { ANDROID } from '@/data';
 
 export type FontTag =
   | 'h1'
@@ -15,69 +16,77 @@ export type FontTag =
   | 'button'
   | 'input';
 
+const lf_bold = ANDROID ? 'LibreFranklin-Roman' : 'LibreFranklinRoman-Bold';
+const lf_medium = ANDROID ? 'LibreFranklin-Roman' : 'LibreFranklinRoman-Medium';
+
 export const fonts: Font = {
   h1: {
-    fontFamily: 'LibreFranklinRoman-Bold',
+    fontFamily: lf_bold,
     fontSize: 32,
+    fontWeight: 'bold',
   },
   h2: {
-    fontFamily: 'LibreFranklinRoman-Bold',
+    fontFamily: lf_bold,
     fontSize: 20,
+    fontWeight: 'bold',
   },
   h3: {
-    fontFamily: 'LibreFranklinRoman-Bold',
+    fontFamily: lf_bold,
     fontSize: 18,
+    fontWeight: 'bold',
   },
   h4: {
-    fontFamily: 'LibreFranklinRoman-Bold',
+    fontFamily: lf_bold,
     fontSize: 16,
+    fontWeight: 'bold',
   },
   h5: {
-    fontFamily: 'LibreFranklinRoman-Bold',
+    fontFamily: lf_bold,
     fontSize: 13,
+    fontWeight: 'bold',
   },
   xl: {
-    fontFamily: 'LibreFranklinRoman-Medium',
+    fontFamily: lf_medium,
     fontWeight: 'normal',
     fontSize: 24,
     lineHeight: 32,
   },
   large: {
-    fontFamily: 'LibreFranklinRoman-Medium',
+    fontFamily: lf_medium,
     fontWeight: 'normal',
     fontSize: 20,
     lineHeight: 28,
   },
   body: {
-    fontFamily: 'LibreFranklinRoman-Medium',
+    fontFamily: lf_medium,
     fontWeight: 'normal',
     fontSize: 16,
     lineHeight: 24,
   },
   small: {
-    fontFamily: 'LibreFranklinRoman-Medium',
+    fontFamily: lf_medium,
     fontWeight: 'normal',
     fontSize: 13,
     lineHeight: 19,
   },
   tiny: {
-    fontFamily: 'LibreFranklinRoman-Medium',
+    fontFamily: lf_medium,
     fontWeight: 'normal',
     fontSize: 7,
     lineHeight: 10,
   },
   secondary: {
-    fontFamily: 'LibreFranklinRoman-Medium',
+    fontFamily: lf_medium,
     fontWeight: 'normal',
     fontSize: 16,
   },
   button: {
-    fontFamily: 'LibreFranklinRoman-Medium',
+    fontFamily: lf_medium,
     fontWeight: 'normal',
     fontSize: 18,
   },
   input: {
-    fontFamily: 'LibreFranklinRoman-Medium',
+    fontFamily: lf_medium,
     fontWeight: 'normal',
     fontSize: 18,
   },
@@ -87,23 +96,23 @@ export const darkFonts: Font = {
   ...fonts,
   h1: {
     ...fonts.h1,
-    fontFamily: 'LibreFranklinRoman-Bold',
+    fontFamily: lf_bold,
   },
   h2: {
     ...fonts.h2,
-    fontFamily: 'LibreFranklinRoman-Bold',
+    fontFamily: lf_bold,
   },
   h3: {
     ...fonts.h3,
-    fontFamily: 'LibreFranklinRoman-Bold',
+    fontFamily: lf_bold,
   },
   h4: {
     ...fonts.h4,
-    fontFamily: 'LibreFranklinRoman-Bold',
+    fontFamily: lf_bold,
   },
   h5: {
     ...fonts.h5,
-    fontFamily: 'LibreFranklinRoman-Bold',
+    fontFamily: lf_bold,
   },
 };
 

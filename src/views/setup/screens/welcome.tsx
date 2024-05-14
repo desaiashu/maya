@@ -59,7 +59,7 @@ const Welcome: React.FC = () => {
         {'\n'}ashutosh
       </Words>
       <Button
-        title="Enter Maya"
+        title="Explore Maya"
         tag="body"
         onPress={go}
         style={styles.button}

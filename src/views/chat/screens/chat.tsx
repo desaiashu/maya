@@ -28,6 +28,7 @@ import {
   DEV_SCREEN,
   WEB,
   WEB_DESKTOP,
+  ANDROID,
   newCommunityChat,
   hashChatID,
   WEB_URL,
@@ -256,6 +257,7 @@ const getStyles = (theme: Theme) =>
       paddingBottom: 9,
       paddingRight: 9,
       marginLeft: 15,
+      marginTop: ANDROID ? 5 : 0,
     },
     iconMenu: {
       width: 18,
@@ -267,6 +269,7 @@ const getStyles = (theme: Theme) =>
       paddingBottom: 7,
       paddingRight: 10,
       marginRight: 14,
+      marginTop: ANDROID ? 5 : 0,
     },
     iconShare: {
       width: 18,
@@ -278,11 +281,7 @@ const getStyles = (theme: Theme) =>
       paddingBottom: 9,
       paddingRight: 9,
       marginRight: 14,
-      borderRadius: 20,
-      shadowColor: theme.colors.outline,
-      shadowOpacity: 0.6,
-      shadowOffset: { width: 0, height: 0 },
-      shadowRadius: 1,
+      marginTop: ANDROID ? 5 : 0,
     },
     iconCompose: {
       width: 20,

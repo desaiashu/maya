@@ -1,5 +1,5 @@
 import { LogBox, Platform } from 'react-native';
-import { RootStackParamList } from '@/views/navigator';
+// import { RootStackParamList } from '@/views/navigator';
 import DeviceInfo from 'react-native-device-info';
 
 //////////////////////////////////
@@ -87,4 +87,4 @@ export const FIVE_MINS = 5 * 60000;
 
 ///// Types /////
 type Environment = 'local' | 'toshbook' | 'toshbox' | 'dev' | 'prod';
-type Screen = keyof RootStackParamList | undefined;
+type Screen = string | undefined; //keyof RootStackParamList | undefined;

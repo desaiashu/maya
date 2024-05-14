@@ -45,6 +45,8 @@ export const settingsOptions = (
             onPress={() => navigation.goBack()}
             containerStyle={styles.iconCloseContainer}
             style={styles.iconClose}
+            round
+            shadow
           />
         )
       : () => <View />,
@@ -203,10 +205,6 @@ const getStyles = (theme: Theme) =>
       alignItems: 'center',
       justifyContent: 'flex-start',
     },
-    close: {
-      marginLeft: -10,
-      marginTop: 1,
-    },
     profileInfo: {
       justifyContent: 'flex-start',
       alignItems: 'center',
@@ -225,11 +223,6 @@ const getStyles = (theme: Theme) =>
       paddingRight: 1,
       marginTop: 5,
       marginLeft: -3,
-      borderRadius: 20,
-      shadowColor: theme.colors.outline,
-      shadowOpacity: 0.6,
-      shadowOffset: { width: 0, height: 0 },
-      shadowRadius: 1,
     },
     iconClose: {
       width: 33,

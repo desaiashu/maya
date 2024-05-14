@@ -74,6 +74,7 @@ const getStyles = (theme: Theme, outlined: boolean) =>
       shadowOpacity: 0.6,
       shadowOffset: { width: 0, height: 0 },
       shadowRadius: 1.5,
+      elevation: 5,
     },
     bare: {
       padding: 10,

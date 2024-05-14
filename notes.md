@@ -25,6 +25,14 @@ Will not use data for advertising or targeting
 YOU are our customer, your data is NOT our product
 We are not a store, we won't make you buy things
 
+##### Manisha
+
+Have you ever been confused with 2 chat threads with separate conversations? I got a lil confused when I continued in the POV chat but came to the main one and lost all my questions. What’s the intent there?
+
+Can you show them in condensed form that they went down a rabbit hole there? So they don’t think it’s all gone now
+
+Is there a way you can highlight perspectives in the main chat? Or make POV as a more prominent CTA?
+
 ##### Milind / Ballu
 
 Ability to "watch" threads

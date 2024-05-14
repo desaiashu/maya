@@ -8,7 +8,14 @@ import {
   useDrawerStatus,
 } from '@react-navigation/drawer';
 import { RootStackParamList } from '@/views/navigator';
-import { State, useStore, newCommunityChat, server, analytics } from '@/data';
+import {
+  State,
+  useStore,
+  newCommunityChat,
+  server,
+  analytics,
+  ANDROID,
+} from '@/data';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
 import {
@@ -261,7 +268,7 @@ const getStyles = (theme: Theme) =>
     chats: {
       flex: 1,
       paddingLeft: 0,
-      marginTop: -50,
+      marginTop: ANDROID ? 0 : -50,
       borderColor: theme.colors.outline,
     },
     chatsText: {
@@ -274,7 +281,7 @@ const getStyles = (theme: Theme) =>
       marginBottom: 0,
     },
     options: {
-      marginBottom: 30,
+      marginBottom: ANDROID ? 15 : 30,
       marginLeft: 0,
       paddingTop: 10,
       borderTopWidth: 1,

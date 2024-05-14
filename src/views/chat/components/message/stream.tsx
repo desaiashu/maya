@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Message } from '@/data/types';
 import { MessageUI } from '@/views/chat/components';
-import { StreamState, useStream, prepAnimation } from '@/data';
+import { StreamState, useStream, prepAnimation, ANDROID } from '@/data';
 
 interface Props {
   prev?: Message;
@@ -16,7 +16,7 @@ export const Stream: React.FC<Props> = props => {
   const chunks = useStream((state: StreamState) => state.chunks);
 
   useEffect(() => {
-    prepAnimation('ease');
+    !ANDROID && prepAnimation('ease');
   }, [chunks]);
 
   if (chunks.chatid !== chatid) return null;

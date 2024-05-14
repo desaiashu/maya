@@ -65,6 +65,7 @@ const getStyles = (theme: Theme) =>
       shadowOpacity: 0.6,
       shadowOffset: { width: 0, height: 0 },
       shadowRadius: 1,
+      elevation: 10,
     },
   });
 

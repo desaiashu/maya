@@ -1,11 +1,11 @@
 // maya.tsx = App
 
 import React, { useEffect, useRef } from 'react';
-import { Platform, UIManager, AppState, AppStateStatus } from 'react-native';
+import { UIManager, AppState, AppStateStatus } from 'react-native';
 import { ThemeProvider } from '@/ui/theme';
 import Navigator from '@/views/navigator';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
-import { analytics } from '@/data';
+import { analytics, ANDROID } from '@/data';
 
 const Maya = () => {
   const appState = useRef(AppState.currentState);
@@ -35,10 +35,7 @@ const Maya = () => {
     appState.current = nextAppState;
   };
 
-  if (
-    Platform.OS === 'android' &&
-    UIManager.setLayoutAnimationEnabledExperimental
-  ) {
+  if (ANDROID && UIManager.setLayoutAnimationEnabledExperimental) {
     UIManager.setLayoutAnimationEnabledExperimental(true);
   }
   return (

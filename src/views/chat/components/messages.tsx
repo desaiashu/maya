@@ -69,6 +69,15 @@ const MessageList = forwardRef<FlatList<any>, MessageListProps>(
         ref={ref}
         scrollIndicatorInsets={{ right: -3 }}
         inverted={WEB ? false : true}
+        onScrollToIndexFailed={i => {
+          const wait = new Promise(resolve => setTimeout(resolve, 50));
+          wait.then(() => {
+            (ref as React.RefObject<FlatList<any>>).current?.scrollToIndex({
+              index: i.index,
+              animated: true,
+            });
+          });
+        }}
       />
     );
   },

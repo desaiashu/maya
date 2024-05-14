@@ -35,6 +35,14 @@ Backend - _(push dev/main)_
 
 - Android ?
 
+- Streaming for secondary responses?
+
+- Fix onboarding issues
+- People don't realize you need a 1 after the +
+- Bumps you back to main page if you put in the wrong code
+- Better communication on this page...
+- Change to twilio OTP? SMS for OTP?
+
 - Figure out how to add meta tags (title/desc) to individual chat pages
 
 - Index DB
@@ -46,6 +54,10 @@ Backend - _(push dev/main)_
 - Inflection.ai for third model
 - Toggle streaming
 - Read speed
+
+#### Bugs
+
+On the download webpage, can’t zoom in to read the screenshots
 
 #### Schema changes
 
@@ -143,6 +155,14 @@ Introduce plans / IAPs
 - Force participant set for certain protocols, allow others
 - Adding other humans in chat
 - Build group protocols
+
+#### Subscription
+
+Input own OpenAI key?
+Free
+Open
+SOTA
+Extended context
 
 #### Tests:
 

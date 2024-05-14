@@ -9,7 +9,7 @@ import {
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
 import { IconButton, Words, Avatar } from '@/ui/atoms';
-import { State, useStore, analytics } from '@/data';
+import { State, useStore, analytics, ANDROID } from '@/data';
 
 export const profileOptions = (
   navigation: DrawerNavigationProp<RootStackParamList, 'Profile'>,
@@ -30,6 +30,8 @@ export const profileOptions = (
         onPress={() => navigation.toggleDrawer()}
         containerStyle={styles.iconMenuContainer}
         style={styles.iconMenu}
+        round
+        shadow
       />
     ),
     headerRight: () => (
@@ -41,6 +43,8 @@ export const profileOptions = (
         }}
         containerStyle={styles.iconSettingsContainer}
         style={styles.iconSettings}
+        round
+        shadow
       />
     ),
   };
@@ -91,18 +95,6 @@ const getStyles = (theme: Theme) =>
       borderRadius: 20,
       marginTop: 70,
     },
-    close: {
-      marginLeft: 3,
-      marginTop: 1,
-      width: 28,
-      height: 28,
-    },
-    settings: {
-      width: 28,
-      height: 28,
-      marginTop: 4,
-      marginRight: 10,
-    },
     profileInfo: {
       justifyContent: 'center',
       alignItems: 'center',
@@ -122,11 +114,7 @@ const getStyles = (theme: Theme) =>
       paddingBottom: 9,
       paddingRight: 9,
       marginLeft: 15,
-      borderRadius: 20,
-      shadowColor: theme.colors.outline,
-      shadowOpacity: 0.6,
-      shadowOffset: { width: 0, height: 0 },
-      shadowRadius: 1,
+      marginTop: ANDROID ? 5 : 0,
     },
     iconMenu: {
       width: 18,
@@ -139,11 +127,7 @@ const getStyles = (theme: Theme) =>
       paddingBottom: 9,
       paddingRight: 9,
       marginRight: 14,
-      borderRadius: 20,
-      shadowColor: theme.colors.outline,
-      shadowOpacity: 0.6,
-      shadowOffset: { width: 0, height: 0 },
-      shadowRadius: 1,
+      marginTop: ANDROID ? 5 : 0,
     },
     iconSettings: {
       width: 20,

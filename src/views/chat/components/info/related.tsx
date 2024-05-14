@@ -55,6 +55,7 @@ const getStyles = (theme: Theme) =>
       shadowOpacity: 0.4,
       shadowOffset: { width: 0, height: 0 },
       shadowRadius: 1,
+      elevation: 5,
     },
     title: {
       //   height: 30,

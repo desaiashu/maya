@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, TextInput, Platform, Keyboard } from 'react-native';
+import { StyleSheet, View, TextInput, Keyboard } from 'react-native';
 import { Button } from '@/ui/atoms';
 import { Theme, useTheme } from '@/ui/theme';
-import { useStore, State, useStream, StreamState } from '@/data';
+import { useStore, State, useStream, StreamState, ANDROID } from '@/data';
 
 interface InputToolbarProps {
   onSend: (text: string) => void;
@@ -31,13 +31,13 @@ const InputToolbar: React.FC<InputToolbarProps> = ({
 
   useEffect(() => {
     const keyboardWillShowListener = Keyboard.addListener(
-      'keyboardWillShow',
+      ANDROID ? 'keyboardDidShow' : 'keyboardWillShow',
       () => {
         setKeyboardVisible(true);
       },
     );
     const keyboardWillHideListener = Keyboard.addListener(
-      'keyboardWillHide',
+      ANDROID ? 'keyboardDidHide' : 'keyboardWillHide',
       () => {
         setKeyboardVisible(false);
       },
@@ -116,11 +116,12 @@ const getStyles = (theme: Theme) =>
       right: 0,
       margin: 15,
       marginTop: 0,
-      marginBottom: 30,
+      marginBottom: ANDROID ? 15 : 30,
       shadowColor: theme.colors.outline,
       shadowOpacity: 0.6,
       shadowOffset: { width: 0, height: 0 },
       shadowRadius: 1,
+      elevation: 2,
       backgroundColor: theme.colors.header,
       paddingLeft: 15,
       paddingTop: 0,
@@ -130,8 +131,7 @@ const getStyles = (theme: Theme) =>
       justifyContent: 'center',
     },
     keyboard: {
-      marginBottom: 15,
-      // marginTop: 10,
+      marginBottom: ANDROID ? 35 : 15,
     },
     primary: {
       flexDirection: 'row',
@@ -154,28 +154,14 @@ const getStyles = (theme: Theme) =>
     },
     textInput: {
       paddingRight: 5,
-      paddingBottom: 12,
-      paddingTop: 6,
+      paddingBottom: ANDROID ? 8 : 12,
+      paddingTop: ANDROID ? 8 : 6,
       color: theme.colors.text.primary,
       //my styles above
       flex: 1,
       marginLeft: 10,
-      ...Platform.select({
-        web: {
-          paddingTop: 6,
-          paddingLeft: 4,
-        },
-      }),
-      marginTop: Platform.select({
-        ios: 6,
-        android: 0,
-        web: 6,
-      }),
-      marginBottom: Platform.select({
-        ios: 5,
-        android: 3,
-        web: 4,
-      }),
+      marginTop: ANDROID ? 0 : 6,
+      marginBottom: ANDROID ? 3 : 5,
     },
   });
 
