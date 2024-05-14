@@ -8,17 +8,17 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 
 ### Run
 
-Backend - `./scripts/types.sh` _(lsof -i :8001)_
-React - `npm run metro`
-Client - `npm run ios`, `npm run android`, `npm run web`
-Types - `./scripts/types.sh`
+- Backend - `./scripts/types.sh` _(lsof -i :8001)_
+- React - `npm run metro`
+- Client - `npm run ios`, `npm run android`, `npm run web`
+- Types - `./scripts/types.sh`
 
 ### Deploy
 
-iOS - xcode release build
-Android - ??
-Web - `npm run dist` _(push web branch)_
-Backend - _(push dev/main)_
+- iOS - xcode release build
+- Android - ??
+- Web - `npm run dist` _(push web branch)_
+- Backend - _(push dev/main)_
 
 ---
 
