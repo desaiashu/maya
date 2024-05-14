@@ -8,18 +8,18 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 
 ### Run
 
-Backend - `heroku local -f Procfile.local` _(lsof -i :8001)_
-React - `npx react-native start --experimental-debugger`
-iOS - `npx run-ios`
-Types - `./scripts/types.sh`
-Web - `npm run web`
+- Backend - `heroku local -f Procfile.local` _(lsof -i :8001)_
+- React - `npx react-native start --experimental-debugger`
+- iOS - `npx run-ios`
+- Types - `./scripts/types.sh`
+- Web - `npm run web`
 
 ### Deploy
 
-iOS - xcode release build
-Android - ??
-Web - `npm run dist` _(push web branch)_
-Backend - _(push dev/main)_
+- iOS - xcode release build
+- Android - ??
+- Web - `npm run dist` _(push web branch)_
+- Backend - _(push dev/main)_
 
 ---
 
