@@ -58,6 +58,9 @@ yarn-error.log
 # Bundle artifact
 *.jsbundle
 
+# ssr-server
+maya/web/ssr-server/dist/*
+
 # Ruby / CocoaPods
 /ios/Pods/
 /vendor/bundle/

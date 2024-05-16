@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "test": "npx jest ./src/*.test.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "webpack --config webpack.config.js --mode development",
+    "dist": "webpack --config webpack.config.js --mode production"
   },
   "keywords": [],
   "author": "",
