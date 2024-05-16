@@ -59,7 +59,8 @@ yarn-error.log
 *.jsbundle
 
 # ssr-server
-maya/web/ssr-server/dist/*
+web/ssr-server/dist/*
+
 
 # Ruby / CocoaPods
 /ios/Pods/
