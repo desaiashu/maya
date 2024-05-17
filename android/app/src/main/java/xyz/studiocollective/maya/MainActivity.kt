@@ -1,4 +1,4 @@
-package com.maya
+package xyz.studiocollective.maya
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

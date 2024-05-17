@@ -21,7 +21,7 @@ const Auth: React.FC = () => {
   const styles = getStyles(useTheme());
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const [phoneNumber, setPhoneNumber] = useState('+');
+  const [phoneNumber, setPhoneNumber] = useState('+1');
 
   const setPhone = useStore((state: State) => state.setPhone);
 

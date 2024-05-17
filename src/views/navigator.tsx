@@ -118,6 +118,7 @@ const Navigator: React.FC = () => {
             component={Discussion}
             options={({ navigation }) => discussionOptions(navigation, theme)}
           />
+          {/* Chat screen below is only for web */}
           <Stack.Screen name="Chat" component={Chat} />
         </Stack.Navigator>
       </NavigationContainer>

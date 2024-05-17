@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "metro": "npx react-native start --experimental-debugger",
-    "android": "react-native run-android",
     "ios": "npx run-ios",
+    "android": "react-native run-android",
+    "release": "npx react-native build-android --mode=release",
     "web": "webpack serve --config web/webpack.config.js --mode development",
     "dist": "webpack --config web/webpack.config.js --mode production",
     "lint": "eslint .",

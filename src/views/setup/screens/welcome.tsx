@@ -48,7 +48,7 @@ const Welcome: React.FC = () => {
         {'\n'}- Messages are stored with an anonymous userid
         {'\n'}- I'll use anonymized data to improve responses
         {'\n'}
-        {'\n'}I don't like ads or venture capitalists. I want to build a more
+        {'\n'}I don't like ads or venture capital. I want to build a more
         "human" internet, free from third party incentives. This is a free
         preview, I'll soon charge for use :)
         {'\n'}

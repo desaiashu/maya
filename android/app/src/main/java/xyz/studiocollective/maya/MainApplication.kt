@@ -1,4 +1,4 @@
-package com.maya
+package xyz.studiocollective.maya
 
 import android.app.Application
 import com.facebook.react.PackageList

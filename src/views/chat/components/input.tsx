@@ -24,10 +24,13 @@ const InputToolbar: React.FC<InputToolbarProps> = ({
   const [text, setText] = useState(draft);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
-  const { isStreaming, stopStream } = useStream((state: StreamState) => ({
-    isStreaming: state.isStreaming,
-    stopStream: state.stopStream,
-  }));
+  const { isStreaming, chunks, stopStream } = useStream(
+    (state: StreamState) => ({
+      isStreaming: state.isStreaming,
+      chunks: state.chunks,
+      stopStream: state.stopStream,
+    }),
+  );
 
   useEffect(() => {
     const keyboardWillShowListener = Keyboard.addListener(
@@ -83,7 +86,7 @@ const InputToolbar: React.FC<InputToolbarProps> = ({
           cursorColor={theme.colors.text.secondary}
           selectionColor={theme.colors.text.secondary}
         />
-        {isStreaming ? (
+        {isStreaming && chunks.chatid === chatid ? (
           <Button
             bare
             tag="h4"

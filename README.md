@@ -8,11 +8,10 @@ It is built in React Native, with a FastAPI backend (The Oracle), and MongoDB da
 
 ### Run
 
-Backend - `heroku local -f Procfile.local` _(lsof -i :8001)_
-React - `npx react-native start --experimental-debugger`
-iOS - `npx run-ios`
+Backend - `./scripts/types.sh` _(lsof -i :8001)_
+React - `npm run metro`
+Client - `npm run ios`, `npm run android`, `npm run web`
 Types - `./scripts/types.sh`
-Web - `npm run web`
 
 ### Deploy
 
@@ -33,9 +32,26 @@ Backend - _(push dev/main)_
 
 ### After 0.1.0:
 
-- Android ?
+- Android
+- Android logo is having issues
+- Test on google phone
+- Privacy policy (/privacy)
+- Delete account (/delete)
+
+- Figure out how to add meta tags (title/desc) to individual chat pages
+
+- Invite user to thread
+
+- Read through user feedback
+
+- Fix truncation of messages
+
+- Open keyboard on new chat
 
 - Streaming for secondary responses?
+- Need to allow multiple simultaneous streams, and make stop button only appear for active stream. Only set stream true in backend if v0.1.1 :)
+
+- Memory issue on heroku
 
 - Fix onboarding issues
 - People don't realize you need a 1 after the +
@@ -43,7 +59,9 @@ Backend - _(push dev/main)_
 - Better communication on this page...
 - Change to twilio OTP? SMS for OTP?
 
-- Figure out how to add meta tags (title/desc) to individual chat pages
+#### p2
+
+- Highlight which "points of view" have a conversation to reference
 
 - Index DB
 - Improve performance of refresh command
@@ -135,6 +153,7 @@ Introduce plans / IAPs
 
 #### UI improvements:
 
+- Highlight which "points of view" have a conversation to reference
 - Try once more to cache the stream locally. Perhaps use a background clock. That was smoother performance
 - Markdown
 - First stream response w/ bounce?
@@ -166,8 +185,9 @@ Extended context
 
 #### Tests:
 
-- Tests for oracle
 - Update tests
+- UI testing
+- Tests for oracle
 
 #### Backlog
 
@@ -387,7 +407,7 @@ Chats follow a discussion protocol
 
 Install/update xcode and command line tools
 
-Install node, watchman (via homebrew), and cocoapods (view rubygems, ruby version 2.7.x)
+Install node, watchman (via homebrew), and cocoapods (via rubygems, ruby version 2.7.x)
 
 ```
 brew install node

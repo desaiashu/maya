@@ -18,7 +18,7 @@ import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
 import { Words, Input, Button, IconButton } from '@/ui/atoms';
-import { State, useStore, server, analytics } from '@/data';
+import { State, useStore, server, analytics, ANDROID } from '@/data';
 
 export const verifyOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'Verify'>,
@@ -41,6 +41,8 @@ export const verifyOptions = (
         }}
         style={styles.iconBack}
         containerStyle={styles.iconBackContainer}
+        round
+        shadow
       />
     ),
   };
@@ -161,11 +163,7 @@ const getStyles = (theme: Theme) =>
       paddingBottom: 8,
       paddingRight: 9,
       marginLeft: -1,
-      borderRadius: 20,
-      shadowColor: theme.colors.outline,
-      shadowOpacity: 0.6,
-      shadowOffset: { width: 0, height: 0 },
-      shadowRadius: 1,
+      marginTop: ANDROID ? 5 : 0,
     },
   });
 
