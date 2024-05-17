@@ -60,7 +60,7 @@ yarn-error.log
 
 # ssr-server
 web/ssr-server/dist/*
-
+bundle.ssr.*
 
 # Ruby / CocoaPods
 /ios/Pods/

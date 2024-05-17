@@ -4,6 +4,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const nodeExternals = require('webpack-node-externals');
 
 const appDirectory = path.resolve(__dirname, '../');
 
@@ -35,7 +36,15 @@ const babelLoaderConfiguration = {
       presets: [
         'module:metro-react-native-babel-preset',
         '@babel/preset-typescript', // Add this preset to handle TypeScript
-        '@babel/preset-env',
+        [
+          '@babel/preset-env',
+          {
+            targets: {
+              node: 'current',
+            },
+            modules: 'commonjs',
+          },
+        ],
         '@babel/preset-react',
       ],
       // Re-write paths to import only the modules needed by the app
@@ -70,23 +79,8 @@ const cssLoaderConfiguration = {
   ],
 };
 
-module.exports = {
-  entry: [
-    // load any web API polyfills
-    // path.resolve(appDirectory, 'polyfills-web.js'),
-    // your web-specific entry file
-    path.resolve(appDirectory, 'web/index.web.js'),
-  ],
-
-  // configures where the build ends up
-  output: {
-    filename: 'bundle.web.js',
-    path: path.resolve(appDirectory, 'dist'),
-    publicPath: '/',
-  },
-
+const sharedConfig = {
   // ...the rest of your config
-
   module: {
     rules: [
       babelLoaderConfiguration,
@@ -110,17 +104,7 @@ module.exports = {
       '.jsx',
     ],
   },
-  devServer: {
-    static: {
-      directory: path.join(appDirectory, 'assets'), // Serve content from the assets directory
-      publicPath: '/',
-      watch: true,
-    },
-    historyApiFallback: true, // This is crucial for single-page applications
-    hot: true, // Enable hot module replacement
-    open: true, // Open the browser after the server has been started
-    port: 3000, // Port to run the server on
-  },
+
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(appDirectory, 'web/index.html'),
@@ -143,3 +127,40 @@ module.exports = {
     // }),
   ],
 };
+
+const ssrConfig = {
+  ...sharedConfig,
+  entry: path.resolve(appDirectory, 'web/ssr-server/src/server.js'),
+  output: {
+    filename: 'bundle.ssr.js',
+    path: path.resolve(appDirectory, 'dist'),
+    publicPath: '/',
+  },
+  target: 'node', // Ensures that Webpack bundles for a Node.js environment
+  externals: [nodeExternals()], // Tells Webpack to treat node_modules as external and not to bundle them
+  externalsPresets: { node: true }, // Automatically externalize node modules
+};
+
+const webConfig = {
+  ...sharedConfig,
+  entry: path.resolve(appDirectory, 'web/index.web.js'),
+  output: {
+    filename: 'bundle.web.js', // This will dynamically name the output files based on the entry point names
+    path: path.resolve(appDirectory, 'dist'),
+    publicPath: '/',
+  },
+  target: 'web',
+  devServer: {
+    static: {
+      directory: path.join(appDirectory, 'assets'), // Serve content from the assets directory
+      publicPath: '/',
+      watch: true,
+    },
+    historyApiFallback: true, // This is crucial for single-page applications
+    hot: true, // Enable hot module replacement
+    open: true, // Open the browser after the server has been started
+    port: 3000, // Port to run the server on
+  },
+};
+
+module.exports = [webConfig, ssrConfig];
