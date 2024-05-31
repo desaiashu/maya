@@ -21,7 +21,8 @@ exports.handler = async (event, context) => {
     image: 'https://seekmaya.com/icon-512-maskable.png',
   };
   try {
-    const fetchedData = await fetchPageData('/your-slug');
+    const slug = event.path.split('/').pop();
+    const fetchedData = await fetchPageData(slug);
     pageData = { ...pageData, ...fetchedData };
   } catch (err) {
     console.error(err);

@@ -84,7 +84,10 @@ const Navigator: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <NavigationContainer ref={navigationRef}>
+      <NavigationContainer
+        ref={navigationRef}
+        documentTitle={{ enabled: false }}
+      >
         <Stack.Navigator
           initialRouteName={initialRoute}
           screenOptions={defaultNavigationOptions(theme)}

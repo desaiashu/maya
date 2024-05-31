@@ -1,6 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+
+const DEV = process.argv.includes('development');
 
 const appDirectory = path.resolve(__dirname, '../');
 
@@ -87,6 +90,13 @@ const clientConfig = {
     publicPath: '/',
   },
   plugins: [
+    ...(DEV
+      ? [
+          new HtmlWebpackPlugin({
+            template: path.join(appDirectory, 'web/index.html'),
+          }),
+        ]
+      : []),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
       __DEV__: JSON.stringify(true),

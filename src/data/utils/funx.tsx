@@ -25,6 +25,8 @@ export function hashChatID(chatid: string): string {
   return chatHash.substring(0, 10);
 }
 
+export const titleFromTopic = (topic: string) => `${topic} | Maya`;
+
 export const timestamp = () => new Date().getTime();
 
 export const threadid = (chatid: string, messid: number) =>

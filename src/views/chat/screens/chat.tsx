@@ -36,6 +36,7 @@ import {
   emptyChat,
   analytics,
   prepAnimation,
+  titleFromTopic,
 } from '@/data';
 import { useNavigation } from '@react-navigation/native';
 import { Message, ChatInfo } from '@/data/types';
@@ -91,7 +92,7 @@ const renderRightMenu = (props: chatOptionsProps) => {
           onPress={() => {
             Share.share({
               url: WEB_URL + hashChatID(chat.chatid),
-              title: 'Maya Chat',
+              title: chat.topic ? titleFromTopic(chat.topic) : 'Maya',
             });
             analytics.track('share_chat');
           }}

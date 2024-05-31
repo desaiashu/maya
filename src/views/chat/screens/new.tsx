@@ -57,6 +57,7 @@ const NewChat: React.FC = () => {
   const save = () => {
     const chat: ChatInfo = {
       chatid: 'new',
+      slug: '_',
       creator: user.userid,
       participants: [user.userid, ...participants],
       topic: 'new chat',
