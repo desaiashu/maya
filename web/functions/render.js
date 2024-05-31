@@ -22,7 +22,10 @@ exports.handler = async (event, context) => {
   };
   try {
     const slug = event.path.split('/').pop();
-    const fetchedData = await fetchPageData(slug);
+    let fetchedData = await fetchPageData(slug);
+    for (let key in fetchedData) {
+      fetchedData[key] = fetchedData[key].replace(/"/g, '&quot;');
+    }
     pageData = { ...pageData, ...fetchedData };
   } catch (err) {
     console.error(err);
