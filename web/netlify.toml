@@ -1,0 +1,11 @@
+[build]
+  publish = "web/netlify/dist"
+  functions = "web/netlify/functions"
+
+[dev]
+  framework = "#static"
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/render"
+  status = 200
