@@ -13,7 +13,6 @@ const babelLoaderConfiguration = {
   include: [
     path.resolve(appDirectory, 'web/index.web.js'),
     path.resolve(appDirectory, 'web/maya.web.tsx'),
-    // path.resolve(appDirectory, 'web/render.js'),
     path.resolve(appDirectory, 'src'),
     ...compileNodeModules,
   ],
@@ -84,14 +83,10 @@ const clientConfig = {
   entry: [path.resolve(appDirectory, 'web/index.web.js')],
   output: {
     filename: 'bundle.web.js',
-    path: path.resolve(appDirectory, 'web/netlify/dist'),
+    path: path.resolve(appDirectory, 'web/dist'),
     publicPath: '/',
   },
   plugins: [
-    // new HtmlWebpackPlugin({
-    //   template: path.join(appDirectory, 'web/index.html'),
-    //   favicon: path.join(appDirectory, 'assets/app icons/web/favicon.ico'),
-    // }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
       __DEV__: JSON.stringify(true),
@@ -100,8 +95,6 @@ const clientConfig = {
     new webpack.DefinePlugin({ process: { env: {} } }),
     new CopyPlugin({
       patterns: [
-        // { from: 'web/_redirects', to: '' },
-        { from: 'web/render.js', to: '../functions' },
         { from: 'assets/app icons/web/icon-512-maskable.png', to: '' },
       ],
     }),
@@ -118,19 +111,5 @@ const clientConfig = {
     port: 3000,
   },
 };
-
-// const serverConfig = {
-//   ...commonConfig,
-//   target: 'node',
-//   externals: [nodeExternals()],
-//   entry: {
-//     render: path.resolve(appDirectory, 'web/render.js'), // Only this entry point is needed
-//   },
-//   output: {
-//     filename: '[name].js',
-//     path: path.resolve(appDirectory, 'web/netlify/functions'),
-//     publicPath: '/',
-//   },
-// };
 
 module.exports = [clientConfig];

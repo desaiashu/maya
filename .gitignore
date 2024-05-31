@@ -5,6 +5,9 @@
 # VSCode
 *.vscode
 
+# Netlify
+*.netlify
+
 # Xcode
 #
 build/

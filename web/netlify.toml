@@ -1,6 +1,7 @@
 [build]
-  publish = "web/netlify/dist"
-  functions = "web/netlify/functions"
+  base = "web"
+  publish = "dist"
+  functions = "functions"
 
 [dev]
   framework = "#static"
