@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet, StyleProp, TextStyle } from 'react-native';
 import { useTheme, Theme, FontTag } from '@/ui/theme';
+import Markdown from 'markdown-to-jsx';
 
 interface WordsProps {
   tag: FontTag;
@@ -21,7 +22,19 @@ const Words: React.FC<WordsProps> = ({ tag, children, style, alt, button }) => {
 
   const styles = getStyles(theme, tag, alt, button);
 
-  return <Text style={[styles.font, styles.color, style]}>{children}</Text>;
+  // Ensure children is a string for Markdown component
+  const isString = typeof children === 'string';
+  const childrenString = isString ? children : '';
+
+  if (isString) {
+    return (
+      <Text style={[styles.font, styles.color, style]}>
+        <Markdown>{childrenString}</Markdown>
+      </Text>
+    );
+  } else {
+    return <Text style={[styles.font, styles.color, style]}>children</Text>;
+  }
 };
 
 const getColor = (
