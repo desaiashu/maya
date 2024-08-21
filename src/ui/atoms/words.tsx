@@ -31,9 +31,11 @@ const Words: React.FC<WordsProps> = ({
   const styles = getStyles(theme, tag, alt, button);
 
   if (markdown) {
-    <Markdown style={theme.markdownStyles} mergeStyle={false}>
-      {children}
-    </Markdown>;
+    return (
+      <Markdown style={theme.markdownStyles} mergeStyle={false}>
+        {children}
+      </Markdown>
+    );
   } else {
     return <Text style={[styles.font, styles.color, style]}>{children}</Text>;
   }
