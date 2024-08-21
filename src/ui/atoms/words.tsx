@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, StyleProp, TextStyle } from 'react-native';
+import { Text, View, StyleSheet, StyleProp, TextStyle } from 'react-native';
 import { useTheme, Theme, FontTag } from '@/ui/theme';
 import Markdown from 'react-native-markdown-display';
 
@@ -21,13 +21,6 @@ const Words: React.FC<WordsProps> = ({
   markdown = false,
 }) => {
   const theme = useTheme();
-  // if (alt === undefined) {
-  //   alt = false;
-  // }
-  // if (button === undefined) {
-  //   button = false;
-  // }
-
   const styles = getStyles(theme, tag, alt, button);
 
   if (markdown) {

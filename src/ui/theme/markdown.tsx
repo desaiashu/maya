@@ -1,4 +1,6 @@
 import { TextStyle, Platform } from 'react-native';
+import { Font } from './font';
+import { Colors } from './theme';
 
 export type MarkdownTag =
   | 'body'
@@ -41,39 +43,38 @@ export type MarkdownTag =
   | 'inline'
   | 'span';
 
-export const markdownStyles: MarkdownStyle = {
+export const markdownStyles = (fonts: Font, colors: Colors): MarkdownStyle => ({
   // The main container
-  body: {},
+  body: {
+    color: colors.text.primary,
+    ...fonts.body,
+    marginTop: -5,
+    marginBottom: -10,
+  },
 
   // Headings
   heading1: {
-    flexDirection: 'row',
-    fontSize: 32,
+    ...fonts.h1,
   },
   heading2: {
-    flexDirection: 'row',
-    fontSize: 24,
+    ...fonts.h2,
   },
   heading3: {
-    flexDirection: 'row',
-    fontSize: 18,
+    ...fonts.h3,
   },
   heading4: {
-    flexDirection: 'row',
-    fontSize: 16,
+    ...fonts.h4,
   },
   heading5: {
-    flexDirection: 'row',
-    fontSize: 13,
+    ...fonts.h5,
   },
   heading6: {
-    flexDirection: 'row',
-    fontSize: 11,
+    ...fonts.h5,
   },
 
   // Horizontal Rule
   hr: {
-    backgroundColor: '#000000',
+    backgroundColor: colors.outline,
     height: 1,
   },
 
@@ -90,8 +91,8 @@ export const markdownStyles: MarkdownStyle = {
 
   // Blockquotes
   blockquote: {
-    backgroundColor: '#F5F5F5',
-    borderColor: '#CCC',
+    backgroundColor: colors.widget,
+    borderColor: colors.outline,
     borderLeftWidth: 4,
     marginLeft: 5,
     paddingHorizontal: 5,
@@ -106,28 +107,34 @@ export const markdownStyles: MarkdownStyle = {
   },
   // @pseudo class, does not have a unique render rule
   bullet_list_icon: {
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: 5,
+    marginRight: 15,
+    fontSize: 40,
+    // height: 5,
+    lineHeight: 36,
   },
   // @pseudo class, does not have a unique render rule
   bullet_list_content: {
     flex: 1,
+    marginBottom: 8,
   },
   // @pseudo class, does not have a unique render rule
   ordered_list_icon: {
-    marginLeft: 10,
+    marginLeft: 0,
     marginRight: 10,
   },
   // @pseudo class, does not have a unique render rule
   ordered_list_content: {
     flex: 1,
+    marginTop: 2,
+    marginBottom: 12,
   },
 
   // Code
   code_inline: {
     borderWidth: 1,
-    borderColor: '#CCCCCC',
-    backgroundColor: '#f5f5f5',
+    borderColor: colors.outline,
+    backgroundColor: colors.widget,
     padding: 10,
     borderRadius: 4,
     ...Platform.select({
@@ -141,8 +148,8 @@ export const markdownStyles: MarkdownStyle = {
   },
   code_block: {
     borderWidth: 1,
-    borderColor: '#CCCCCC',
-    backgroundColor: '#f5f5f5',
+    borderColor: colors.outline,
+    backgroundColor: colors.widget,
     padding: 10,
     borderRadius: 4,
     ...Platform.select({
@@ -156,8 +163,8 @@ export const markdownStyles: MarkdownStyle = {
   },
   fence: {
     borderWidth: 1,
-    borderColor: '#CCCCCC',
-    backgroundColor: '#f5f5f5',
+    borderColor: colors.outline,
+    backgroundColor: colors.widget,
     padding: 10,
     borderRadius: 4,
     ...Platform.select({
@@ -173,7 +180,7 @@ export const markdownStyles: MarkdownStyle = {
   // Tables
   table: {
     borderWidth: 1,
-    borderColor: '#000000',
+    borderColor: colors.outline,
     borderRadius: 3,
   },
   thead: {},
@@ -184,7 +191,7 @@ export const markdownStyles: MarkdownStyle = {
   },
   tr: {
     borderBottomWidth: 1,
-    borderColor: '#000000',
+    borderColor: colors.outline,
     flexDirection: 'row',
   },
   td: {
@@ -198,7 +205,7 @@ export const markdownStyles: MarkdownStyle = {
   },
   blocklink: {
     flex: 1,
-    borderColor: '#000000',
+    borderColor: colors.outline,
     borderBottomWidth: 1,
   },
 
@@ -208,7 +215,9 @@ export const markdownStyles: MarkdownStyle = {
   },
 
   // Text Output
-  text: {},
+  text: {
+    // ...fonts.body,
+  },
   textgroup: {},
   paragraph: {
     marginTop: 10,
@@ -229,7 +238,7 @@ export const markdownStyles: MarkdownStyle = {
   pre: {},
   inline: {},
   span: {},
-};
+});
 
 ///////////////////////////////
 /////// Type definition ///////
