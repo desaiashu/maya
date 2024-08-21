@@ -1,4 +1,5 @@
 import { Font, fonts, darkFonts } from './font';
+import { MarkdownStyle, markdownStyles } from './markdown';
 
 export const lightTheme = {
   colors: {
@@ -15,6 +16,7 @@ export const lightTheme = {
   },
   iconOpacity: 0.85,
   fonts,
+  markdownStyles,
 };
 
 export const darkTheme = {
@@ -32,6 +34,7 @@ export const darkTheme = {
   },
   iconOpacity: 0.7,
   fonts: darkFonts,
+  markdownStyles,
 };
 
 ///////////////////////////////
@@ -52,4 +55,5 @@ export type Theme = {
   };
   iconOpacity: number;
   fonts: Font;
+  markdown: MarkdownStyle;
 };

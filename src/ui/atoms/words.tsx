@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet, StyleProp, TextStyle } from 'react-native';
 import { useTheme, Theme, FontTag } from '@/ui/theme';
+import Markdown from 'react-native-markdown-display';
 
 interface WordsProps {
   tag: FontTag;
@@ -8,20 +9,34 @@ interface WordsProps {
   style?: StyleProp<TextStyle>;
   alt?: boolean;
   button?: boolean;
+  markdown?: boolean;
 }
 
-const Words: React.FC<WordsProps> = ({ tag, children, style, alt, button }) => {
+const Words: React.FC<WordsProps> = ({
+  tag,
+  children,
+  style,
+  alt = false,
+  button = false,
+  markdown = false,
+}) => {
   const theme = useTheme();
-  if (alt === undefined) {
-    alt = false;
-  }
-  if (button === undefined) {
-    button = false;
-  }
+  // if (alt === undefined) {
+  //   alt = false;
+  // }
+  // if (button === undefined) {
+  //   button = false;
+  // }
 
   const styles = getStyles(theme, tag, alt, button);
 
-  return <Text style={[styles.font, styles.color, style]}>{children}</Text>;
+  if (markdown) {
+    <Markdown style={theme.markdownStyles} mergeStyle={false}>
+      {children}
+    </Markdown>;
+  } else {
+    return <Text style={[styles.font, styles.color, style]}>{children}</Text>;
+  }
 };
 
 const getColor = (

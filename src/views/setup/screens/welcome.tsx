@@ -26,37 +26,33 @@ const Welcome: React.FC = () => {
     navigation.navigate('Auth');
   };
 
+  const welcomeText = `Maya is an app to help you learn and discover new perspectives. Thank you for participating in the beta!
+
+I'm building on top of LLMs to improve knowledge transfer between humans past, present, and future.
+
+Maya refers to the "illusion" of reality, suggesting that no single perspective fully captures ground truth.
+
+The roadmap includes community knowledge contributions, bias detection, multi-user chats, and additional personas.
+
+- All data is encrypted in transit and at rest
+- Messages are stored with an anonymous userid
+- I'll use anonymized data to improve responses
+
+I don't like ads or venture capital. I want to build a more "human" internet, free from third party incentives. This is a free preview, I'll soon charge for use :)
+
+Questions / feedback?
+In the app or ashu@desaidata.com
+
+with <3
+ashutosh`;
+
   return (
     <View style={styles.container}>
       <Words tag="h2" style={styles.title}>
         Hello, friend!
       </Words>
       <Words tag="small" style={styles.description}>
-        Maya is an app to help you learn and discover new perspectives. Thank
-        you for participating in the beta!
-        {'\n'}
-        {'\n'}I'm building on top of LLMs to improve knowledge transfer between
-        humans past, present, and future.
-        {'\n'}
-        {'\n'}Maya refers to the "illusion" of reality, suggesting that no
-        single perspective fully captures ground truth.
-        {'\n'}
-        {'\n'}The roadmap includes community knowledge contributions, bias
-        detection, multi-user chats, and additional personas.
-        {'\n'}
-        {'\n'}- All data is encrypted in transit and at rest
-        {'\n'}- Messages are stored with an anonymous userid
-        {'\n'}- I'll use anonymized data to improve responses
-        {'\n'}
-        {'\n'}I don't like ads or venture capital. I want to build a more
-        "human" internet, free from third party incentives. This is a free
-        preview, I'll soon charge for use :)
-        {'\n'}
-        {'\n'}Questions / feedback?
-        {'\n'}In the app or ashu@desaidata.com
-        {'\n'}
-        {'\n'}with {'<3'}
-        {'\n'}ashutosh
+        {welcomeText}
       </Words>
       <Button
         title="Explore Maya"
