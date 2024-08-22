@@ -35,10 +35,10 @@ Backend - _(push dev/main)_
 - Android
 - Android logo is having issues
 - Test on google phone
+- Figure out how to add meta tags (title/desc) to individual chat pages
+
 - Privacy policy (/privacy)
 - Delete account (/delete)
-
-- Figure out how to add meta tags (title/desc) to individual chat pages
 
 - Invite user to thread
 
@@ -52,6 +52,8 @@ Backend - _(push dev/main)_
 - Need to allow multiple simultaneous streams, and make stop button only appear for active stream. Only set stream true in backend if v0.1.1 :)
 
 - Memory issue on heroku
+
+- Slow send button
 
 - Fix onboarding issues
 - People don't realize you need a 1 after the +
@@ -215,6 +217,7 @@ Extended context
 
 #### Done
 
+- Markdown
 - Left arrow key is misplaced on web mobile
 - Search margin / height only make sense on web desktop
 - Diff screen sizes
