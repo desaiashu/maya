@@ -94,13 +94,18 @@ export const markdownStyles = (fonts: Font, colors: Colors): MarkdownStyle => ({
     backgroundColor: colors.widget,
     borderColor: colors.outline,
     borderLeftWidth: 4,
-    marginLeft: 5,
-    paddingHorizontal: 5,
+    marginLeft: 3,
+    paddingHorizontal: 12,
+    marginBottom: 10,
   },
 
   // Lists
-  bullet_list: {},
-  ordered_list: {},
+  bullet_list: {
+    marginBottom: 10,
+  },
+  ordered_list: {
+    marginBottom: 10,
+  },
   list_item: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -126,7 +131,7 @@ export const markdownStyles = (fonts: Font, colors: Colors): MarkdownStyle => ({
   // @pseudo class, does not have a unique render rule
   ordered_list_content: {
     flex: 1,
-    marginTop: 2,
+    // marginTop: 2,
     marginBottom: 12,
   },
 
@@ -145,6 +150,7 @@ export const markdownStyles = (fonts: Font, colors: Colors): MarkdownStyle => ({
         fontFamily: 'monospace',
       },
     }),
+    marginBottom: 10,
   },
   code_block: {
     borderWidth: 1,
@@ -160,6 +166,7 @@ export const markdownStyles = (fonts: Font, colors: Colors): MarkdownStyle => ({
         fontFamily: 'monospace',
       },
     }),
+    marginBottom: 10,
   },
   fence: {
     borderWidth: 1,
@@ -175,6 +182,7 @@ export const markdownStyles = (fonts: Font, colors: Colors): MarkdownStyle => ({
         fontFamily: 'monospace',
       },
     }),
+    marginBottom: 10,
   },
 
   // Tables
@@ -182,6 +190,7 @@ export const markdownStyles = (fonts: Font, colors: Colors): MarkdownStyle => ({
     borderWidth: 1,
     borderColor: colors.outline,
     borderRadius: 3,
+    marginBottom: 10,
   },
   thead: {},
   tbody: {},
@@ -212,6 +221,7 @@ export const markdownStyles = (fonts: Font, colors: Colors): MarkdownStyle => ({
   // Images
   image: {
     flex: 1,
+    marginBottom: 10,
   },
 
   // Text Output

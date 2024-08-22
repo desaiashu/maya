@@ -23,6 +23,7 @@ export const fonts: Font = {
   h1: {
     fontFamily: lf_bold,
     fontSize: 32,
+    lineHeight: 40,
     fontWeight: 'bold',
   },
   h2: {
