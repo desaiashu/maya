@@ -50,6 +50,7 @@ export const markdownStyles = (fonts: Font, colors: Colors): MarkdownStyle => ({
     ...fonts.body,
     marginTop: -5,
     marginBottom: -10,
+    flex: 1,
   },
 
   // Headings
@@ -117,6 +118,14 @@ export const markdownStyles = (fonts: Font, colors: Colors): MarkdownStyle => ({
     fontSize: 40,
     // height: 5,
     lineHeight: 36,
+    ...Platform.select({
+      ['web']: {
+        fontSize: 35,
+        lineHeight: 24,
+        marginLeft: 1,
+        marginRight: 11,
+      },
+    }),
   },
   // @pseudo class, does not have a unique render rule
   bullet_list_content: {

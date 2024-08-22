@@ -7,9 +7,10 @@ const DEV = process.argv.includes('development');
 
 const appDirectory = path.resolve(__dirname, '../');
 
-const compileNodeModules = ['react-native-reanimated'].map(moduleName =>
-  path.resolve(appDirectory, `node_modules/${moduleName}`),
-);
+const compileNodeModules = [
+  'react-native-reanimated',
+  'react-native-markdown-display',
+].map(moduleName => path.resolve(appDirectory, `node_modules/${moduleName}`));
 
 const babelLoaderConfiguration = {
   test: /\.(js|jsx|ts|tsx)$/,
