@@ -20,15 +20,32 @@ export const useMessagesState: StateCreator<MessagesState> = (set, get) => ({
     })),
   //Add messages from server to state
   updateMessages: (messages: Message[]) =>
-    set(state => ({
-      messages: messages.reduce((acc: Message[], message: Message) => {
-        const index = acc.findIndex(
-          m => m.chatid === message.chatid && m.timestamp === message.timestamp,
-        );
-        index !== -1 ? (acc[index] = message) : acc.push(message);
-        return acc;
-      }, state.messages),
-    })),
+    set((state: MessagesState) => {
+      if (messages.length === 0) return state;
+
+      const messageMap: { [key: string]: Message } = {};
+      // Create a map of new messages
+      for (const message of messages) {
+        messageMap[`${message.chatid}-${message.timestamp}`] = message;
+      }
+      // Update existing messages and mark new ones
+      const updatedMessages = state.messages.map((m: Message) => {
+        const key = `${m.chatid}-${m.timestamp}`;
+        return messageMap[key] || m;
+      });
+      // Add new messages that didn't exist before
+      for (const message of messages) {
+        if (
+          !state.messages.some(
+            m =>
+              m.chatid === message.chatid && m.timestamp === message.timestamp,
+          )
+        ) {
+          updatedMessages.push(message);
+        }
+      }
+      return { messages: updatedMessages };
+    }),
   selectMessagesByChatId: (chatId: string) =>
     get().messages.filter(message => message.chatid === chatId),
   updateDraft: (chatid: string, draft: string) => {

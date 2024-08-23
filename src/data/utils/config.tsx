@@ -23,7 +23,7 @@ export const WEB_MOBILE = WEB && !WEB_DESKTOP;
 export const ANDROID = Platform.OS === 'android';
 
 ///// Version /////
-export const VERSION = WEB ? '0.1.0' : DeviceInfo.getVersion();
+export const VERSION = WEB ? '0.1.2' : DeviceInfo.getVersion();
 console.log(VERSION);
 
 ///// Analytics /////
@@ -69,7 +69,7 @@ switch (ENV as Environment) {
 if (['local', 'toshbook'].includes(ENV)) {
   SUBDOMAIN = '';
   SSL = '://';
-  APP_PORT = ':8001';
+  APP_PORT = ':8010';
   WEB_PORT = ':3000';
 }
 

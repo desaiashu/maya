@@ -188,6 +188,8 @@ const Chat: React.FC = () => {
   }, [chats, chatInfo.created]);
 
   const onSend = (message: string) => {
+    if (chatInfo.chatid === '_') return;
+
     let newMessage: Message = {
       chatid: chatInfo.chatid,
       content: message,

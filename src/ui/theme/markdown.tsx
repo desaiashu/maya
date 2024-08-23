@@ -105,7 +105,8 @@ export const markdownStyles = (fonts: Font, colors: Colors): MarkdownStyle => ({
     marginBottom: 10,
   },
   ordered_list: {
-    marginBottom: 10,
+    marginBottom: 5,
+    marginTop: 10,
   },
   list_item: {
     flexDirection: 'row',

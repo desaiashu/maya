@@ -35,14 +35,13 @@ export const usePerspectiveState: StateCreator<PerspectiveState> = (
         },
       };
     }),
-  updatePerspectives: (data: PerspectiveData[]) => {
-    const updated = data.reduce(
-      (acc, p) => {
-        acc[threadid(p.chatid, p.messageid)] = p;
-        return acc;
-      },
-      { ...get().perspectives },
-    );
-    set({ perspectives: updated });
-  },
+  updatePerspectives: (data: PerspectiveData[]) =>
+    set((state: PerspectiveState) => {
+      const updated = { ...state.perspectives };
+      for (const p of data) {
+        const id = threadid(p.chatid, p.messageid);
+        updated[id] = { ...updated[id], ...p };
+      }
+      return { perspectives: updated };
+    }),
 });

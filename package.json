@@ -12,7 +12,8 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "netlify": "cd web && netlify dev && cd .."
+    "netlify": "cd web && netlify dev && cd ..",
+    "toshphone": "npx react-native run-ios --device toshphone"
   },
   "dependencies": {
     "@amplitude/analytics-react-native": "^1.4.8",

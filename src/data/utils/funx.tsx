@@ -149,44 +149,46 @@ export const fastAnimation: LayoutAnimationConfig = {
 };
 
 export const prepAnimation = (config: LayoutAnimationConfig | string) => {
-  if (typeof config === 'string') {
-    switch (config) {
-      case 'ease':
-        config = LayoutAnimation.Presets.easeInEaseOut;
-        break;
-      case 'spring':
-        config = LayoutAnimation.Presets.spring;
-        break;
-      case 'linear':
-        config = LayoutAnimation.Presets.linear;
-        break;
-      default:
-        config = LayoutAnimation.Presets.linear;
-        break;
-    }
-  }
-  LayoutAnimation.configureNext(config);
+  return;
+  // if (typeof config === 'string') {
+  //   switch (config) {
+  //     case 'ease':
+  //       config = LayoutAnimation.Presets.easeInEaseOut;
+  //       break;
+  //     case 'spring':
+  //       config = LayoutAnimation.Presets.spring;
+  //       break;
+  //     case 'linear':
+  //       config = LayoutAnimation.Presets.linear;
+  //       break;
+  //     default:
+  //       config = LayoutAnimation.Presets.linear;
+  //       break;
+  //   }
+  // }
+  // LayoutAnimation.configureNext(config);
 };
 
 export const cancelAnimation = () => {
-  if (Platform.OS === 'android') {
-    // For Android, use a supported animation type or disable animation
-    LayoutAnimation.configureNext({ duration: 0 });
-  } else {
-    LayoutAnimation.configureNext({
-      duration: 0,
-      update: {
-        type: LayoutAnimation.Types.easeInEaseOut,
-        property: LayoutAnimation.Properties.opacity,
-      },
-      delete: {
-        type: LayoutAnimation.Types.easeInEaseOut,
-        property: LayoutAnimation.Properties.opacity,
-      },
-      create: {
-        type: LayoutAnimation.Types.easeInEaseOut,
-        property: LayoutAnimation.Properties.opacity,
-      },
-    });
-  }
+  return;
+  // if (Platform.OS === 'android') {
+  //   // For Android, use a supported animation type or disable animation
+  //   LayoutAnimation.configureNext({ duration: 0 });
+  // } else {
+  //   LayoutAnimation.configureNext({
+  //     duration: 0,
+  //     update: {
+  //       type: LayoutAnimation.Types.easeInEaseOut,
+  //       property: LayoutAnimation.Properties.opacity,
+  //     },
+  //     delete: {
+  //       type: LayoutAnimation.Types.easeInEaseOut,
+  //       property: LayoutAnimation.Properties.opacity,
+  //     },
+  //     create: {
+  //       type: LayoutAnimation.Types.easeInEaseOut,
+  //       property: LayoutAnimation.Properties.opacity,
+  //     },
+  //   });
+  // }
 };

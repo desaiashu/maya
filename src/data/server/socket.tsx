@@ -37,6 +37,7 @@ class Socket {
 
     socket.onmessage = event => {
       const update: MayaUpdate = JSON.parse(event.data);
+      console.log('received update: ', update.update);
       const handler = this.updateHandlers[update.update];
       if (handler) {
         handler(update.data);
@@ -121,6 +122,8 @@ class Socket {
         console.error('WebSocket reconnection error:', error);
       }
     }
+
+    console.log('sending request: ', message.command);
   };
 }
 
