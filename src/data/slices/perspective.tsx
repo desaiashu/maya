@@ -36,14 +36,12 @@ export const usePerspectiveState: StateCreator<PerspectiveState> = (
       };
     }),
   updatePerspectives: (data: PerspectiveData[]) => {
-    logger.info('started perspective update');
     const state = get();
     const perspectives = { ...state.perspectives };
     for (const p of data) {
       const id = threadid(p.chatid, p.messageid);
       perspectives[id] = { ...perspectives[id], ...p };
     }
-    logger.info('finished perspective update');
     return perspectives;
   },
 });

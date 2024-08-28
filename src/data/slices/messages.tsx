@@ -21,17 +21,14 @@ export const useMessagesState: StateCreator<MessagesState> = (set, get) => ({
     })),
   //Add messages from server to state
   updateMessages: (newMessages: Message[]) => {
-    logger.info('starting message update');
     const state = get();
     if (newMessages.length === 0) return state.messages;
-    // Create a Map of existing messages, update them
     const existingMessages = new Map(
       state.messages.map((m: Message) => [key(m), m]),
     );
     for (const m of newMessages) {
       existingMessages.set(key(m), m);
     }
-    logger.info('finished message update');
     return Array.from(existingMessages.values());
   },
   selectMessagesByChatId: (chatId: string) =>

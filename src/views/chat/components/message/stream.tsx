@@ -16,7 +16,7 @@ export const Stream: React.FC<Props> = props => {
   const chunks = useStream((state: StreamState) => state.chunks);
 
   // useEffect(() => {
-  //   !ANDROID && prepAnimation('ease');
+  //   !ANDROID && prepAnimation('linear');
   // }, [chunks]);
 
   if (chunks.chatid !== chatid) return null;
