@@ -1,7 +1,7 @@
 import { useStore } from '@/data';
 import { MayaRequest, MayaUpdate, WSUpdate } from '@/data/types';
 import { client } from '@/data/server/updates';
-import { WS_URL, WEB } from '@/data';
+import { WS_URL, WEB, logger } from '@/data';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -27,7 +27,7 @@ class Socket {
   }
 
   private initializeWebSocket = (): WebSocket => {
-    console.log('WebSocket starting');
+    logger.info('WebSocket starting');
     const state = useStore.getState();
     const user_slug =
       WEB || state.currentUser.userid === '_'
@@ -37,24 +37,25 @@ class Socket {
 
     socket.onmessage = event => {
       const update: MayaUpdate = JSON.parse(event.data);
-      console.log('received update: ', update.update);
+      logger.info('received update: ', update.update);
       const handler = this.updateHandlers[update.update];
       if (handler) {
         handler(update.data);
       } else {
-        console.error('Unknown update type:', update.update);
+        logger.error('Unknown update type:', update.update);
       }
+      logger.info('completed update: ', update.update);
     };
 
     socket.onerror = event => {
-      console.error('WebSocket error:', event);
+      logger.error('WebSocket error:', event);
     };
 
     socket.onclose = event => {
-      console.log('WebSocket connection closed:', event);
+      logger.info('WebSocket connection closed:', event);
     };
 
-    console.log('WebSocket initialized');
+    logger.info('WebSocket initialized');
     return socket;
   };
 
@@ -72,19 +73,19 @@ class Socket {
       socket.addEventListener('error', event => {
         clearTimeout(maxTimeout);
         reject(new Error('WebSocket connection error'));
-        console.error('WebSocket error:', event);
+        logger.error('WebSocket error:', event);
       });
 
       socket.addEventListener('close', event => {
         clearTimeout(maxTimeout);
         reject(new Error('WebSocket was closed'));
-        console.log('WebSocket closed:', event);
+        logger.info('WebSocket closed:', event);
       });
     });
   }
 
   public reinitalizeWebSocket = () => {
-    console.log('Reinitializing WebSocket with user hash...');
+    logger.info('Reinitializing WebSocket with user hash...');
     try {
       if (this.socket.readyState !== WebSocket.CLOSED) {
         this.socket.close();
@@ -93,7 +94,7 @@ class Socket {
       this.waitForSocketOpen(newSocket);
       this.socket = newSocket;
     } catch (error) {
-      console.error('WebSocket reconnection error:', error);
+      logger.error('WebSocket reconnection error:', error);
       throw error;
     }
   };
@@ -106,10 +107,10 @@ class Socket {
         await this.waitForSocketOpen(this.socket);
         this.socket.send(JSON.stringify(message));
       } catch (error) {
-        console.error('WebSocket send error:', error);
+        logger.error('WebSocket send error:', error);
       }
     } else {
-      console.log('Attempting to reconnect WebSocket...');
+      logger.info('Attempting to reconnect WebSocket...');
       try {
         if (this.socket.readyState !== WebSocket.CLOSED) {
           this.socket.close();
@@ -119,11 +120,11 @@ class Socket {
         this.socket = newSocket;
         this.socket.send(JSON.stringify(message));
       } catch (error) {
-        console.error('WebSocket reconnection error:', error);
+        logger.error('WebSocket reconnection error:', error);
       }
     }
 
-    console.log('sending request: ', message.command);
+    logger.info('sending request: ', message.command);
   };
 }
 

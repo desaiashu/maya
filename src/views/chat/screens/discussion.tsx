@@ -31,6 +31,7 @@ import {
   analytics,
   prepAnimation,
   fastAnimation,
+  logger,
 } from '@/data';
 import {
   MessageList,
@@ -152,7 +153,7 @@ const Discussion: React.FC = () => {
     perspective ? perspective.search : [],
   );
   useEffect(() => {
-    console.log('updated search');
+    logger.info('updated search');
     if (perspective && perspective.search.length > 0) prepAnimation('spring');
     perspective && setResults(perspective.search);
   }, [perspective]);
@@ -161,7 +162,7 @@ const Discussion: React.FC = () => {
     perspective ? perspective.related : [],
   );
   useEffect(() => {
-    console.log('updated topics');
+    logger.info('updated topics');
     if (perspective && perspective.related.length > 0) prepAnimation('spring');
     perspective && setRelated(perspective.related);
   }, [perspective]);

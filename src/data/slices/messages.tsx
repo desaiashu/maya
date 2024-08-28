@@ -1,5 +1,6 @@
 import { StateCreator } from 'zustand';
 import { Message } from '@/data/types';
+import { logger, key } from '@/data';
 
 export interface MessagesState {
   messages: Message[];
@@ -19,35 +20,22 @@ export const useMessagesState: StateCreator<MessagesState> = (set, get) => ({
       messages: [...state.messages, message],
     })),
   //Add messages from server to state
-  updateMessages: (messages: Message[]) =>
-    set((state: MessagesState) => {
-      if (messages.length === 0) return state;
-
-      const messageMap: { [key: string]: Message } = {};
-      // Create a map of new messages
-      for (const message of messages) {
-        messageMap[`${message.chatid}-${message.timestamp}`] = message;
-      }
-      // Update existing messages and mark new ones
-      const updatedMessages = state.messages.map((m: Message) => {
-        const key = `${m.chatid}-${m.timestamp}`;
-        return messageMap[key] || m;
-      });
-      // Add new messages that didn't exist before
-      for (const message of messages) {
-        if (
-          !state.messages.some(
-            m =>
-              m.chatid === message.chatid && m.timestamp === message.timestamp,
-          )
-        ) {
-          updatedMessages.push(message);
-        }
-      }
-      return { messages: updatedMessages };
-    }),
+  updateMessages: (newMessages: Message[]) => {
+    logger.info('starting message update');
+    const state = get();
+    if (newMessages.length === 0) return state.messages;
+    // Create a Map of existing messages, update them
+    const existingMessages = new Map(
+      state.messages.map((m: Message) => [key(m), m]),
+    );
+    for (const m of newMessages) {
+      existingMessages.set(key(m), m);
+    }
+    logger.info('finished message update');
+    return Array.from(existingMessages.values());
+  },
   selectMessagesByChatId: (chatId: string) =>
-    get().messages.filter(message => message.chatid === chatId),
+    get().messages.filter((message: Message) => message.chatid === chatId),
   updateDraft: (chatid: string, draft: string) => {
     if (chatid !== 'new') {
       // don't want to populate unrelated future new chats with the draft

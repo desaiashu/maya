@@ -47,7 +47,6 @@ const ChatDrawer: React.FC = () => {
 
   const newChat: ChatInfo | undefined = useMemo(() => {
     if (chats.length === 0) {
-      console.log('newchat');
       return newCommunityChat();
     }
   }, [chats]);

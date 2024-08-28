@@ -5,6 +5,8 @@ import {
   server,
   analytics,
   prepAnimation,
+  logger,
+  State,
 } from '@/data';
 import {
   User,
@@ -23,25 +25,29 @@ class ClientUpdate {
   handleRefreshUpdate(data: RefreshData) {
     // Seems to be messing with the navigation stack
     // prepAnimation('spring');
-    const state = useStore.getState();
-    state.updateChats(data.chatlist);
-    state.updateMessages(data.messages);
-    state.updateProtocols(data.protocols);
-    state.updateBots(data.bots);
-    state.updateHumans(data.contacts);
-    state.updatePerspectives(data.perspectives);
+    const currentState = useStore.getState();
+    const messages = currentState.updateMessages(data.messages);
+    const perspectives = currentState.updatePerspectives(data.perspectives);
+    useStore.setState((state: State) => ({
+      ...state,
+      chats: data.chatlist,
+      protocols: data.protocols,
+      bots: data.bots,
+      messages: messages,
+      perspectives: perspectives,
+    }));
   }
 
   handleUserUpdate(data: User | undefined) {
     const state = useStore.getState();
     if (data) {
       state.setUser(data);
-      console.log('set user');
+      logger.info('set user');
       server.reinitialize();
       analytics.set_user(data.userid);
     }
     state.authenticate();
-    console.log('user update');
+    logger.info('user update');
   }
 
   handleChatInfoUpdate(data: ChatInfo) {
@@ -56,12 +62,16 @@ class ClientUpdate {
 
   handleMessageUpdate(data: Message) {
     prepAnimation('spring');
-    const state = useStore.getState();
-    state.updateMessages([data]);
+    const currentState = useStore.getState();
+    const messages = currentState.updateMessages([data]);
+    useStore.setState((state: State) => ({
+      ...state,
+      messages: messages,
+    }));
     // Pass message to stream state. If it's relevant, it will be handled
     const streamState = useStream.getState();
     streamState.handleMessage(data);
-    console.log('message update');
+    logger.info('message update');
   }
 
   handleConfidenceUpdate(data: Confidence) {
@@ -81,24 +91,28 @@ class ClientUpdate {
     state.updatePerspective(data[0].messageid, data[0].chatid, {
       related: data,
     });
-    console.log('related update');
+    logger.info('related update');
   }
 
   handleSlugUpdate(data: SlugData) {
-    const state = useStore.getState();
-    state.updateChatInfo(data.chatInfo);
-    state.updateMessages(data.messages);
-    for (let p of data.perspectives) {
-      state.updatePerspective(p.messageid, p.chatid, p);
-    }
+    const currentState = useStore.getState();
+    const chats = currentState.updateChatInfo(data.chatInfo);
+    const messages = currentState.updateMessages(data.messages);
+    const perspectives = currentState.updatePerspectives(data.perspectives);
+    useStore.setState((state: State) => ({
+      ...state,
+      chats: chats,
+      messages: messages,
+      perspectives: perspectives,
+    }));
   }
 
   handleSuccessUpdate(data: UpdateInfo) {
-    console.log('Success:', data.code);
+    logger.info('Success:', data.code);
   }
 
   handleErrorUpdate(data: UpdateInfo) {
-    console.error('Error:', data);
+    logger.error('Error:', data);
     if (data.code === 'version outdated') {
       forceUpdate(data.info);
     } else if (data.code === 'verification failed') {

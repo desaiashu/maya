@@ -1,6 +1,6 @@
 import { StateCreator } from 'zustand';
 import { PerspectiveData } from '@/data/types';
-import { emptyPerspective, threadid } from '@/data';
+import { emptyPerspective, threadid, logger } from '@/data';
 
 export interface PerspectiveState {
   perspectives: { [threadid: string]: PerspectiveData };
@@ -35,13 +35,15 @@ export const usePerspectiveState: StateCreator<PerspectiveState> = (
         },
       };
     }),
-  updatePerspectives: (data: PerspectiveData[]) =>
-    set((state: PerspectiveState) => {
-      const updated = { ...state.perspectives };
-      for (const p of data) {
-        const id = threadid(p.chatid, p.messageid);
-        updated[id] = { ...updated[id], ...p };
-      }
-      return { perspectives: updated };
-    }),
+  updatePerspectives: (data: PerspectiveData[]) => {
+    logger.info('started perspective update');
+    const state = get();
+    const perspectives = { ...state.perspectives };
+    for (const p of data) {
+      const id = threadid(p.chatid, p.messageid);
+      perspectives[id] = { ...perspectives[id], ...p };
+    }
+    logger.info('finished perspective update');
+    return perspectives;
+  },
 });

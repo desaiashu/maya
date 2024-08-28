@@ -17,6 +17,19 @@ import {
 } from '@/data';
 import { Message, Chunk, ChatInfo, PerspectiveData } from '@/data/types';
 
+export const logger = {
+  time: () => {
+    return new Date().toISOString().split('T')[1].slice(0, -1);
+  },
+  info: (...args: any[]) => {
+    console.log(`[${logger.time()}] `, ...args);
+  },
+
+  error: (...args: any[]) => {
+    console.error(`[${logger.time}] `, ...args);
+  },
+};
+
 export function hashChatID(chatid: string): string {
   const chatHash = CryptoJS.SHA256(chatid)
     .toString(CryptoJS.enc.Base64url)
@@ -28,6 +41,8 @@ export function hashChatID(chatid: string): string {
 export const titleFromTopic = (topic: string) => `${topic} | Maya`;
 
 export const timestamp = () => new Date().getTime();
+
+export const key = (m: Message) => m.chatid + '_' + m.timestamp.toString();
 
 export const threadid = (chatid: string, messid: number) =>
   chatid + '_' + messid.toString();

@@ -1,6 +1,7 @@
 import { LogBox, Platform } from 'react-native';
 // import { RootStackParamList } from '@/views/navigator';
 import DeviceInfo from 'react-native-device-info';
+import { logger } from '@/data/utils/funx';
 
 //////////////////////////////////
 // Overrides for development purposes
@@ -12,7 +13,7 @@ export const ENV: Environment = 'prod';
 export let DEV_SCREEN: Screen;
 
 // Reset local state & storage on app load
-export let RESET_STATE = false;
+export let RESET_STATE = true;
 
 //////////////////////////////////
 
@@ -24,7 +25,7 @@ export const ANDROID = Platform.OS === 'android';
 
 ///// Version /////
 export const VERSION = WEB ? '0.1.2' : DeviceInfo.getVersion();
-console.log(VERSION);
+logger.info(VERSION);
 
 ///// Analytics /////
 export let AMPLITUDE_KEY = '1e239f3793b699a7c77df6782b5f233c';
@@ -76,8 +77,8 @@ if (['local', 'toshbook'].includes(ENV)) {
 export const WEB_URL = HTTP + SSL + DOMAIN + WEB_PORT + '/';
 export const WS_URL = WS + SSL + SUBDOMAIN + DOMAIN + APP_PORT + SLUG + '/';
 
-console.log(WEB_URL);
-console.log(WS_URL);
+logger.info(WEB_URL);
+logger.info(WS_URL);
 
 ///// Logging /////
 LogBox.ignoreAllLogs(true);

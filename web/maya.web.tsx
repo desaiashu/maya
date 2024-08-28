@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ThemeProvider, useTheme, Theme } from '@/ui/theme';
+import { logger } from '@/data';
 import Navigator from '@/views/navigator';
 import { Landing } from '@/views/setup';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
@@ -23,7 +24,7 @@ const WebApp = () => {
 };
 
 const MayaWeb = () => {
-  console.log('Web version rendered');
+  logger.info('Web version rendered');
   return (
     <Router>
       <ThemeProvider>

@@ -29,9 +29,9 @@ export const useChatlistState: StateCreator<ChatlistState> = (set, get) => ({
     }
     if (index > -1) {
       chats[index] = chat;
-      set({ chats: chats });
+      return chats;
     } else {
-      set({ chats: [...chats, chat] });
+      return [...chats, chat];
     }
   },
 

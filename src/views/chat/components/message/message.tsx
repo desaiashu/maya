@@ -15,6 +15,7 @@ import {
   useStore,
   threadid,
   analytics,
+  logger,
 } from '@/data';
 import { RootStackParamList } from '@/views/navigator';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
@@ -72,7 +73,7 @@ const MessageUI: React.FC<MessageProps> = props => {
   }, [perspective]);
 
   const openAnnotation = () => {
-    console.log('annotate');
+    logger.info('annotate');
     analytics.track('open_annotation');
     const p: AnnotationProps = {
       prompt: prev!,
@@ -84,7 +85,7 @@ const MessageUI: React.FC<MessageProps> = props => {
   };
 
   const openDiscussion = () => {
-    console.log('discuss');
+    logger.info('discuss');
     analytics.track('explore_perspective');
     const p: DiscussionProps = {
       prompt: prev!,
@@ -95,7 +96,7 @@ const MessageUI: React.FC<MessageProps> = props => {
   };
 
   const thumbs = (direction: 'up' | 'down') => {
-    console.log(direction);
+    logger.info(direction);
   };
 
   const renderButtons = () => {
