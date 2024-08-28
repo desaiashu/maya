@@ -6,7 +6,7 @@ export interface ChatlistState {
   protocols: string[];
   lastRefresh: number;
   updateChats: (chats: ChatInfo[]) => void;
-  updateChatInfo: (chat: ChatInfo) => void;
+  updateChatInfo: (chat: ChatInfo) => ChatInfo[];
   updateProtocols: (protocols: string[]) => void;
   updateUserChats: (updatedProfile: Profile) => void;
   getTopic: (chatInfo: ChatInfo) => string;

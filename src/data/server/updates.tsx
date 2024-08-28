@@ -6,7 +6,6 @@ import {
   analytics,
   prepAnimation,
   logger,
-  State,
 } from '@/data';
 import {
   User,
@@ -28,7 +27,7 @@ class ClientUpdate {
     const currentState = useStore.getState();
     const messages = currentState.updateMessages(data.messages);
     const perspectives = currentState.updatePerspectives(data.perspectives);
-    useStore.setState((state: State) => ({
+    useStore.setState(state => ({
       ...state,
       chats: data.chatlist,
       protocols: data.protocols,
@@ -64,7 +63,7 @@ class ClientUpdate {
     prepAnimation('spring');
     const currentState = useStore.getState();
     const messages = currentState.updateMessages([data]);
-    useStore.setState((state: State) => ({
+    useStore.setState(state => ({
       ...state,
       messages: messages,
     }));
@@ -99,7 +98,7 @@ class ClientUpdate {
     const chats = currentState.updateChatInfo(data.chatInfo);
     const messages = currentState.updateMessages(data.messages);
     const perspectives = currentState.updatePerspectives(data.perspectives);
-    useStore.setState((state: State) => ({
+    useStore.setState(state => ({
       ...state,
       chats: chats,
       messages: messages,

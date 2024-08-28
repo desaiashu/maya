@@ -1,6 +1,6 @@
 import { StateCreator } from 'zustand';
 import { PerspectiveData } from '@/data/types';
-import { emptyPerspective, threadid, logger } from '@/data';
+import { emptyPerspective, threadid } from '@/data';
 
 export interface PerspectiveState {
   perspectives: { [threadid: string]: PerspectiveData };
@@ -9,7 +9,9 @@ export interface PerspectiveState {
     chatid: string,
     data: Partial<PerspectiveData>,
   ) => void;
-  updatePerspectives: (data: PerspectiveData[]) => void;
+  updatePerspectives: (data: PerspectiveData[]) => {
+    [threadid: string]: PerspectiveData;
+  };
 }
 
 export const usePerspectiveState: StateCreator<PerspectiveState> = (

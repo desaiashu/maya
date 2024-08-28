@@ -3,6 +3,7 @@
   "compilerOptions": {
     "allowJs": true,
     // "allowDeclareFields": true
+    "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
