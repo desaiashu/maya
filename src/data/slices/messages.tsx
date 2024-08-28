@@ -1,6 +1,6 @@
 import { StateCreator } from 'zustand';
 import { Message } from '@/data/types';
-import { key } from '@/data';
+import { key, logger } from '@/data';
 
 export interface MessagesState {
   messages: Message[];
@@ -21,12 +21,17 @@ export const useMessagesState: StateCreator<MessagesState> = (set, get) => ({
     })),
   //Add messages from server to state
   updateMessages: (newMessages: Message[]) => {
+    logger.info('started messages update');
     const state = get();
     const existingMessages = new Map(state.messages.map(m => [key(m), m]));
     for (const m of newMessages) {
       existingMessages.set(key(m), m);
     }
-    return Array.from(existingMessages.values());
+    const messages = Array.from(existingMessages.values()).sort(
+      (a, b) => a.timestamp - b.timestamp,
+    );
+    logger.info('finished messages update');
+    return messages;
   },
   selectMessagesByChatId: (chatId: string) =>
     get().messages.filter(message => message.chatid === chatId),
