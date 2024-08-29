@@ -13,7 +13,7 @@ export const ENV: Environment = 'prod';
 export let DEV_SCREEN: Screen;
 
 // Reset local state & storage on app load
-export let RESET_STATE = false;
+export let RESET_STATE = true;
 
 //////////////////////////////////
 
@@ -24,7 +24,7 @@ export const WEB_MOBILE = WEB && !WEB_DESKTOP;
 export const ANDROID = Platform.OS === 'android';
 
 ///// Version /////
-export const VERSION = WEB ? '0.1.2' : DeviceInfo.getVersion();
+export const VERSION = WEB ? '0.1.4' : DeviceInfo.getVersion();
 logger.info(VERSION);
 
 ///// Analytics /////

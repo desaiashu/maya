@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { debounce } from 'lodash';
 import { StyleSheet, View, TextInput, Keyboard } from 'react-native';
 import { Button } from '@/ui/atoms';
 import { Theme, useTheme } from '@/ui/theme';
@@ -54,9 +55,18 @@ const InputToolbar: React.FC<InputToolbarProps> = ({
   const theme = useTheme();
   const styles = getStyles(theme);
 
+  const debouncedUpdateDraft = useMemo(
+    () =>
+      debounce((c: string, d: string) => {
+        updateDraft(c, d);
+      }, 300),
+    [updateDraft],
+  );
+
   useEffect(() => {
-    chatid && updateDraft(chatid, text);
-  }, [text, chatid, updateDraft]);
+    chatid && debouncedUpdateDraft(chatid, text);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [text, chatid]);
 
   const onSendPress = () => {
     onSend(text);
@@ -102,7 +112,7 @@ const InputToolbar: React.FC<InputToolbarProps> = ({
               style={styles.sendContainer}
               title="Send"
               onPress={onSendPress}
-              disabled={chatid === 'new' ? true : false}
+              disabled={chatid === '_'}
             />
           )
         )}

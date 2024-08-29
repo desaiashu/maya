@@ -1,40 +1,47 @@
 import { StateCreator } from 'zustand';
 import { Message } from '@/data/types';
-import { key, logger } from '@/data';
+import { logger } from '@/data';
 
 export interface MessagesState {
-  messages: Message[];
+  messages: Record<string, Message[]>;
   drafts: Record<string, string>;
   addMessage: (message: Message) => void;
-  updateMessages: (messages: Message[]) => Message[];
+  updateMessages: (messages: Message[]) => Record<string, Message[]>;
   selectMessagesByChatId: (chatId: string) => Message[];
   updateDraft: (chatid: string, draft: string) => void;
 }
 
 export const useMessagesState: StateCreator<MessagesState> = (set, get) => ({
-  messages: [],
+  messages: {},
   drafts: {},
   //Add locally sent message to state
   addMessage: (message: Message) =>
     set(state => ({
-      messages: [...state.messages, message],
+      messages: {
+        ...state.messages,
+        [message.chatid]: [...(state.messages[message.chatid] || []), message],
+      },
     })),
   //Add messages from server to state
   updateMessages: (newMessages: Message[]) => {
     logger.info('started messages update');
     const state = get();
-    const existingMessages = new Map(state.messages.map(m => [key(m), m]));
-    for (const m of newMessages) {
-      existingMessages.set(key(m), m);
+    const updatedMessages = { ...state.messages };
+
+    for (const m of newMessages.reverse()) {
+      const existing = updatedMessages[m.chatid] || [];
+      if (
+        !existing.length ||
+        m.timestamp > existing[existing.length - 1].timestamp
+      ) {
+        updatedMessages[m.chatid] = [...existing, m];
+      }
     }
-    const messages = Array.from(existingMessages.values()).sort(
-      (a, b) => a.timestamp - b.timestamp,
-    );
+
     logger.info('finished messages update');
-    return messages;
+    return updatedMessages;
   },
-  selectMessagesByChatId: (chatId: string) =>
-    get().messages.filter(message => message.chatid === chatId),
+  selectMessagesByChatId: (chatId: string) => get().messages[chatId],
   updateDraft: (chatid: string, draft: string) => {
     if (chatid !== 'new') {
       // don't want to populate unrelated future new chats with the draft

@@ -19,7 +19,9 @@ class AnalyticsClient {
     event: amplitude.Types.BaseEvent | string,
     props?: Record<string, any>,
   ) {
-    amplitude.track(event, { ...props, platform: Platform.OS });
+    setTimeout(() => {
+      amplitude.track(event, { ...props, platform: Platform.OS });
+    }, 50);
   }
 }
 

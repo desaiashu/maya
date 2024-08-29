@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, StyleProp, TextStyle } from 'react-native';
+import { Text, StyleSheet, StyleProp, TextStyle } from 'react-native';
 import { useTheme, Theme, FontTag } from '@/ui/theme';
 import Markdown from 'react-native-markdown-display';
 
@@ -25,7 +25,7 @@ const Words: React.FC<WordsProps> = ({
 
   if (markdown) {
     return (
-      <Markdown style={theme.markdownStyles} mergeStyle={false}>
+      <Markdown style={theme.markdown} mergeStyle={false}>
         {children}
       </Markdown>
     );

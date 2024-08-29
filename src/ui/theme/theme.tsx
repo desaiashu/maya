@@ -33,14 +33,14 @@ export const lightTheme = {
   colors: lightColors,
   iconOpacity: 0.85,
   fonts,
-  markdownStyles: markdownStyles(fonts, lightColors),
+  markdown: markdownStyles(fonts, lightColors),
 };
 
 export const darkTheme = {
   colors: darkColors,
   iconOpacity: 0.7,
   fonts: darkFonts,
-  markdownStyles: markdownStyles(darkFonts, darkColors),
+  markdown: markdownStyles(darkFonts, darkColors),
 };
 
 ///////////////////////////////

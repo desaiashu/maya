@@ -63,7 +63,7 @@ export const useStream = create<StreamState>((set, get) => ({
     cancelAnimation();
     get().resetStream();
     const zstate = useStore.getState();
-    zstate.updateMessages([chunks]);
+    zstate.addMessage(chunks);
   },
 
   resetStream: () =>

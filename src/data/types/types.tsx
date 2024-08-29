@@ -167,8 +167,8 @@ export interface PerspectiveData {
   messageid: number;
   lastupdated: number;
   confidence?: Confidence;
-  related: RelatedTopic[];
-  search: SearchResult[];
+  related?: RelatedTopic[];
+  search?: SearchResult[];
 }
 export interface RelatedTopic {
   chatid: string;

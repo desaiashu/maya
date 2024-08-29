@@ -14,7 +14,7 @@ import { useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
 import { IconButton, Words, Divider } from '@/ui/atoms';
-import { Message, Profile, SearchResult, RelatedTopic } from '@/data/types';
+import { Message, Profile } from '@/data/types';
 import {
   State,
   useStore,
@@ -93,7 +93,7 @@ const Discussion: React.FC = () => {
     messages: [
       // prompt,
       // response,
-      ...state.messages.filter(message => message.chatid === messageid),
+      ...(state.messages[messageid] || []),
       ...(isStreaming ? [dummyMessage] : []),
     ],
   }));
@@ -144,28 +144,30 @@ const Discussion: React.FC = () => {
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { perspective } = useStore((state: State) => ({
-    perspective:
-      state.perspectives[threadid(response.chatid, response.timestamp)],
+  const thread = threadid(response.chatid, response.timestamp);
+
+  const { results, related } = useStore((state: State) => ({
+    results: state.results[thread] || [],
+    related: state.topics[thread] || [],
   }));
 
-  const [results, setResults] = useState<SearchResult[]>(
-    perspective ? perspective.search : [],
-  );
+  // const [results, setResults] = useState<SearchResult[]>(
+  //   perspective ? perspective.search : [],
+  // );
   useEffect(() => {
     logger.info('updated search');
-    if (perspective && perspective.search.length > 0) prepAnimation('spring');
-    perspective && setResults(perspective.search);
-  }, [perspective]);
+    if (results.length > 0) prepAnimation('spring');
+    // setResults(results);
+  }, [results]);
 
-  const [related, setRelated] = useState<RelatedTopic[]>(
-    perspective ? perspective.related : [],
-  );
+  // const [related, setRelated] = useState<RelatedTopic[]>(
+  //   perspective ? perspective.related : [],
+  // );
   useEffect(() => {
     logger.info('updated topics');
-    if (perspective && perspective.related.length > 0) prepAnimation('spring');
-    perspective && setRelated(perspective.related);
-  }, [perspective]);
+    if (related.length > 0) prepAnimation('spring');
+    // perspective && setRelated(perspective.related);
+  }, [related]);
 
   const sendMessage = (message: string) => {
     let newMessage: Message = {
