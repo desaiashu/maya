@@ -25,15 +25,15 @@ class ClientUpdate {
     // Seems to be messing with the navigation stack
     // prepAnimation('spring');
     const currentState = useStore.getState();
-    const messages = currentState.updateMessages(data.messages);
-    const perspectives = currentState.updatePerspectives(data.perspectives);
+    // const messages = currentState.updateMessages(data.messages);
+    // const p = currentState.updatePerspectives(data.perspectives);
     useStore.setState(state => ({
       ...state,
       chats: data.chatlist,
       protocols: data.protocols,
       bots: data.bots,
-      messages: messages,
-      perspectives: perspectives,
+      messages: currentState.updateMessages(data.messages),
+      ...currentState.updatePerspectives(data.perspectives),
     }));
   }
 
@@ -50,8 +50,12 @@ class ClientUpdate {
   }
 
   handleChatInfoUpdate(data: ChatInfo) {
-    const state = useStore.getState();
-    state.updateChatInfo(data);
+    const currentState = useStore.getState();
+    // const chats = currentState.updateChatInfo(data);
+    useStore.setState(state => ({
+      ...state,
+      chats: currentState.updateChatInfo(data),
+    }));
   }
 
   handleChunkUpdate(data: Chunk) {
@@ -62,10 +66,10 @@ class ClientUpdate {
   handleMessageUpdate(data: Message) {
     prepAnimation('spring');
     const currentState = useStore.getState();
-    const messages = currentState.updateMessages([data]);
+    // const messages = currentState.updateMessages([data]);
     useStore.setState(state => ({
       ...state,
-      messages: messages,
+      messages: currentState.updateMessages([data]),
     }));
     // Pass message to stream state. If it's relevant, it will be handled
     const streamState = useStream.getState();
@@ -75,34 +79,30 @@ class ClientUpdate {
 
   handleConfidenceUpdate(data: Confidence) {
     const state = useStore.getState();
-    state.updatePerspective(data.messageid, data.chatid, { confidence: data });
+    state.saveConfidence(data);
   }
 
   handleSearchUpdate(data: SearchResult[]) {
     const state = useStore.getState();
-    state.updatePerspective(data[0].messageid, data[0].chatid, {
-      search: data,
-    });
+    state.saveResults(data);
   }
 
   handleRelatedUpdate(data: RelatedTopic[]) {
     const state = useStore.getState();
-    state.updatePerspective(data[0].messageid, data[0].chatid, {
-      related: data,
-    });
+    state.saveTopics(data);
     logger.info('related update');
   }
 
   handleSlugUpdate(data: SlugData) {
     const currentState = useStore.getState();
-    const chats = currentState.updateChatInfo(data.chatInfo);
-    const messages = currentState.updateMessages(data.messages);
-    const perspectives = currentState.updatePerspectives(data.perspectives);
+    // const chats = currentState.updateChatInfo(data.chatInfo);
+    // const messages = currentState.updateMessages(data.messages);
+    // const p = currentState.updatePerspectives(data.perspectives);
     useStore.setState(state => ({
       ...state,
-      chats: chats,
-      messages: messages,
-      perspectives: perspectives,
+      chats: currentState.updateChatInfo(data.chatInfo),
+      messages: currentState.updateMessages(data.messages),
+      ...currentState.updatePerspectives(data.perspectives),
     }));
   }
 

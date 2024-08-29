@@ -37,14 +37,19 @@ class Socket {
 
     socket.onmessage = event => {
       const update: MayaUpdate = JSON.parse(event.data);
-      logger.info('received update: ', update.update);
+      if (update.update !== 'chunk')
+        logger.info('received update: ', update.update);
       const handler = this.updateHandlers[update.update];
       if (handler) {
-        handler(update.data);
+        setTimeout(() => {
+          handler(update.data);
+          if (update.update !== 'chunk')
+            logger.info('completed update: ', update.update);
+        }, 0);
       } else {
         logger.error('Unknown update type:', update.update);
       }
-      logger.info('completed update: ', update.update);
+      // logger.info('completed update: ', update.update);
     };
 
     socket.onerror = event => {
