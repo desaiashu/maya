@@ -84,17 +84,19 @@ const Discussion: React.FC = () => {
 
   const messagesRef = React.useRef<FlatList>(null);
 
-  const messageid = threadid(response.chatid, response.timestamp);
+  const thread = threadid(response.chatid, response.timestamp);
 
-  const isStreaming = useStream((state: StreamState) => state.isStreaming);
+  const isStreaming = useStream(
+    (state: StreamState) => state.isStreaming[thread],
+  );
   const { messages, user, addMessage } = useStore((state: State) => ({
     user: state.currentUser,
     addMessage: state.addMessage,
     messages: [
       // prompt,
       // response,
-      ...(state.messages[messageid] || []),
-      ...(isStreaming ? [dummyMessage] : []),
+      ...(state.messages[thread] || []),
+      ...(isStreaming ? [dummyMessage(thread)] : []),
     ],
   }));
 
@@ -144,8 +146,6 @@ const Discussion: React.FC = () => {
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const thread = threadid(response.chatid, response.timestamp);
-
   const { results, related } = useStore((state: State) => ({
     results: state.results[thread] || [],
     related: state.topics[thread] || [],
@@ -171,7 +171,7 @@ const Discussion: React.FC = () => {
 
   const sendMessage = (message: string) => {
     let newMessage: Message = {
-      chatid: messageid,
+      chatid: thread,
       content: message,
       sender: user.userid,
       timestamp: timestamp(),
@@ -228,7 +228,7 @@ const Discussion: React.FC = () => {
           profiles={profiles}
           style={styles.messages}
           info
-          chatid={messageid}
+          chatid={thread}
           ref={messagesRef}
         />
 

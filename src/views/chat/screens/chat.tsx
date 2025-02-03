@@ -162,7 +162,7 @@ const Chat: React.FC = () => {
     addMessage: state.addMessage,
     messages: [
       ...(state.messages[chatInfo.chatid] || []),
-      ...(isStreaming ? [dummyMessage] : []),
+      ...(isStreaming[chatInfo.chatid] ? [dummyMessage(chatInfo.chatid)] : []),
     ],
   }));
 

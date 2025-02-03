@@ -27,8 +27,8 @@ const InputToolbar: React.FC<InputToolbarProps> = ({
 
   const { isStreaming, chunks, stopStream } = useStream(
     (state: StreamState) => ({
-      isStreaming: state.isStreaming,
-      chunks: state.chunks,
+      isStreaming: state.isStreaming[chatid || ''],
+      chunks: state.streams[chatid || ''],
       stopStream: state.stopStream,
     }),
   );
@@ -74,7 +74,7 @@ const InputToolbar: React.FC<InputToolbarProps> = ({
   };
 
   const onStopPress = () => {
-    stopStream();
+    stopStream(chatid);
   };
 
   return (

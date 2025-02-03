@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Message } from '@/data/types';
 import { MessageUI } from '@/views/chat/components';
-import { StreamState, useStream, prepAnimation, ANDROID } from '@/data';
+import { StreamState, useStream } from '@/data';
 
 interface Props {
   prev?: Message;
@@ -13,7 +13,7 @@ interface Props {
 export const Stream: React.FC<Props> = props => {
   const { prev, avatars, usernames, chatid } = props;
 
-  const chunks = useStream((state: StreamState) => state.chunks);
+  const chunks = useStream((state: StreamState) => state.streams[chatid]);
 
   // useEffect(() => {
   //   !ANDROID && prepAnimation('linear');
