@@ -13,7 +13,7 @@ export const ENV: Environment = 'prod';
 export let DEV_SCREEN: Screen;
 
 // Reset local state & storage on app load
-export let RESET_STATE = true;
+export let RESET_STATE = false;
 
 //////////////////////////////////
 

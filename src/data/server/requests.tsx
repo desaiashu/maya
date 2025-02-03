@@ -12,6 +12,7 @@ import {
   StopRequest,
 } from '@/data/types';
 import { Message, Auth, Profile, ChatInfo } from '@/data/types';
+import { throttle } from 'lodash';
 
 class ServerRequest {
   reinitialize() {
@@ -29,16 +30,24 @@ class ServerRequest {
   }
 
   refreshChatlist() {
-    const state = useStore.getState();
-    let request: RefreshRequest = {
-      ...this.baseParams(),
-      command: 'refresh',
-      data: {
-        time: state.lastRefresh,
-      },
-    };
-    socket.sendRequest(request);
+    this.throttledRefresh();
   }
+
+  throttledRefresh = throttle(
+    () => {
+      const state = useStore.getState();
+      let request: RefreshRequest = {
+        ...this.baseParams(),
+        command: 'refresh',
+        data: {
+          time: state.lastRefresh,
+        },
+      };
+      socket.sendRequest(request);
+    },
+    120000,
+    { leading: true, trailing: false },
+  );
 
   sendMessage(message: Message) {
     let request: MessageRequest = {

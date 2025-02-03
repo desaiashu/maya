@@ -34,7 +34,7 @@ import {
 } from '@/views/chat';
 import { ChatInfo } from '@/data/types';
 import { Theme, useTheme } from '@/ui/theme';
-import { State, useStore, DEV_SCREEN, WEB } from '@/data';
+import { State, useStore, DEV_SCREEN, WEB, server } from '@/data';
 
 export type RootStackParamList = {
   ChatList: undefined;
@@ -72,6 +72,7 @@ const Navigator: React.FC = () => {
     initialRoute = DEV_SCREEN as string;
   } else if (isAuthenticated && userCreated) {
     initialRoute = 'ChatDrawer';
+    server.refreshChatlist();
   } else if (isAuthenticated && !userCreated) {
     initialRoute = 'Settings';
   } else {

@@ -30,7 +30,7 @@ const MessageList = forwardRef<FlatList<any>, MessageListProps>(
       next?: Message,
       prev?: Message,
     ) => {
-      if (current.chatid === 'stream') {
+      if (current.chatid.includes('stream')) {
         return (
           <Stream
             prev={prev}

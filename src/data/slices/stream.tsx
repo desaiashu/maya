@@ -9,38 +9,52 @@ import {
 } from '@/data';
 
 export interface StreamState {
-  chunks: Message;
-  isStreaming: boolean;
-  stopTime: number;
+  streams: Record<string, Message>;
+  isStreaming: Record<string, boolean>;
+  stopTimes: Record<string, number>;
   handleChunk: (chunk: Chunk) => void;
   handleMessage: (message: Message) => void;
-  stopStream: () => void;
-  resetStream: () => void;
+  stopStream: (streamid?: string) => void;
+  resetStream: (streamid?: string) => void;
 }
 
-export const dummyMessage: Message = {
-  chatid: 'stream',
-  content: '',
-  sender: '',
-  timestamp: 0,
+export const dummyMessage = (streamid: string): Message => {
+  return {
+    chatid: 'stream_' + streamid,
+    content: '',
+    sender: '',
+    timestamp: 0,
+  };
 };
 
 export const useStream = create<StreamState>((set, get) => ({
-  chunks: dummyMessage,
-  isStreaming: false,
-  stopTime: 0,
+  streams: {},
+  isStreaming: {},
+  stopTimes: {},
 
   handleChunk: (incoming: Chunk) => {
     const s = get();
-    if (!s.isStreaming || isCurrentStream(s, incoming) || isStale(s)) {
-      if (s.stopTime < incoming.timestamp) {
+    const streamid = incoming.chatid;
+    if (
+      !s.isStreaming[streamid] ||
+      isCurrentStream(s, incoming) ||
+      isStale(s, streamid)
+    ) {
+      if ((s.stopTimes[streamid] || 0) < incoming.timestamp) {
         set(state => ({
           ...state,
-          chunks: {
-            ...incoming,
-            content: s.chunks.content + incoming.content,
+          streams: {
+            ...state.streams,
+            [streamid]: {
+              ...incoming,
+              content:
+                (state.streams[streamid]?.content || '') + incoming.content,
+            },
           },
-          isStreaming: true,
+          isStreaming: {
+            ...state.isStreaming,
+            [streamid]: true,
+          },
         }));
       }
     }
@@ -50,34 +64,50 @@ export const useStream = create<StreamState>((set, get) => ({
   //even unrelated to active stream
   handleMessage: (incoming: Message) => {
     const s = get();
-    if (isCurrentStream(get(), incoming)) {
+    const streamid = incoming.chatid;
+    if (isCurrentStream(s, incoming)) {
       cancelAnimation();
-      s.resetStream();
+      s.resetStream(streamid);
     }
   },
 
-  stopStream: () => {
-    const chunks = get().chunks;
+  stopStream: (streamid: string = '') => {
+    if (streamid === '') return;
+    const chunks = get().streams[streamid];
     server.stopStream(chunks);
-    set(state => ({ ...state, stopTime: timestamp() }));
+    set(state => ({
+      ...state,
+      stopTimes: {
+        ...state.stopTimes,
+        [streamid]: timestamp(),
+      },
+    }));
     cancelAnimation();
-    get().resetStream();
+    get().resetStream(streamid);
     const zstate = useStore.getState();
     zstate.addMessage(chunks);
   },
 
-  resetStream: () =>
+  resetStream: (streamid: string = '') => {
+    if (streamid === '') return;
     set(state => ({
       ...state,
-      chunks: dummyMessage,
-      isStreaming: false,
-    })),
+      streams: {
+        ...state.streams,
+        [streamid]: dummyMessage(streamid),
+      },
+      isStreaming: {
+        ...state.isStreaming,
+        [streamid]: false,
+      },
+    }));
+  },
 }));
 
 const isCurrentStream = (s: StreamState, message: Message) =>
-  s.isStreaming &&
-  s.chunks.chatid === message.chatid &&
-  s.chunks.timestamp === message.timestamp;
+  s.isStreaming[message.chatid] &&
+  s.streams[message.chatid]?.chatid === message.chatid &&
+  s.streams[message.chatid]?.timestamp === message.timestamp;
 
-const isStale = (s: StreamState) =>
-  timestamp() - s.chunks.timestamp > FIVE_MINS;
+const isStale = (s: StreamState, streamid: string) =>
+  timestamp() - (s.streams[streamid]?.timestamp || 0) > FIVE_MINS;

@@ -165,10 +165,9 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
   const isDrawerOpen = useDrawerStatus() === 'open';
   useEffect(() => {
     if (isDrawerOpen) {
-      const refreshChatListAsync = async () => {
-        await server.refreshChatlist();
-      };
-      refreshChatListAsync();
+      setTimeout(() => {
+        server.refreshChatlist();
+      }, 0);
     }
   }, [isDrawerOpen]);
 

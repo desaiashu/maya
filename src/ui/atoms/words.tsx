@@ -23,10 +23,37 @@ const Words: React.FC<WordsProps> = ({
   const theme = useTheme();
   const styles = getStyles(theme, tag, alt, button);
 
+  const processThinkTags = (content: any) => {
+    if (typeof content !== 'string' || !content.includes('<think>'))
+      return content;
+    if (content.includes('</think>')) {
+      return (
+        '...*thinking*... \n' +
+        content.replace(/<think>([\s\S]*?)<\/think>/g, (_, inner) =>
+          inner
+            .split('\n\n')
+            .map((paragraph: string) => paragraph.trim())
+            .map((paragraph: string) => `> *${paragraph}*`)
+            .join('\n>\n'),
+        )
+      );
+    }
+    return (
+      '...*thinking*... \n' +
+      content.replace(/<think>([\s\S]*)/g, (_, inner) =>
+        inner
+          .split('\n\n')
+          .map((paragraph: string) => paragraph.trim())
+          .map((paragraph: string) => `> *${paragraph}*`)
+          .join('\n>\n'),
+      )
+    );
+  };
+
   if (markdown) {
     return (
       <Markdown style={theme.markdown} mergeStyle={false}>
-        {children}
+        {processThinkTags(children)}
       </Markdown>
     );
   } else {

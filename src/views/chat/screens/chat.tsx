@@ -37,7 +37,6 @@ import {
   analytics,
   prepAnimation,
   titleFromTopic,
-  logger,
 } from '@/data';
 import { useNavigation } from '@react-navigation/native';
 import { Message, ChatInfo } from '@/data/types';
@@ -163,14 +162,13 @@ const Chat: React.FC = () => {
     addMessage: state.addMessage,
     messages: [
       ...(state.messages[chatInfo.chatid] || []),
-      ...(isStreaming ? [dummyMessage] : []),
+      ...(isStreaming[chatInfo.chatid] ? [dummyMessage(chatInfo.chatid)] : []),
     ],
   }));
 
   // For new chats, the chatID will be '_' and requires update
   // For existing chats, profile updates might come through
   useEffect(() => {
-    logger.info('use effect');
     if (WEB) {
       const updatedChat = chats.find(c => c.slug === params.slug);
       if (updatedChat) setChatInfo(updatedChat);
@@ -178,8 +176,6 @@ const Chat: React.FC = () => {
     } else {
       const updatedChat = chats.find(c => c.created === chatInfo.created);
       if (updatedChat) {
-        logger.info('chat updated');
-        logger.info(updatedChat.chatid);
         setChatInfo(updatedChat);
         navigation.setOptions({
           headerRight: () =>

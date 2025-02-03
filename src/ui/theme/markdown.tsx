@@ -94,7 +94,7 @@ export const markdownStyles = (fonts: Font, colors: Colors): MarkdownStyle => ({
   blockquote: {
     backgroundColor: colors.widget,
     borderColor: colors.outline,
-    borderLeftWidth: 4,
+    borderLeftWidth: 1,
     marginLeft: 3,
     paddingHorizontal: 12,
     marginBottom: 10,
