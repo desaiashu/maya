@@ -29,8 +29,9 @@ const Landing: React.FC = () => {
       </Words>
       <Words tag="body" style={styles.description}>
         Maya is an app to help you learn and discover new perspectives. We use a
-        primary LLM, a secondary uncensored contrarian LLM, and a third holistic
-        LLM. We also present web links to go deeper into the topics discussed.
+        Gemini 2.0 Flash for primary response, an uncensored distillation of R1
+        as a contrarian perspective, and o3-mini as a holistic perspective. We
+        also present web links to go deeper into the topics discussed.
       </Words>
       <Button
         title="Download beta"
