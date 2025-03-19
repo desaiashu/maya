@@ -7,7 +7,7 @@ import { logger } from '@/data/utils/funx';
 // Overrides for development purposes
 
 ///// Environment /////
-export const ENV: Environment = 'prod';
+export const ENV: Environment = 'local';
 
 ///// Overrides nav stack  /////
 export let DEV_SCREEN: Screen;
