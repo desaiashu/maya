@@ -1,11 +1,12 @@
 {
   "name": "maya",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "private": true,
   "scripts": {
     "metro": "npx react-native start --experimental-debugger",
     "ios": "npx run-ios",
     "android": "react-native run-android",
+    "testandroid": "react-native run-android --mode=release",
     "release": "npx react-native build-android --mode=release",
     "web": "webpack serve --config web/webpack.config.js --mode development",
     "dist": "webpack --config web/webpack.config.js --mode production",
