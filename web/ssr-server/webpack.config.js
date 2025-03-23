@@ -1,13 +1,16 @@
-// web/webpack.config.js
+// SSR Server Compilation
+// Starting with the web/webpack.config.js
+// seeing if I can tweak it to get it working for ssr with fastify
 
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const nodeExternals = require('webpack-node-externals');
 
-const appDirectory = path.resolve(__dirname, '../');
+const appDirectory = path.resolve(__dirname, '../../');
+const ssrAppDirectory = __dirname;
 
+// TODO combine appropriately with web/webpack.config.js
 const compileNodeModules = [
   // Add every react-native package that needs compiling
   // 'react-native-gesture-handler',
@@ -21,39 +24,33 @@ const compileNodeModules = [
 // `node_module`.
 const babelLoaderConfiguration = {
   test: /\.(js|jsx|ts|tsx)$/,
+  exclude: /\.test\.js/, // Exclude test files
   // Add every directory that needs to be compiled by Babel during the build.
   include: [
     path.resolve(appDirectory, 'web/index.web.js'),
     path.resolve(appDirectory, 'web/maya.web.tsx'),
     path.resolve(appDirectory, 'src'),
+    path.resolve(ssrAppDirectory, 'src'), // Ensure SSR-specific source files are included
     ...compileNodeModules,
   ],
   use: {
     loader: 'babel-loader',
     options: {
-      cacheDirectory: false,
+      cacheDirectory: true, // Enable caching for faster rebuilds
       // The 'metro-react-native-babel-preset' preset is recommended to match React Native's packager
       presets: [
         'module:metro-react-native-babel-preset',
-        '@babel/preset-typescript', // Add this preset to handle TypeScript
-        [
-          '@babel/preset-env',
-          {
-            targets: {
-              node: 'current',
-            },
-            modules: 'commonjs',
-          },
-        ],
-        '@babel/preset-react',
+        '@babel/preset-typescript', // Handle TypeScript files
+        '@babel/preset-env', // Transpile to compatible JavaScript
+        '@babel/preset-react', // Transpile React JSX to JavaScript
       ],
       // Re-write paths to import only the modules needed by the app
       plugins: [
-        'react-native-web',
-        '@babel/plugin-transform-react-jsx',
-        '@babel/plugin-proposal-class-properties',
-        '@babel/plugin-proposal-export-namespace-from',
-        'react-native-reanimated/plugin',
+        'react-native-web', // Re-map React Native components to React Native Web equivalents
+        '@babel/plugin-transform-react-jsx', // Transform JSX to JavaScript
+        '@babel/plugin-proposal-class-properties', // Support class properties
+        '@babel/plugin-proposal-export-namespace-from', // Support export * as syntax
+        'react-native-reanimated/plugin', // Plugin for react-native-reanimated
       ],
     },
   },
@@ -79,8 +76,17 @@ const cssLoaderConfiguration = {
   ],
 };
 
-const sharedConfig = {
-  // ...the rest of your config
+module.exports = {
+  entry: [path.resolve(ssrAppDirectory, 'src/server.js')],
+  target: 'node',
+
+  // configures where the build ends up
+  output: {
+    filename: 'bundle.ssr.js',
+    path: path.resolve(ssrAppDirectory, 'dist'),
+    publicPath: '/',
+  },
+
   module: {
     rules: [
       babelLoaderConfiguration,
@@ -104,7 +110,17 @@ const sharedConfig = {
       '.jsx',
     ],
   },
-
+  // devServer: {
+  //   static: {
+  //     directory: path.join(appDirectory, 'assets'), // Serve content from the assets directory
+  //     publicPath: '/',
+  //     watch: true,
+  //   },
+  //   historyApiFallback: true, // This is crucial for single-page applications
+  //   hot: true, // Enable hot module replacement
+  //   open: true, // Open the browser after the server has been started
+  //   port: 3000, // Port to run the server on
+  // },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(appDirectory, 'web/index.html'),
@@ -118,8 +134,8 @@ const sharedConfig = {
     new webpack.DefinePlugin({ process: { env: {} } }),
     new CopyPlugin({
       patterns: [
-        { from: 'web/_redirects', to: '' },
-        { from: 'assets/app icons/web/icon-512-maskable.png', to: '' },
+        { from: '../_redirects', to: '' },
+        { from: '../../assets/app icons/web/icon-512-maskable.png', to: '' },
       ],
     }),
     // new CopyWebpackPlugin({
@@ -127,40 +143,3 @@ const sharedConfig = {
     // }),
   ],
 };
-
-const ssrConfig = {
-  ...sharedConfig,
-  entry: path.resolve(appDirectory, 'web/ssr-server/src/server.js'),
-  output: {
-    filename: 'bundle.ssr.js',
-    path: path.resolve(appDirectory, 'dist'),
-    publicPath: '/',
-  },
-  target: 'node', // Ensures that Webpack bundles for a Node.js environment
-  externals: [nodeExternals()], // Tells Webpack to treat node_modules as external and not to bundle them
-  externalsPresets: { node: true }, // Automatically externalize node modules
-};
-
-const webConfig = {
-  ...sharedConfig,
-  entry: path.resolve(appDirectory, 'web/index.web.js'),
-  output: {
-    filename: 'bundle.web.js', // This will dynamically name the output files based on the entry point names
-    path: path.resolve(appDirectory, 'dist'),
-    publicPath: '/',
-  },
-  target: 'web',
-  devServer: {
-    static: {
-      directory: path.join(appDirectory, 'assets'), // Serve content from the assets directory
-      publicPath: '/',
-      watch: true,
-    },
-    historyApiFallback: true, // This is crucial for single-page applications
-    hot: true, // Enable hot module replacement
-    open: true, // Open the browser after the server has been started
-    port: 3000, // Port to run the server on
-  },
-};
-
-module.exports = [webConfig, ssrConfig];
