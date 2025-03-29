@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Text } from 'react-native';
 import { Message, Confidence, Profile } from '@/data/types';
 import {
   Bubble,
@@ -31,6 +31,7 @@ interface MessageProps {
   position?: 'left' | 'right';
   stream?: boolean;
   info?: boolean;
+  isThinking?: boolean;
 }
 
 const MessageUI: React.FC<MessageProps> = props => {
@@ -43,6 +44,7 @@ const MessageUI: React.FC<MessageProps> = props => {
     profiles = [],
     stream = false,
     info = false,
+    isThinking = true,
     position = 'left',
   } = props;
 
@@ -161,6 +163,18 @@ const MessageUI: React.FC<MessageProps> = props => {
     );
   };
 
+  const renderThinkingIndicator = () => {
+    if (isThinking) {
+      return (
+        <View style={styles.base.thinkingContainer}>
+          <ActivityIndicator size="small" color="#666" />
+          <Text style={styles.base.thinkingText}>Thinking...</Text>
+        </View>
+      );
+    }
+    return null;
+  };
+
   return (
     <View
       style={[
@@ -180,6 +194,7 @@ const MessageUI: React.FC<MessageProps> = props => {
         />
         {position === 'right' && renderAvatar()}
       </View>
+      {renderThinkingIndicator()}
       {renderButtons()}
     </View>
   );
@@ -238,6 +253,16 @@ const getStyles = () => ({
     },
     thumbsUp: {
       paddingBottom: 2,
+    },
+    thinkingContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginLeft: 62,
+      marginTop: 8,
+    },
+    thinkingText: {
+      marginLeft: 8,
+      color: '#666',
     },
   }),
   left: StyleSheet.create({

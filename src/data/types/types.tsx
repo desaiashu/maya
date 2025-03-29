@@ -28,7 +28,8 @@ export type WSUpdate =
   | "confidence"
   | "related"
   | "search"
-  | "slug";
+  | "slug"
+  | "thinking";
 export type SuccessCode =
   | "success"
   | "token sent"
@@ -279,6 +280,11 @@ export interface UserRequest {
 }
 export interface UserUpdate {
   data?: User;
+  update?: WSUpdate & string;
+  background?: boolean;
+}
+export interface ThinkingUpdate {
+  isThinking: boolean;
   update?: WSUpdate & string;
   background?: boolean;
 }

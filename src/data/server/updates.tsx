@@ -18,6 +18,7 @@ import {
   SearchResult,
   SlugData,
   UpdateInfo,
+  ThinkingUpdate,
 } from '@/data/types';
 
 class ClientUpdate {
@@ -118,6 +119,11 @@ class ClientUpdate {
       const state = useStore.getState();
       state.clearUser();
     }
+  }
+
+  handleThinkingUpdate(data: ThinkingUpdate) {
+    // Handle thinking state updates
+    logger.info('thinking update:', data.isThinking);
   }
 }
 
