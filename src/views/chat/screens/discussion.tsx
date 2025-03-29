@@ -6,6 +6,8 @@ import {
   KeyboardAvoidingView,
   FlatList,
   Keyboard,
+  ActivityIndicator,
+  Text,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -14,7 +16,8 @@ import { useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
 import { IconButton, Words, Divider } from '@/ui/atoms';
-import { Message, Profile } from '@/data/types';
+import { Message, Profile, ThinkingUpdate } from '@/data/types';
+import { socket } from '@/data/server';
 import {
   State,
   useStore,
@@ -195,6 +198,22 @@ const Discussion: React.FC = () => {
     // Additional logic for handling the selected topic
   };
 
+  const [isThinking, setIsThinking] = useState(false);
+
+  useEffect(() => {
+    // Listen for thinking state updates
+    const handleThinkingUpdate = (update: ThinkingUpdate) => {
+      setIsThinking(update.isThinking);
+    };
+
+    // Subscribe to thinking updates
+    socket.setThinkingHandler(handleThinkingUpdate);
+  
+    return () => {
+      socket.removeThinkingHandler();
+    };
+  }, []);
+
   return (
     <SafeAreaView edges={['top']} style={styles.container}>
       <KeyboardAvoidingView
@@ -230,6 +249,7 @@ const Discussion: React.FC = () => {
           info
           chatid={thread}
           ref={messagesRef}
+          isThinking={isThinking}
         />
 
         {!WEB && <InputToolbar onSend={onSend} />}

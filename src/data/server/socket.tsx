@@ -1,5 +1,5 @@
 import { useStore } from '@/data';
-import { MayaRequest, MayaUpdate, WSUpdate } from '@/data/types';
+import { MayaRequest, MayaUpdate, WSUpdate, ThinkingUpdate } from '@/data/types';
 import { client } from '@/data/server/updates';
 import { WS_URL, WEB, logger } from '@/data';
 import 'react-native-get-random-values';
@@ -23,6 +23,7 @@ class Socket {
       related: client.handleRelatedUpdate,
       search: client.handleSearchUpdate,
       slug: client.handleSlugUpdate,
+      thinking: client.handleThinkingUpdate,
     };
   }
 
@@ -131,6 +132,14 @@ class Socket {
 
     logger.info('sending request: ', message.command);
   };
+
+  public setThinkingHandler(handler: (data: ThinkingUpdate) => void) {
+    this.updateHandlers.thinking = handler;
+  }
+
+  public removeThinkingHandler() {
+    this.updateHandlers.thinking = client.handleThinkingUpdate;
+  }
 }
 
 export const socket = new Socket();

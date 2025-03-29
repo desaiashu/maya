@@ -10,6 +10,7 @@ interface MessageListProps {
   style?: ViewStyle;
   info?: boolean;
   chatid: string;
+  isThinking?: boolean;
 }
 
 const MessageList = forwardRef<FlatList<any>, MessageListProps>(
@@ -49,6 +50,7 @@ const MessageList = forwardRef<FlatList<any>, MessageListProps>(
             username={usernames[current.sender] || ''}
             profiles={profiles}
             info={info}
+            isThinking={props.isThinking} 
           />
         );
       }
