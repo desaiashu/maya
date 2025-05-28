@@ -44,6 +44,7 @@ class ServerRequest {
         },
       };
       socket.sendRequest(request);
+      state.refreshRequested();
     },
     120000,
     { leading: true, trailing: false },

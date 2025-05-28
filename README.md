@@ -79,6 +79,14 @@ Backend - _(push dev/main)_
 
 On the download webpage, can’t zoom in to read the screenshots
 
+#### Server comms
+
+- Only load perspectives when user clicks into perspective screen, not on "refresh"
+- Update "last-refresh" to paginate data loading
+- Lastrefresh functionality, so it doesn't reload chats all the time
+- Ensure websocket isn't created before userid exists on client?
+- Background data updates
+
 #### Schema changes
 
 #### User feedback
@@ -140,13 +148,6 @@ Introduce plans / IAPs
 - Relationship with user that gets summarized and added to context? Ability to clear
 - Thumbs up / thumbs down data saving
 - Experiment with deeper trained bots
-
-#### Server comms
-
-- Background data updates
-- Update "last-refresh" to paginate data loading
-- Lastrefresh functionality, so it doesn't reload chats all the time
-- Ensure websocket isn't created before userid exists on client?
 
 #### Performance
 

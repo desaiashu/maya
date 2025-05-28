@@ -35,6 +35,7 @@ class ClientUpdate {
       messages: currentState.updateMessages(data.messages),
       ...currentState.updatePerspectives(data.perspectives),
     }));
+    currentState.refreshSucceeded();
   }
 
   handleUserUpdate(data: User | undefined) {
