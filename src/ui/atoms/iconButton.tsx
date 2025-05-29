@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
-  TouchableOpacity,
+  Animated,
+  Pressable,
   StyleSheet,
   useColorScheme,
   StyleProp,
@@ -27,22 +28,44 @@ const IconButton: React.FC<IconButtonProps> = props => {
   const theme = useTheme();
   const styles = getStyles(theme);
 
+  const animated = useRef(new Animated.Value(1)).current;
+
+  const handlePressIn = () => {
+    Animated.timing(animated, {
+      toValue: 0.25,
+      duration: 50,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.timing(animated, {
+      toValue: 1,
+      duration: 50,
+      useNativeDriver: true,
+    }).start();
+  };
+
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={[
-        styles.container,
-        round && styles.round,
-        shadow && styles.shadow,
-        containerStyle,
-      ]}
-    >
-      {/* <FastImage */}
-      <Image
-        source={getImageSource(icon, colorScheme)} // Replace with the actual path to your image
-        style={[styles.iconButton, style]} // Adjust the size as needed
-      />
-    </TouchableOpacity>
+    <Animated.View style={{ opacity: animated }}>
+      <Pressable
+        onPress={onPress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        style={[
+          styles.container,
+          round && styles.round,
+          shadow && styles.shadow,
+          containerStyle,
+        ]}
+      >
+        {/* <FastImage */}
+        <Image
+          source={getImageSource(icon, colorScheme)} // Replace with the actual path to your image
+          style={[styles.iconButton, style]} // Adjust the size as needed
+        />
+      </Pressable>
+    </Animated.View>
   );
 };
 

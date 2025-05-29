@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
-  TouchableOpacity,
+  Animated,
+  Pressable,
   StyleSheet,
   StyleProp,
   ViewStyle,
@@ -37,22 +38,44 @@ const Button: React.FC<ButtonProps> = ({
 
   const fontTag = tag || 'button';
 
+  const animated = useRef(new Animated.Value(1)).current;
+
+  const handlePressIn = () => {
+    Animated.timing(animated, {
+      toValue: 0.25,
+      duration: 50,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.timing(animated, {
+      toValue: 1,
+      duration: 50,
+      useNativeDriver: true,
+    }).start();
+  };
+
   return (
-    <TouchableOpacity
-      style={[
-        bare ? styles.bare : styles.button,
-        !bare && (tag === 'small' ? styles.small : styles.normal),
-        shadow && styles.shadow,
-        disabled && styles.disabled,
-        style,
-      ]}
-      disabled={disabled}
-      onPress={onPress}
-    >
-      <Words tag={fontTag} alt={outlined || bare} button={true}>
-        {title}
-      </Words>
-    </TouchableOpacity>
+    <Animated.View style={{ opacity: animated }}>
+      <Pressable
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        style={[
+          bare ? styles.bare : styles.button,
+          !bare && (tag === 'small' ? styles.small : styles.normal),
+          shadow && styles.shadow,
+          disabled && styles.disabled,
+          style,
+        ]}
+        disabled={disabled}
+        onPress={onPress}
+      >
+        <Words tag={fontTag} alt={outlined || bare} button={true}>
+          {title}
+        </Words>
+      </Pressable>
+    </Animated.View>
   );
 };
 
