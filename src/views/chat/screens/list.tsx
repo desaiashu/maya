@@ -122,8 +122,8 @@ const ChatList: React.FC = () => {
         keyExtractor={chat => chat.chatid}
         renderItem={renderChatItem}
         initialNumToRender={10}
-        maxToRenderPerBatch={10}
-        updateCellsBatchingPeriod={30}
+        maxToRenderPerBatch={5}
+        updateCellsBatchingPeriod={50}
         ListHeaderComponent={<View style={styles.listHeader} />}
       />
     </View>
