@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import {
   NavigationProp,
@@ -73,10 +73,13 @@ const ChatList: React.FC = () => {
     return chatList.slice().sort((a, b) => b.updated - a.updated);
   }, [chatList]);
 
-  const handleSelectChat = (chatInfo: ChatInfo) => {
-    cancelAnimation();
-    navigation.navigate('Chat', chatInfo);
-  };
+  const handleSelectChat = useCallback(
+    (chatInfo: ChatInfo) => {
+      cancelAnimation();
+      navigation.navigate('Chat', chatInfo);
+    },
+    [navigation],
+  );
 
   useFocusEffect(
     React.useCallback(() => {
@@ -84,29 +87,32 @@ const ChatList: React.FC = () => {
     }, []),
   );
 
-  const renderChatItem = ({ item }: { item: ChatInfo }) => {
-    let chatInfo = item;
-    let avatar = getAvatar(chatInfo, userid);
-    let topic = getTopic(chatInfo);
-    // let participant = getParticipants(chatInfo, userid);
+  const renderChatItem = useCallback(
+    ({ item }: { item: ChatInfo }) => {
+      let chatInfo = item;
+      let avatar = getAvatar(chatInfo, userid);
+      let topic = getTopic(chatInfo);
+      // let participant = getParticipants(chatInfo, userid);
 
-    return (
-      <TouchableOpacity
-        style={styles.itemContainer}
-        onPress={() => handleSelectChat(chatInfo)}
-      >
-        <Avatar avatar={avatar} size={50} />
-        <View style={styles.textContainer}>
-          <Words tag="h2" style={styles.name}>
-            {topic}
-          </Words>
-          {/* <Words tag="small" style={styles.topic}>
+      return (
+        <TouchableOpacity
+          style={styles.itemContainer}
+          onPress={() => handleSelectChat(chatInfo)}
+        >
+          <Avatar avatar={avatar} size={50} />
+          <View style={styles.textContainer}>
+            <Words tag="h2" style={styles.name}>
+              {topic}
+            </Words>
+            {/* <Words tag="small" style={styles.topic}>
             {topic}
           </Words> */}
-        </View>
-      </TouchableOpacity>
-    );
-  };
+          </View>
+        </TouchableOpacity>
+      );
+    },
+    [getAvatar, getTopic, handleSelectChat, userid, styles],
+  );
 
   return (
     <View style={styles.container}>
@@ -115,6 +121,9 @@ const ChatList: React.FC = () => {
         data={sortedChats}
         keyExtractor={chat => chat.chatid}
         renderItem={renderChatItem}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        updateCellsBatchingPeriod={30}
         ListHeaderComponent={<View style={styles.listHeader} />}
       />
     </View>

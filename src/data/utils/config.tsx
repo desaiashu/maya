@@ -24,7 +24,7 @@ export const WEB_MOBILE = WEB && !WEB_DESKTOP;
 export const ANDROID = Platform.OS === 'android';
 
 ///// Version /////
-export const VERSION = WEB ? '0.1.4' : DeviceInfo.getVersion();
+export const VERSION = WEB ? '0.1.8' : DeviceInfo.getVersion();
 logger.info(VERSION);
 
 ///// Analytics /////

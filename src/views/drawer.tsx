@@ -53,11 +53,36 @@ const ChatDrawer: React.FC = () => {
 
   const feedbackChat = chats.find(chat => chat.chatid === userid);
 
+  // Memoize the custom drawer renderer
+  const renderCustomDrawer = React.useCallback(
+    (props: DrawerContentComponentProps) => {
+      const newChatScreen = props.state.routes[props.state.routes.length - 3];
+      const excluded = ['Profile', '_new chat', 'Feedback'];
+      const filteredProps = {
+        ...props,
+        state: {
+          ...props.state,
+          routes: props.state.routes.filter(
+            route => !excluded.includes(route.name),
+          ),
+        },
+      };
+      return (
+        <CustomDrawer
+          theme={theme}
+          newScreen={newChatScreen}
+          {...filteredProps}
+        />
+      );
+    },
+    [theme],
+  );
+
   return (
     <Drawer.Navigator
       initialRouteName={chats[0] ? chats[0].chatid : '_new chat'}
       screenOptions={defaultDrawerOptions()}
-      drawerContent={renderCustomDrawer(theme)}
+      drawerContent={renderCustomDrawer}
     >
       {chats
         .filter(chat => chat.chatid !== userid)
@@ -100,28 +125,7 @@ const ChatDrawer: React.FC = () => {
   );
 };
 
-const renderCustomDrawer =
-  (theme: Theme) => (props: DrawerContentComponentProps) => {
-    const newChatScreen = props.state.routes[props.state.routes.length - 3];
-    const excluded = ['Profile', '_new chat', 'Feedback']; // Add the route names you want to exclude
-    const filteredProps = {
-      ...props,
-      state: {
-        ...props.state,
-        routes: props.state.routes.filter(
-          route => !excluded.includes(route.name),
-        ),
-      },
-    };
-
-    return (
-      <CustomDrawer
-        theme={theme}
-        newScreen={newChatScreen}
-        {...filteredProps}
-      />
-    );
-  };
+// --- inside ChatDrawer ---
 
 interface CustomDrawerProps extends DrawerContentComponentProps {
   theme: Theme;
@@ -242,6 +246,7 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
 
 const defaultDrawerOptions = (): DrawerNavigationOptions => ({
   headerShown: true,
+  drawerType: 'front',
 });
 
 const getStyles = (theme: Theme) =>

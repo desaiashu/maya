@@ -1,6 +1,6 @@
 import { ChatInfo, Profile } from '@/data/types';
 import { StateCreator } from 'zustand';
-import { timestamp } from '@/data';
+import { timestamp, logger } from '@/data';
 
 export interface ChatlistState {
   chats: ChatInfo[];
@@ -12,7 +12,7 @@ export interface ChatlistState {
   refreshRequested: () => void;
   refreshSucceeded: () => void;
 
-  updateChats: (chats: ChatInfo[]) => void;
+  updateChats: (chats: ChatInfo[]) => ChatInfo[];
   updateChatInfo: (chat: ChatInfo) => ChatInfo[];
   updateProtocols: (protocols: string[]) => void;
   updateUserChats: (updatedProfile: Profile) => void;
@@ -32,7 +32,21 @@ export const useChatlistState: StateCreator<ChatlistState> = (set, get) => ({
   refreshSucceeded: () =>
     set(state => ({ lastRefresh: state.lastRefreshRequest })),
 
-  updateChats: (chats: ChatInfo[]) => set({ chats }),
+  updateChats: (newChats: ChatInfo[]) => {
+    logger.info('started chat update');
+    const state = get();
+    let updatedChats = [...state.chats];
+    for (const chat of newChats.reverse()) {
+      const idx = updatedChats.findIndex(c => c.chatid === chat.chatid);
+      if (idx === -1) {
+        updatedChats = [...updatedChats, chat];
+      } else if (chat.updated > updatedChats[idx].updated) {
+        updatedChats[idx] = chat;
+      }
+    }
+    logger.info('finished chat update');
+    return updatedChats;
+  },
 
   updateChatInfo: (chat: ChatInfo) => {
     const chats = get().chats;

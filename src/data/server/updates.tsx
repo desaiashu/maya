@@ -22,6 +22,11 @@ import {
 
 class ClientUpdate {
   handleRefreshUpdate(data: RefreshData) {
+    logger.info('refresh update');
+    logger.info(data.messages.length);
+    logger.info(data.perspectives.length);
+    logger.info(data.chatlist.length);
+
     // Seems to be messing with the navigation stack
     // prepAnimation('spring');
     const currentState = useStore.getState();
@@ -29,7 +34,7 @@ class ClientUpdate {
     // const p = currentState.updatePerspectives(data.perspectives);
     useStore.setState(state => ({
       ...state,
-      chats: data.chatlist,
+      chats: currentState.updateChats(data.chatlist),
       protocols: data.protocols,
       bots: data.bots,
       messages: currentState.updateMessages(data.messages),

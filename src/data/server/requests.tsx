@@ -1,4 +1,4 @@
-import { useStore, VERSION } from '@/data';
+import { useStore, VERSION, logger } from '@/data';
 import { socket } from '@/data/server';
 import {
   MayaRequest,
@@ -45,6 +45,8 @@ class ServerRequest {
       };
       socket.sendRequest(request);
       state.refreshRequested();
+      logger.info('refresh requested');
+      logger.info('last refresh: ' + state.lastRefresh);
     },
     120000,
     { leading: true, trailing: false },
