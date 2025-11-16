@@ -207,7 +207,7 @@ const Chat: React.FC = () => {
   return (
     <SafeAreaView edges={['top']} style={styles.container}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'height' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardAvoid}
       >
         {WEB && (

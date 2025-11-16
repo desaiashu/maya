@@ -30,6 +30,20 @@ Backend - _(push dev/main)_
 
 #### 0.1.0 ship:
 
+#### Bugs
+
+Implement sentry / bugsnag to identify source of crashes
+On the download webpage, can’t zoom in to read the screenshots
+
+#### Server comms
+
+- Only load perspectives when user clicks into perspective screen, not on "refresh"
+- Update "last-refresh" to paginate data loading
+- Lastrefresh functionality, so it doesn't reload chats all the time
+- Ensure websocket isn't created before userid exists on client?
+- Background data updates
+- 
+
 ### After 0.1.0:
 
 - Android
@@ -74,18 +88,6 @@ Backend - _(push dev/main)_
 - Inflection.ai for third model
 - Toggle streaming
 - Read speed
-
-#### Bugs
-
-On the download webpage, can’t zoom in to read the screenshots
-
-#### Server comms
-
-- Only load perspectives when user clicks into perspective screen, not on "refresh"
-- Update "last-refresh" to paginate data loading
-- Lastrefresh functionality, so it doesn't reload chats all the time
-- Ensure websocket isn't created before userid exists on client?
-- Background data updates
 
 #### Schema changes
 

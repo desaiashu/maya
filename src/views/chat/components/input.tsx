@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { debounce } from 'lodash';
-import { StyleSheet, View, TextInput, Keyboard } from 'react-native';
+import { StyleSheet, View, TextInput } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '@/ui/atoms';
 import { Theme, useTheme } from '@/ui/theme';
 import { useStore, State, useStream, StreamState, ANDROID } from '@/data';
@@ -23,7 +24,7 @@ const InputToolbar: React.FC<InputToolbarProps> = ({
   );
   const updateDraft = useStore((state: State) => state.updateDraft);
   const [text, setText] = useState(draft);
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const insets = useSafeAreaInsets();
 
   const { isStreaming, chunks, stopStream } = useStream(
     (state: StreamState) => ({
@@ -32,25 +33,6 @@ const InputToolbar: React.FC<InputToolbarProps> = ({
       stopStream: state.stopStream,
     }),
   );
-
-  useEffect(() => {
-    const keyboardWillShowListener = Keyboard.addListener(
-      ANDROID ? 'keyboardDidShow' : 'keyboardWillShow',
-      () => {
-        setKeyboardVisible(true);
-      },
-    );
-    const keyboardWillHideListener = Keyboard.addListener(
-      ANDROID ? 'keyboardDidHide' : 'keyboardWillHide',
-      () => {
-        setKeyboardVisible(false);
-      },
-    );
-    return () => {
-      keyboardWillShowListener.remove();
-      keyboardWillHideListener.remove();
-    };
-  }, []);
 
   const theme = useTheme();
   const styles = getStyles(theme);
@@ -79,7 +61,7 @@ const InputToolbar: React.FC<InputToolbarProps> = ({
 
   return (
     <View
-      style={[styles.container, keyboardVisible && styles.keyboard]}
+      style={[styles.container, { marginBottom: insets.bottom - 12 }]}
       onLayout={onLayout}
     >
       <View style={styles.primary}>
@@ -129,7 +111,6 @@ const getStyles = (theme: Theme) =>
       right: 0,
       margin: 15,
       marginTop: 0,
-      marginBottom: ANDROID ? 15 : 30,
       shadowColor: theme.colors.outline,
       shadowOpacity: 0.6,
       shadowOffset: { width: 0, height: 0 },
@@ -142,9 +123,6 @@ const getStyles = (theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-    },
-    keyboard: {
-      marginBottom: ANDROID ? 35 : 15,
     },
     primary: {
       flexDirection: 'row',
