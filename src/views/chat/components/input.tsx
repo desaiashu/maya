@@ -25,6 +25,7 @@ const InputToolbar: React.FC<InputToolbarProps> = ({
   const updateDraft = useStore((state: State) => state.updateDraft);
   const [text, setText] = useState(draft);
   const insets = useSafeAreaInsets();
+  const [focused, setFocused] = useState(false);
 
   const { isStreaming, chunks, stopStream } = useStream(
     (state: StreamState) => ({
@@ -61,7 +62,12 @@ const InputToolbar: React.FC<InputToolbarProps> = ({
 
   return (
     <View
-      style={[styles.container, { marginBottom: insets.bottom - 12 }]}
+      style={[
+        styles.container,
+        {
+          marginBottom: insets.bottom - (focused ? 24 : 0),
+        },
+      ]}
       onLayout={onLayout}
     >
       <View style={styles.primary}>
@@ -77,6 +83,8 @@ const InputToolbar: React.FC<InputToolbarProps> = ({
           verticalAlign={'top'}
           cursorColor={theme.colors.text.secondary}
           selectionColor={theme.colors.text.secondary}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
         />
         {isStreaming && chunks.chatid === chatid ? (
           <Button
