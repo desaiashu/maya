@@ -30,6 +30,7 @@ import {
   WEB_DESKTOP,
   ANDROID,
   newCommunityChat,
+  newCodeChat,
   hashChatID,
   WEB_URL,
   DOWNLOAD_URL,
@@ -40,7 +41,7 @@ import {
 } from '@/data';
 import { useNavigation } from '@react-navigation/native';
 import { Message, ChatInfo } from '@/data/types';
-import { MessageList, InputToolbar } from '@/views/chat/components';
+import { MessageList, InputToolbar, CodePanel } from '@/views/chat/components';
 import { Theme, useTheme } from '@/ui/theme';
 import { IconButton, Button } from '@/ui/atoms';
 import { useParams } from 'react-router-dom';
@@ -111,8 +112,10 @@ const renderRightMenu = (props: chatOptionsProps) => {
       <IconButton
         icon="compose"
         onPress={() => {
-          analytics.track('new_chat');
-          const newChat = newCommunityChat();
+          const viewMode = useStore.getState().viewMode;
+          analytics.track('new_chat', { mode: viewMode });
+          const newChat =
+            viewMode === 'code' ? newCodeChat() : newCommunityChat();
           navigation.reset({
             index: 0,
             routes: [{ name: newChat.chatid + newChat.topic, params: newChat }],
@@ -165,6 +168,15 @@ const Chat: React.FC = () => {
       ...(isStreaming[chatInfo.chatid] ? [dummyMessage(chatInfo.chatid)] : []),
     ],
   }));
+  const isCodeMode = chatInfo.protocol === 'roundtable';
+
+  // Phase-1: ensure server agrees a roundtable chat is in code mode on entry.
+  useEffect(() => {
+    if (isCodeMode && chatInfo.chatid !== '_') {
+      server.setMode(chatInfo.chatid, 'code');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chatInfo.chatid]);
 
   // For new chats, the chatID will be '_' and requires update
   // For existing chats, profile updates might come through
@@ -228,6 +240,7 @@ const Chat: React.FC = () => {
           ref={flatListRef}
           chatid={chatInfo.chatid}
         />
+        {isCodeMode && <CodePanel chatid={chatInfo.chatid} />}
         {!WEB && <InputToolbar onSend={onSend} chatid={chatInfo.chatid} />}
       </KeyboardAvoidingView>
     </SafeAreaView>

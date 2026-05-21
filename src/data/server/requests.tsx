@@ -10,9 +10,19 @@ import {
   PerspectiveRequest,
   SlugRequest,
   StopRequest,
+  WSRequest,
+  CodeWSRequest,
+  ChatMode,
+  PlanEdit,
+  WorkspaceSource,
 } from '@/data/types';
 import { Message, Auth, Profile, ChatInfo } from '@/data/types';
 import { throttle } from 'lodash';
+
+// MayaRequest.command is auto-generated from pydantic and only includes WSRequest.
+// Code-mode commands are valid at runtime; cast at the boundary until the pydantic
+// models are regenerated.
+const cmd = (c: CodeWSRequest): WSRequest => c as unknown as WSRequest;
 
 class ServerRequest {
   reinitialize() {
@@ -132,6 +142,63 @@ class ServerRequest {
       ...this.baseParams(),
       command: 'stop',
       data: message,
+    };
+    socket.sendRequest(request);
+  }
+
+  // ---------- code-mode commands ----------
+
+  setMode(chatid: string, mode: ChatMode) {
+    const request: MayaRequest = {
+      ...this.baseParams(),
+      command: cmd('set_mode'),
+      data: { chatid, mode },
+    };
+    socket.sendRequest(request);
+    logger.info('set_mode', chatid, mode);
+  }
+
+  approvePlan(chatid: string, plan_id: string) {
+    const request: MayaRequest = {
+      ...this.baseParams(),
+      command: cmd('approve_plan'),
+      data: { chatid, plan_id },
+    };
+    socket.sendRequest(request);
+  }
+
+  revisePlan(chatid: string, plan_id: string, edits: PlanEdit[]) {
+    const request: MayaRequest = {
+      ...this.baseParams(),
+      command: cmd('revise_plan'),
+      data: { chatid, plan_id, edits },
+    };
+    socket.sendRequest(request);
+  }
+
+  skipTask(chatid: string, plan_id: string, task_id: string) {
+    const request: MayaRequest = {
+      ...this.baseParams(),
+      command: cmd('skip_task'),
+      data: { chatid, plan_id, task_id },
+    };
+    socket.sendRequest(request);
+  }
+
+  cancelRun(chatid: string) {
+    const request: MayaRequest = {
+      ...this.baseParams(),
+      command: cmd('cancel'),
+      data: { chatid },
+    };
+    socket.sendRequest(request);
+  }
+
+  attachWorkspace(chatid: string, source: WorkspaceSource) {
+    const request: MayaRequest = {
+      ...this.baseParams(),
+      command: cmd('attach_workspace'),
+      data: { chatid, source },
     };
     socket.sendRequest(request);
   }

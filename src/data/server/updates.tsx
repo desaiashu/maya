@@ -18,6 +18,20 @@ import {
   SearchResult,
   SlugData,
   UpdateInfo,
+  PlanProposed,
+  PlanPendingApproval,
+  PlanApproved,
+  TaskDispatched,
+  TaskCompleted,
+  ExecutorEvent,
+  RoundtableTurn,
+  RoundtableSummary,
+  RoundtableVerdict,
+  MergeConflict,
+  SeatAttribution,
+  ThoughtChunk,
+  ToolCallStart,
+  ToolCallEnd,
 } from '@/data/types';
 
 class ClientUpdate {
@@ -124,6 +138,65 @@ class ClientUpdate {
       const state = useStore.getState();
       state.clearUser();
     }
+  }
+
+  // ---------- code-mode updates ----------
+
+  handleThoughtChunkUpdate(data: ThoughtChunk) {
+    // Phase 1: log; UI hookup lands with the collapsible "thoughts" component.
+    logger.info('thought_chunk', data.sender, data.content?.length);
+  }
+
+  handleToolCallStartUpdate(data: ToolCallStart) {
+    logger.info('tool_call_start', data.tool, data.call_id);
+  }
+
+  handleToolCallEndUpdate(data: ToolCallEnd) {
+    logger.info('tool_call_end', data.call_id);
+  }
+
+  handleSeatAttributionUpdate(data: SeatAttribution) {
+    useStore.getState().applySeatAttribution(data);
+  }
+
+  handleRoundtableTurnUpdate(data: RoundtableTurn) {
+    useStore.getState().applyRoundtableTurn(data);
+  }
+
+  handleRoundtableSummaryUpdate(data: RoundtableSummary) {
+    useStore.getState().applyRoundtableSummary(data);
+  }
+
+  handlePlanProposedUpdate(data: PlanProposed) {
+    useStore.getState().applyPlanProposed(data);
+  }
+
+  handlePlanPendingApprovalUpdate(data: PlanPendingApproval) {
+    useStore.getState().applyPlanPendingApproval(data);
+  }
+
+  handlePlanApprovedUpdate(data: PlanApproved) {
+    useStore.getState().applyPlanApproved(data);
+  }
+
+  handleTaskDispatchedUpdate(data: TaskDispatched) {
+    useStore.getState().applyTaskDispatched(data);
+  }
+
+  handleExecutorEventUpdate(data: ExecutorEvent) {
+    useStore.getState().applyExecutorEvent(data);
+  }
+
+  handleTaskCompletedUpdate(data: TaskCompleted) {
+    useStore.getState().applyTaskCompleted(data);
+  }
+
+  handleMergeConflictUpdate(data: MergeConflict) {
+    useStore.getState().applyMergeConflict(data);
+  }
+
+  handleRoundtableVerdictUpdate(data: RoundtableVerdict) {
+    useStore.getState().applyRoundtableVerdict(data);
   }
 }
 

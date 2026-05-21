@@ -8,3 +8,4 @@ export { default as Search } from './info/search';
 export { default as Related } from './info/related';
 export { default as MessageList } from './messages';
 export { default as InputToolbar } from './input';
+export { default as CodePanel } from './code/panel';

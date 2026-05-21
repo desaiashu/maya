@@ -1,13 +1,15 @@
 import { useStore } from '@/data';
-import { MayaRequest, MayaUpdate, WSUpdate } from '@/data/types';
+import { MayaRequest, MayaUpdate, WSUpdate, CodeWSUpdate } from '@/data/types';
 import { client } from '@/data/server/updates';
 import { WS_URL, WEB, logger } from '@/data';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
+type AnyUpdate = WSUpdate | CodeWSUpdate;
+
 class Socket {
   private socket: WebSocket;
-  private updateHandlers: Record<WSUpdate, (data: any) => void>;
+  private updateHandlers: Record<AnyUpdate, (data: any) => void>;
 
   constructor() {
     this.socket = this.initializeWebSocket();
@@ -23,6 +25,21 @@ class Socket {
       related: client.handleRelatedUpdate,
       search: client.handleSearchUpdate,
       slug: client.handleSlugUpdate,
+      // code-mode
+      thought_chunk: client.handleThoughtChunkUpdate,
+      tool_call_start: client.handleToolCallStartUpdate,
+      tool_call_end: client.handleToolCallEndUpdate,
+      seat_attribution: client.handleSeatAttributionUpdate,
+      roundtable_turn: client.handleRoundtableTurnUpdate,
+      roundtable_summary: client.handleRoundtableSummaryUpdate,
+      plan_proposed: client.handlePlanProposedUpdate,
+      plan_pending_approval: client.handlePlanPendingApprovalUpdate,
+      plan_approved: client.handlePlanApprovedUpdate,
+      task_dispatched: client.handleTaskDispatchedUpdate,
+      executor_event: client.handleExecutorEventUpdate,
+      task_completed: client.handleTaskCompletedUpdate,
+      merge_conflict: client.handleMergeConflictUpdate,
+      roundtable_verdict: client.handleRoundtableVerdictUpdate,
     };
   }
 
@@ -37,19 +54,17 @@ class Socket {
 
     socket.onmessage = event => {
       const update: MayaUpdate = JSON.parse(event.data);
-      if (update.update !== 'chunk')
-        logger.info('received update: ', update.update);
-      const handler = this.updateHandlers[update.update];
+      const kind = update.update as AnyUpdate;
+      if (kind !== 'chunk') logger.info('received update: ', kind);
+      const handler = this.updateHandlers[kind];
       if (handler) {
         setTimeout(() => {
           handler(update.data);
-          if (update.update !== 'chunk')
-            logger.info('completed update: ', update.update);
+          if (kind !== 'chunk') logger.info('completed update: ', kind);
         }, 0);
       } else {
-        logger.error('Unknown update type:', update.update);
+        logger.error('Unknown update type:', kind);
       }
-      // logger.info('completed update: ', update.update);
     };
 
     socket.onerror = event => {

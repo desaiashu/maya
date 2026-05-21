@@ -47,16 +47,22 @@ export const key = (m: Message) => m.chatid + '_' + m.timestamp.toString();
 export const threadid = (chatid: string, messid: number) =>
   chatid + '_' + messid.toString();
 
-export const emptyChat = (): ChatInfo => {
+export const emptyChat = (protocol: string = 'maya'): ChatInfo => {
   const state = useStore.getState();
   const userid = state.currentUser.userid;
+  const participants =
+    protocol === 'roundtable'
+      ? [userid, 'maya', 'moderator']
+      : [userid, 'maya', 'system', 'uncensored', 'oracle'];
   return {
     chatid: '_',
     slug: '_',
     creator: userid,
-    participants: [userid, 'maya', 'system', 'uncensored', 'oracle'],
+    participants,
+    // Keep the topic stable across protocols so the `_new chat` drawer route
+    // resolves regardless of mode; server will rename on first response.
     topic: 'new chat',
-    protocol: 'maya',
+    protocol,
     profiles: [],
     created: timestamp(),
     updated: timestamp(),
@@ -85,6 +91,12 @@ export const newCommunityChat = () => {
     server.createChat(chat);
     return chat;
   }
+};
+
+export const newCodeChat = () => {
+  const chat: ChatInfo = emptyChat('roundtable');
+  server.createChat(chat);
+  return chat;
 };
 
 export const isSameDay = (

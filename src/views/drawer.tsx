@@ -23,7 +23,7 @@ import {
   DrawerContentComponentProps,
   DrawerItem,
 } from '@react-navigation/drawer';
-import { Words } from '@/ui/atoms';
+import { Words, Button } from '@/ui/atoms';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Chat, chatOptions } from '@/views/chat';
 import { Profile, profileOptions } from '@/views/setup';
@@ -165,6 +165,17 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
   const styles = getStyles(theme);
   const routes = state.routes;
 
+  const viewMode = useStore((s: State) => s.viewMode);
+  const setViewMode = useStore((s: State) => s.setViewMode);
+
+  const visibleRoutes = routes.filter(route => {
+    const chat = route.params as ChatInfo | undefined;
+    if (!chat || !chat.protocol) return true; // keep meta routes
+    return viewMode === 'code'
+      ? chat.protocol === 'roundtable'
+      : chat.protocol !== 'roundtable';
+  });
+
   // TODO: make sure this is the right timing to refresh
   const isDrawerOpen = useDrawerStatus() === 'open';
   useEffect(() => {
@@ -179,12 +190,34 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
     <SafeAreaView edges={['top']} style={styles.container}>
       <View style={styles.header}>
         <Words tag="h3" style={styles.headerText}>
-          Chats
+          {viewMode === 'code' ? 'Code' : 'Chats'}
         </Words>
+        <View style={styles.modeToggle}>
+          <Button
+            title="Chat"
+            tag="small"
+            outlined={viewMode !== 'chat'}
+            bare={viewMode === 'chat'}
+            onPress={() => {
+              setViewMode('chat');
+              analytics.track('view_mode', { mode: 'chat' });
+            }}
+          />
+          <Button
+            title="Code"
+            tag="small"
+            outlined={viewMode !== 'code'}
+            bare={viewMode === 'code'}
+            onPress={() => {
+              setViewMode('code');
+              analytics.track('view_mode', { mode: 'code' });
+            }}
+          />
+        </View>
       </View>
       <DrawerContentScrollView {...props}>
         <View style={styles.chats}>
-          {routes.map(route => {
+          {visibleRoutes.map(route => {
             const chat = route.params as ChatInfo;
             let selected = false;
             if (routes[state.index] !== undefined) {
@@ -208,7 +241,7 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
                 focused={selected}
                 activeTintColor={theme.colors.outline}
                 onPress={() => {
-                  analytics.track('select_chat');
+                  analytics.track('select_chat', { mode: viewMode });
                   props.navigation.navigate(route.name);
                 }}
               />
@@ -264,6 +297,12 @@ const getStyles = (theme: Theme) =>
     headerText: {
       marginLeft: 20,
       marginTop: 20,
+    },
+    modeToggle: {
+      flexDirection: 'row',
+      marginLeft: 12,
+      marginTop: 8,
+      gap: 4,
     },
     itemText: {
       color: theme.colors.text.primary,
