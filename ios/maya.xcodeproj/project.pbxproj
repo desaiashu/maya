@@ -9,9 +9,7 @@
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* mayaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* mayaTests.m */; };
 		0CB1652A623292191C3535F9 /* libPods-maya-mayaTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CADE932EC7A2C3D8004987B0 /* libPods-maya-mayaTests.a */; };
-		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		4799A1B7BC4F4607A115F710 /* PlayfairDisplay-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D636A5B7A1564C81B2B88D0B /* PlayfairDisplay-Italic.ttf */; };
 		5411648E2B82C01300432CC6 /* transparent.png in Resources */ = {isa = PBXBuildFile; fileRef = 5411648D2B82C01300432CC6 /* transparent.png */; };
 		541164902B82C18900432CC6 /* background.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5411648F2B82C18900432CC6 /* background.xcassets */; };
@@ -20,6 +18,8 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		994F1D3D4EB94DB18D529F70 /* PlayfairDisplay-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D1E1ED6DB8C143D68DF93E2C /* PlayfairDisplay-Regular.ttf */; };
 		A793D8A8C70A4ABF81936A78 /* LibreFranklin-Roman.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F3D7ECC87EC43789EDB405E /* LibreFranklin-Roman.ttf */; };
+		AD51A002000000000000002A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD51A001000000000000001A /* AppDelegate.swift */; };
+		AD51A004000000000000004A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AD51A003000000000000003A /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,17 +37,16 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* mayaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = mayaTests.m; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* maya.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = maya.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = maya/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = maya/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = maya/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = maya/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = maya/main.m; sourceTree = "<group>"; };
 		24B1A17BD7B90DA38F5E950E /* Pods-maya.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-maya.debug.xcconfig"; path = "Target Support Files/Pods-maya/Pods-maya.debug.xcconfig"; sourceTree = "<group>"; };
 		3F3D7ECC87EC43789EDB405E /* LibreFranklin-Roman.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LibreFranklin-Roman.ttf"; path = "../assets/fonts/LibreFranklin/LibreFranklin-Roman.ttf"; sourceTree = "<group>"; };
 		5411648D2B82C01300432CC6 /* transparent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = transparent.png; path = "../assets/app icons/raw/transparent.png"; sourceTree = "<group>"; };
 		5411648F2B82C18900432CC6 /* background.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = background.xcassets; path = maya/background.xcassets; sourceTree = "<group>"; };
 		6C07AA8C155EE577E8015AAC /* Pods-maya.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-maya.release.xcconfig"; path = "Target Support Files/Pods-maya/Pods-maya.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = maya/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		AD51A001000000000000001A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = maya/AppDelegate.swift; sourceTree = "<group>"; };
+		AD51A003000000000000003A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = maya/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		B7565A63A50243B0AA93124C /* LibreFranklin-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LibreFranklin-Italic.ttf"; path = "../assets/fonts/LibreFranklin/LibreFranklin-Italic.ttf"; sourceTree = "<group>"; };
 		CADE932EC7A2C3D8004987B0 /* libPods-maya-mayaTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-maya-mayaTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1E1ED6DB8C143D68DF93E2C /* PlayfairDisplay-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "PlayfairDisplay-Regular.ttf"; path = "../assets/fonts/Playfair/PlayfairDisplay-Regular.ttf"; sourceTree = "<group>"; };
@@ -98,14 +97,13 @@
 		13B07FAE1A68108700A75B9A /* maya */ = {
 			isa = PBXGroup;
 			children = (
-				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				AD51A001000000000000001A /* AppDelegate.swift */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
+				AD51A003000000000000003A /* PrivacyInfo.xcprivacy */,
 				5411648F2B82C18900432CC6 /* background.xcassets */,
 				5411648D2B82C01300432CC6 /* transparent.png */,
-				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = maya;
 			sourceTree = "<group>";
@@ -269,6 +267,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				AD51A004000000000000004A /* PrivacyInfo.xcprivacy in Resources */,
 				5411648E2B82C01300432CC6 /* transparent.png in Resources */,
 				5645D2AA26FA4C079C3D9417 /* LibreFranklin-Italic.ttf in Resources */,
 				4799A1B7BC4F4607A115F710 /* PlayfairDisplay-Italic.ttf in Resources */,
@@ -424,8 +423,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
-				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				AD51A002000000000000002A /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -450,7 +448,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = mayaTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -474,7 +472,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = mayaTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -515,6 +513,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.studiocollective.maya;
 				PRODUCT_NAME = maya;
+				SWIFT_OBJC_BRIDGING_HEADER = "maya/maya-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -544,6 +543,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.studiocollective.maya;
 				PRODUCT_NAME = maya;
+				SWIFT_OBJC_BRIDGING_HEADER = "maya/maya-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -598,7 +598,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -610,21 +610,23 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = "$(inherited)";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-DRCT_REMOVE_LEGACY_ARCH=1",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
+					"-DRCT_REMOVE_LEGACY_ARCH=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-Wl",
-					"-ld_classic",
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
 				USE_HERMES = true;
 			};
 			name = Debug;
@@ -671,7 +673,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -682,21 +684,22 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_CFLAGS = "$(inherited)";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-DRCT_REMOVE_LEGACY_ARCH=1",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
+					"-DRCT_REMOVE_LEGACY_ARCH=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-Wl",
-					"-ld_classic",
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
 				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};

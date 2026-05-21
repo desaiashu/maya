@@ -1,7 +1,6 @@
 module.exports = {
   presets: [
-    // 'module:@react-native/babel-preset', #old
-    'module:metro-react-native-babel-preset',
+    'module:@react-native/babel-preset',
     [
       '@babel/preset-typescript',
       {
@@ -20,6 +19,6 @@ module.exports = {
         },
       },
     ],
-    'react-native-reanimated/plugin',
+    'react-native-worklets/plugin',
   ],
 };

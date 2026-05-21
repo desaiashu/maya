@@ -1,8 +1,8 @@
-import { MMKV } from 'react-native-mmkv';
+import { createMMKV } from 'react-native-mmkv';
 import { StateStorage } from 'zustand/middleware';
 import { RESET_STATE, WEB } from '@/data/utils/config';
 
-let storage = new MMKV({ id: 'state' });
+let storage = createMMKV({ id: 'state' });
 
 if (RESET_STATE) WEB ? localStorage.clear() : storage.clearAll();
 
@@ -17,6 +17,6 @@ export const zustandStorage: StateStorage = WEB
         return value ?? null;
       },
       removeItem: name => {
-        return storage.delete(name);
+        storage.remove(name);
       },
     };

@@ -25,7 +25,7 @@ const babelLoaderConfiguration = {
     options: {
       cacheDirectory: false,
       presets: [
-        'module:metro-react-native-babel-preset',
+        'module:@react-native/babel-preset',
         '@babel/preset-typescript',
         '@babel/preset-env',
         '@babel/preset-react',
@@ -33,9 +33,8 @@ const babelLoaderConfiguration = {
       plugins: [
         'react-native-web',
         '@babel/plugin-transform-react-jsx',
-        '@babel/plugin-proposal-class-properties',
         '@babel/plugin-proposal-export-namespace-from',
-        'react-native-reanimated/plugin',
+        'react-native-worklets/plugin',
       ],
     },
   },
