@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 // import { StackNavigationProp } from '@react-navigation/stack';
 // import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
@@ -8,8 +8,13 @@ import {
 } from '@react-navigation/drawer';
 import { RootStackParamList } from '@/views/navigator';
 import { Theme, useTheme } from '@/ui/theme';
-import { IconButton, Words, Avatar } from '@/ui/atoms';
+import { IconButton, Words, Avatar, Button } from '@/ui/atoms';
 import { State, useStore, analytics, ANDROID } from '@/data';
+import {
+  checkForUpdate,
+  downloadUpdate,
+  UpdateManifest,
+} from '@/data/server/ota';
 
 export const profileOptions = (
   navigation: DrawerNavigationProp<RootStackParamList, 'Profile'>,
@@ -53,10 +58,34 @@ export const profileOptions = (
 const Profile: React.FC = () => {
   const styles = getStyles(useTheme());
   const user = useStore((state: State) => state.currentUser);
+  const [update, setUpdate] = useState<UpdateManifest | null>(null);
+  const [downloading, setDownloading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    checkForUpdate().then(setUpdate);
+  }, []);
 
   if (user === null) {
     return null;
   }
+
+  const onDownload = () => {
+    if (!update) return;
+    analytics.track('ota_download', { version: update.version });
+    setError(null);
+    setProgress(0);
+    setDownloading(true);
+    downloadUpdate(update, setProgress, (msg) => {
+      setDownloading(false);
+      setError(msg);
+    });
+  };
+
+  const updateLabel = downloading
+    ? `downloading ${Math.round(progress * 100)}%`
+    : `update to ${update?.name ?? ''}`;
 
   return (
     <View style={styles.container}>
@@ -74,6 +103,25 @@ const Profile: React.FC = () => {
         <Words tag="body" style={styles.phoneNumber}>
           {user.userid}
         </Words>
+        {update && (
+          <View style={styles.updateBlock}>
+            <Button
+              title={updateLabel}
+              onPress={onDownload}
+              disabled={downloading}
+            />
+            {update.notes ? (
+              <Words tag="body" style={styles.updateNotes}>
+                {update.notes}
+              </Words>
+            ) : null}
+            {error ? (
+              <Words tag="body" style={styles.updateError}>
+                {error}
+              </Words>
+            ) : null}
+          </View>
+        )}
       </View>
     </View>
   );
@@ -106,6 +154,22 @@ const getStyles = (theme: Theme) =>
     phoneNumber: {
       marginTop: 26,
       fontSize: 18,
+    },
+    updateBlock: {
+      marginTop: 40,
+      alignItems: 'center',
+    },
+    updateNotes: {
+      marginTop: 12,
+      color: theme.colors.text.secondary,
+      textAlign: 'center',
+      maxWidth: 280,
+    },
+    updateError: {
+      marginTop: 12,
+      color: '#c33',
+      textAlign: 'center',
+      maxWidth: 280,
     },
     iconMenuContainer: {
       backgroundColor: theme.colors.background,

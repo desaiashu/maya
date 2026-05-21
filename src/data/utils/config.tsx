@@ -80,6 +80,7 @@ if (['local', 'toshbook'].includes(ENV)) {
 
 export const WEB_URL = HTTP + SSL + DOMAIN + WEB_PORT + '/';
 export const WS_URL = WS + SSL + SUBDOMAIN + DOMAIN + APP_PORT + SLUG + '/';
+export const API_URL = HTTP + SSL + SUBDOMAIN + DOMAIN + APP_PORT + '/';
 
 logger.info(WEB_URL);
 logger.info(WS_URL);
