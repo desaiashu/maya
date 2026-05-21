@@ -53,6 +53,13 @@ const ChatDrawer: React.FC = () => {
 
   const feedbackChat = chats.find(chat => chat.chatid === userid);
 
+  const firstChat = chats
+    .filter(chat => chat.chatid !== userid)
+    .sort((a, b) => b.updated - a.updated)[0];
+  const initialRouteName = firstChat
+    ? firstChat.chatid + '_' + (firstChat.topic || 'new chat')
+    : '_new chat';
+
   // Memoize the custom drawer renderer
   const renderCustomDrawer = React.useCallback(
     (props: DrawerContentComponentProps) => {
@@ -80,7 +87,7 @@ const ChatDrawer: React.FC = () => {
 
   return (
     <Drawer.Navigator
-      initialRouteName={chats[0] ? chats[0].chatid : '_new chat'}
+      initialRouteName={initialRouteName}
       screenOptions={defaultDrawerOptions()}
       drawerContent={renderCustomDrawer}
     >
