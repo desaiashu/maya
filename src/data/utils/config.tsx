@@ -55,6 +55,10 @@ switch (ENV as Environment) {
   case 'toshbox':
     RESET_STATE = false; //safety measure
     DEV_SCREEN = undefined;
+    // Cloudflare Tunnel terminates TLS at the edge; backend stays on
+    // 127.0.0.1:8010 on toshbox. Mobile points at the public hostname.
+    SUBDOMAIN = '';
+    DOMAIN = 'maya.toshbox.dev';
     break;
   case 'dev':
     RESET_STATE = false; //safety measure
