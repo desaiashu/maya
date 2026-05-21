@@ -23,7 +23,7 @@ import {
   DrawerContentComponentProps,
   DrawerItem,
 } from '@react-navigation/drawer';
-import { Words, Button } from '@/ui/atoms';
+import { Words } from '@/ui/atoms';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Chat, chatOptions } from '@/views/chat';
 import { Profile, profileOptions } from '@/views/setup';
@@ -173,7 +173,6 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
   const routes = state.routes;
 
   const viewMode = useStore((s: State) => s.viewMode);
-  const setViewMode = useStore((s: State) => s.setViewMode);
 
   const visibleRoutes = routes.filter(route => {
     const chat = route.params as ChatInfo | undefined;
@@ -199,28 +198,6 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
         <Words tag="h3" style={styles.headerText}>
           {viewMode === 'code' ? 'Code' : 'Chats'}
         </Words>
-        <View style={styles.modeToggle}>
-          <Button
-            title="Chat"
-            tag="small"
-            outlined={viewMode !== 'chat'}
-            bare={viewMode === 'chat'}
-            onPress={() => {
-              setViewMode('chat');
-              analytics.track('view_mode', { mode: 'chat' });
-            }}
-          />
-          <Button
-            title="Code"
-            tag="small"
-            outlined={viewMode !== 'code'}
-            bare={viewMode === 'code'}
-            onPress={() => {
-              setViewMode('code');
-              analytics.track('view_mode', { mode: 'code' });
-            }}
-          />
-        </View>
       </View>
       <DrawerContentScrollView {...props}>
         <View style={styles.chats}>
@@ -304,12 +281,6 @@ const getStyles = (theme: Theme) =>
     headerText: {
       marginLeft: 20,
       marginTop: 20,
-    },
-    modeToggle: {
-      flexDirection: 'row',
-      marginLeft: 12,
-      marginTop: 8,
-      gap: 4,
     },
     itemText: {
       color: theme.colors.text.primary,
