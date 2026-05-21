@@ -72,5 +72,10 @@ yarn-error.log
 # testing
 /coverage
 
+# Playwright
+/playwright-report/
+/test-results/
+/tests/e2e/screenshots/
+
 # Local Netlify folder
 .netlify
