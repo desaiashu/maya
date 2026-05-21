@@ -52,6 +52,36 @@ interface chatOptionsProps {
   chat: ChatInfo | undefined;
 }
 
+const ViewModeToggle: React.FC<{ theme: Theme }> = ({ theme }) => {
+  const styles = getStyles(theme);
+  const viewMode = useStore((s: State) => s.viewMode);
+  const setViewMode = useStore((s: State) => s.setViewMode);
+  return (
+    <View style={styles.modeToggle}>
+      <Button
+        title="Chat"
+        tag="small"
+        outlined={viewMode !== 'chat'}
+        bare={viewMode === 'chat'}
+        onPress={() => {
+          setViewMode('chat');
+          analytics.track('view_mode', { mode: 'chat' });
+        }}
+      />
+      <Button
+        title="Code"
+        tag="small"
+        outlined={viewMode !== 'code'}
+        bare={viewMode === 'code'}
+        onPress={() => {
+          setViewMode('code');
+          analytics.track('view_mode', { mode: 'code' });
+        }}
+      />
+    </View>
+  );
+};
+
 export const chatOptions = (
   props: chatOptionsProps,
 ): DrawerNavigationOptions => {
@@ -59,7 +89,7 @@ export const chatOptions = (
   const styles = getStyles(theme);
   return {
     title: chat ? chat.chatid : 'new chat',
-    headerTitle: '',
+    headerTitle: () => <ViewModeToggle theme={theme} />,
     headerTransparent: true,
     headerStyle: {
       backgroundColor: theme.colors.transparent,
@@ -258,6 +288,10 @@ const getStyles = (theme: Theme) =>
     },
     rightMenu: {
       flexDirection: 'row',
+    },
+    modeToggle: {
+      flexDirection: 'row',
+      gap: 4,
     },
     download: {
       marginTop: WEB_DESKTOP ? 25 : 15,
