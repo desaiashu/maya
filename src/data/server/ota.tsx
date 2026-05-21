@@ -39,7 +39,6 @@ export function downloadUpdate(
     manifest.url,
     manifest.version,
     {
-      extensionBundle: '.zip',
       restartAfterInstall: true,
       progress: (received, total) => {
         const r = parseInt(received, 10);
@@ -49,7 +48,7 @@ export function downloadUpdate(
       updateSuccess: () => {
         logger.info('ota install success');
       },
-      updateFail: (msg) => {
+      updateFail: msg => {
         onError(typeof msg === 'string' ? msg : String(msg));
       },
     },
