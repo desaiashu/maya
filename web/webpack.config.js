@@ -56,9 +56,17 @@ const cssLoaderConfiguration = {
   use: ['style-loader', 'css-loader'],
 };
 
+const esmResolutionConfig = {
+  test: /\.m?js$/,
+  resolve: {
+    fullySpecified: false,
+  },
+};
+
 const commonConfig = {
   module: {
     rules: [
+      esmResolutionConfig,
       babelLoaderConfiguration,
       imageLoaderConfiguration,
       cssLoaderConfiguration,
