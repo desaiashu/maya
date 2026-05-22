@@ -5,11 +5,10 @@ import { logger } from '@/data';
 
 const NIL_UUID = '00000000-0000-0000-0000-000000000000';
 
-// The standalone server occasionally returns {status:"ROLLBACK", id:NIL, fileUrl:null}
-// when the device is already on the built-in bundle. The default wrap applies that
-// "update" and reloads, then re-checks → same response → infinite reload loop. This
-// resolver short-circuits that case to UP_TO_DATE. Everything else passes through
-// unchanged.
+// Mirrors the server invariant: when the device is already on its baseline
+// (bundleId == NIL or bundleId == minBundleId), a ROLLBACK→NIL response is a
+// no-op that would otherwise apply, reload, re-check, and loop forever. Drop
+// it on the floor. Everything else passes through unchanged.
 export function createUpdateResolver(baseURL: string): HotUpdaterResolver {
   return {
     checkUpdate: async params => {
@@ -26,11 +25,12 @@ export function createUpdateResolver(baseURL: string): HotUpdaterResolver {
         });
         if (res.status !== 200) throw new Error(res.statusText);
         const info = await res.json();
+        const atBaseline = params.bundleId === NIL_UUID || params.bundleId === params.minBundleId;
         if (
           info?.status === 'ROLLBACK' &&
           info?.id === NIL_UUID &&
           info?.fileUrl == null &&
-          params.bundleId === NIL_UUID
+          atBaseline
         ) {
           return { status: 'UP_TO_DATE' };
         }
