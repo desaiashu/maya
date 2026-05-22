@@ -1,56 +1,75 @@
 import { Platform } from 'react-native';
-import hotUpdate from 'react-native-ota-hot-update';
-import ReactNativeBlobUtil from 'react-native-blob-util';
-import { API_URL, logger } from '@/data';
+import { HotUpdater } from '@hot-updater/react-native';
+import { logger } from '@/data';
 
+// We surface the minimum that the UI needs. The full shape (id, fileHash,
+// manifestUrl, etc.) is in @hot-updater/core's AppUpdateAvailableInfo.
 export interface UpdateManifest {
-  version: number;
-  name: string;
-  url: string;
-  sha256?: string;
-  notes?: string;
+  id: string;
+  message?: string | null;
+  shouldForceUpdate?: boolean;
 }
 
-const MANIFEST_URL = API_URL + 'updates/ios/latest';
-
+// Resolves to an update if one is available (anything the server returns —
+// hot-updater handles app-version / fingerprint matching server-side).
 export async function checkForUpdate(): Promise<UpdateManifest | null> {
   if (Platform.OS !== 'ios') return null;
   try {
-    const res = await fetch(MANIFEST_URL);
-    if (!res.ok) return null;
-    const manifest: UpdateManifest = await res.json();
-    if (!manifest?.version) return null;
-    const current = await hotUpdate.getCurrentVersion();
-    if (manifest.version > current) return manifest;
-    return null;
+    const info = await HotUpdater.checkForUpdate({ updateStrategy: 'appVersion' });
+    if (!info) return null;
+    return {
+      id: info.id,
+      message: info.message,
+      shouldForceUpdate: info.shouldForceUpdate,
+    };
   } catch (e) {
     logger.info('ota check failed: ' + String(e));
     return null;
   }
 }
 
-export function downloadUpdate(
-  manifest: UpdateManifest,
+// Downloads + applies the update, then reloads. Native handles the healthy
+// beacon (RCTContentDidAppear + 10s grace) and auto-rollback on crash.
+export async function downloadUpdate(
+  _manifest: UpdateManifest,
   onProgress: (frac: number) => void,
   onError: (msg: string) => void,
-) {
-  hotUpdate.downloadBundleUri(
-    ReactNativeBlobUtil,
-    manifest.url,
-    manifest.version,
-    {
-      restartAfterInstall: true,
-      progress: (received, total) => {
-        const r = parseInt(received, 10);
-        const t = parseInt(total, 10);
-        if (t > 0) onProgress(r / t);
-      },
-      updateSuccess: () => {
-        logger.info('ota install success');
-      },
-      updateFail: msg => {
-        onError(typeof msg === 'string' ? msg : String(msg));
-      },
-    },
-  );
+): Promise<void> {
+  try {
+    const info = await HotUpdater.checkForUpdate({ updateStrategy: 'appVersion' });
+    if (!info) {
+      onError('no update available');
+      return;
+    }
+    const unsubscribe = HotUpdater.addListener('onProgress', ev => {
+      onProgress(ev.progress);
+    });
+    try {
+      const ok = await info.updateBundle();
+      if (!ok) {
+        onError('update install failed');
+        return;
+      }
+      logger.info(`ota install success v${info.id}`);
+      HotUpdater.reload();
+    } finally {
+      unsubscribe();
+    }
+  } catch (e) {
+    onError(String(e));
+  }
+}
+
+// Reset to the binary-shipped bundle, dropping any installed OTA updates.
+// Used as a "panic" path in the settings UI. To avoid immediately re-installing
+// the same broken bundle, the maintainer should disable it server-side first.
+export async function resetToBuiltIn(): Promise<boolean> {
+  const ok = await HotUpdater.resetChannel();
+  if (ok) HotUpdater.reload();
+  return ok;
+}
+
+// Currently-active bundle id. NIL UUID means "built-in bundle".
+export function getCurrentBundleId(): string | null {
+  return HotUpdater.getBundleId();
 }

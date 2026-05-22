@@ -48,9 +48,8 @@
     "react-devtools": "^5.0.0",
     "react-dom": "19.2.3",
     "react-native": "0.85.0",
-    "react-native-blob-util": "^0.24.9",
+    "@hot-updater/react-native": "^0.32.0",
     "react-native-device-info": "^15.0.2",
-    "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.31.2",
     "react-native-get-random-values": "^2.0.0",
     "react-native-gifted-chat": "^3.3.3",
@@ -59,7 +58,6 @@
     "react-native-markdown-display": "^7.0.2",
     "react-native-mmkv": "^4.3.1",
     "react-native-nitro-modules": "^0.35.7",
-    "react-native-ota-hot-update": "^2.4.3",
     "react-native-reanimated": "^4.3.1",
     "react-native-safe-area-context": "^5.8.0",
     "react-native-screens": "^4.25.1",
@@ -73,6 +71,9 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@hot-updater/bare": "^0.32.0",
+    "@hot-updater/standalone": "^0.32.0",
+    "hot-updater": "^0.32.0",
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.3",
     "@babel/preset-typescript": "^7.27.1",

@@ -1,11 +1,12 @@
 // maya.tsx = App
 
 import React, { useEffect, useRef } from 'react';
-import { UIManager, AppState, AppStateStatus } from 'react-native';
+import { UIManager, AppState, AppStateStatus, View, ActivityIndicator } from 'react-native';
+import { HotUpdater } from '@hot-updater/react-native';
 import { ThemeProvider } from '@/ui/theme';
 import Navigator from '@/views/navigator';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
-import { analytics, ANDROID, server, useStore } from '@/data';
+import { analytics, ANDROID, API_URL, server, useStore } from '@/data';
 
 const Maya = () => {
   const appState = useRef(AppState.currentState);
@@ -50,4 +51,17 @@ const Maya = () => {
   );
 };
 
-export default Maya;
+// HotUpdater.wrap runs a check-for-update on mount, blocks the UI with
+// fallbackComponent while downloading, and calls notifyAppReady() after first
+// commit. Native side handles auto-rollback (RCTContentDidAppear + 10s grace +
+// signal/exception handlers).
+export default HotUpdater.wrap({
+  baseURL: API_URL + 'hot-updater',
+  updateStrategy: 'appVersion',
+  reloadOnForceUpdate: true,
+  fallbackComponent: ({ status, progress }) => (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
+      <ActivityIndicator color="#fff" />
+    </View>
+  ),
+})(Maya);

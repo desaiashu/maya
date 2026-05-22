@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
@@ -22,6 +23,9 @@ import { Button, IconButton, Input, Words } from '@/ui/atoms';
 import { State, useStore, server, analytics } from '@/data';
 import { Profile } from '@/data/types';
 import { AvatarSelect } from '@/ui/molecules';
+import { getCurrentBundleId, resetToBuiltIn } from '@/data/server/ota';
+
+const NIL_BUNDLE_ID = '00000000-0000-0000-0000-000000000000';
 
 export const settingsOptions = (
   navigation: StackNavigationProp<RootStackParamList, 'Settings'>,
@@ -73,6 +77,8 @@ const Settings: React.FC = () => {
   const [username, setUsername] = useState(user.username);
   const [avatar, setAvatar] = useState(user.avatar);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const bundleId = Platform.OS === 'ios' ? getCurrentBundleId() : null;
+  const onBuiltIn = !bundleId || bundleId === NIL_BUNDLE_ID;
 
   useEffect(() => {
     const keyboardWillShowListener = Keyboard.addListener(
@@ -109,6 +115,25 @@ const Settings: React.FC = () => {
   if (user === null) {
     return null;
   }
+
+  const onReset = () => {
+    Alert.alert(
+      'reset to built-in bundle',
+      'drop all installed updates and restart on the binary-shipped bundle. the app will re-check for updates after.',
+      [
+        { text: 'cancel', style: 'cancel' },
+        {
+          text: 'reset',
+          style: 'destructive',
+          onPress: async () => {
+            analytics.track('ota_reset', { from: bundleId });
+            const ok = await resetToBuiltIn();
+            if (!ok) Alert.alert('reset failed');
+          },
+        },
+      ],
+    );
+  };
 
   const save = () => {
     // check if the username/avatar is empty
@@ -169,6 +194,18 @@ const Settings: React.FC = () => {
               />
             </View>
           </View>
+          {Platform.OS === 'ios' && !onBuiltIn && (
+            <View style={styles.bundleSection}>
+              <Words tag="h4" style={styles.bundleLabel}>
+                bundle {bundleId?.substring(0, 8)}
+              </Words>
+              <Button
+                outlined
+                title="reset to built-in bundle"
+                onPress={onReset}
+              />
+            </View>
+          )}
         </View>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
@@ -215,6 +252,14 @@ const getStyles = (theme: Theme) =>
       // marginBottom: 40,
     },
     save: {},
+    bundleSection: {
+      marginTop: 60,
+      alignItems: 'center',
+    },
+    bundleLabel: {
+      marginBottom: 12,
+      color: theme.colors.text.secondary,
+    },
     iconCloseContainer: {
       backgroundColor: theme.colors.background,
       paddingLeft: 1,

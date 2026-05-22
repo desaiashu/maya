@@ -1,73 +1,36 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Build a JS bundle, zip it, drop it into the-oracle's OTA dir, and update the manifest.
+# Thin wrapper around `hot-updater deploy` so the existing `npm run publish-ota`
+# entry point keeps working.
 #
-# Usage: bin/publish-ota.sh <version-int> <display-name> [notes]
-# Example: bin/publish-ota.sh 2 0.1.8+2 "Fixed icon spacing on profile"
+# Usage:
+#   bin/publish-ota.sh "fix: short description"            # targets current native version, prod channel
+#   bin/publish-ota.sh "..." 0.1.x                          # custom semver range
+#   CHANNEL=staging bin/publish-ota.sh "..."                # custom channel
+#   HOT_UPDATER_BASE_URL=... bin/publish-ota.sh "..."       # override OTA host
 #
-# Env overrides:
-#   PLATFORM         (default: ios)
-#   OTA_DIR          (default: $HOME/the-oracle/ota/$PLATFORM)
-#   BUNDLE_URL_BASE  (default: https://prod.seekmaya.com/updates/$PLATFORM/bundle)
+# What hot-updater does end-to-end:
+#   1. Builds the JS bundle (Hermes-compiled).
+#   2. SHA-256 hashes + packages it as a zip with manifest.json.
+#   3. (Optional) computes bsdiff patches against recent prior bundles.
+#   4. Uploads via @hot-updater/standalone storage HTTP API.
+#   5. POSTs the bundle metadata via @hot-updater/standalone repository HTTP API.
 
-if [ $# -lt 2 ]; then
-  echo "usage: $0 <version-int> <display-name> [notes]" >&2
+if [ $# -lt 1 ]; then
+  echo "usage: $0 \"<message>\" [target-app-version-range]" >&2
   exit 1
 fi
 
-if ! [[ "$1" =~ ^[0-9]+$ ]]; then
-  echo "error: version must be a positive integer (got: $1)" >&2
-  exit 1
-fi
-
-VERSION="$1"
-NAME="$2"
-NOTES="${3:-}"
-PLATFORM="${PLATFORM:-ios}"
-OTA_DIR="${OTA_DIR:-$HOME/the-oracle/ota/$PLATFORM}"
-BUNDLE_URL_BASE="${BUNDLE_URL_BASE:-https://prod.seekmaya.com/updates/$PLATFORM/bundle}"
+MESSAGE="$1"
+TARGET="${2:-}"
+CHANNEL="${CHANNEL:-production}"
 
 cd "$(dirname "$0")/.."  # maya root
 
-TMP=$(mktemp -d)
-trap 'rm -rf "$TMP"' EXIT
+ARGS=(deploy -p ios -c "$CHANNEL" -m "$MESSAGE")
+if [ -n "$TARGET" ]; then
+  ARGS+=(-t "$TARGET")
+fi
 
-echo "→ Building JS bundle for $PLATFORM ..."
-mkdir -p "$TMP/assets"
-npx react-native bundle \
-  --platform "$PLATFORM" \
-  --dev false \
-  --entry-file index.js \
-  --bundle-output "$TMP/main.jsbundle" \
-  --assets-dest "$TMP/assets"
-
-echo "→ Zipping → $OTA_DIR/$VERSION.zip"
-mkdir -p "$OTA_DIR"
-ZIP_PATH="$OTA_DIR/$VERSION.zip"
-(cd "$TMP" && zip -r -q "$ZIP_PATH" main.jsbundle assets)
-
-SHA=$(sha256sum "$ZIP_PATH" | awk '{print $1}')
-SIZE=$(stat -c%s "$ZIP_PATH" 2>/dev/null || stat -f%z "$ZIP_PATH")
-
-echo "→ Writing manifest.json"
-VERSION="$VERSION" NAME="$NAME" \
-URL="$BUNDLE_URL_BASE/$VERSION.zip" \
-SHA="$SHA" NOTES="$NOTES" MANIFEST_PATH="$OTA_DIR/manifest.json" \
-python3 - <<'PY'
-import json, os
-manifest = {
-    'version': int(os.environ['VERSION']),
-    'name': os.environ['NAME'],
-    'url': os.environ['URL'],
-    'sha256': os.environ['SHA'],
-    'notes': os.environ['NOTES'],
-}
-with open(os.environ['MANIFEST_PATH'], 'w') as f:
-    json.dump(manifest, f, indent=2)
-    f.write('\n')
-PY
-
-echo "✓ Published $NAME (v$VERSION, ${SIZE} bytes)"
-echo "  Bundle: $ZIP_PATH"
-echo "  SHA-256: $SHA"
+exec npx hot-updater "${ARGS[@]}"
