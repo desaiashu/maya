@@ -1,6 +1,46 @@
 import { Platform } from 'react-native';
 import { HotUpdater } from '@hot-updater/react-native';
+import type { HotUpdaterResolver } from '@hot-updater/react-native';
 import { logger } from '@/data';
+
+const NIL_UUID = '00000000-0000-0000-0000-000000000000';
+
+// The standalone server occasionally returns {status:"ROLLBACK", id:NIL, fileUrl:null}
+// when the device is already on the built-in bundle. The default wrap applies that
+// "update" and reloads, then re-checks → same response → infinite reload loop. This
+// resolver short-circuits that case to UP_TO_DATE. Everything else passes through
+// unchanged.
+export function createUpdateResolver(baseURL: string): HotUpdaterResolver {
+  return {
+    checkUpdate: async params => {
+      const url =
+        params.updateStrategy === 'fingerprint'
+          ? `${baseURL.replace(/\/+$/, '')}/fingerprint/${params.platform}/${params.fingerprintHash}/${params.channel}/${params.minBundleId}/${params.bundleId}/${encodeURIComponent(params.cohort)}`
+          : `${baseURL.replace(/\/+$/, '')}/app-version/${params.platform}/${params.appVersion}/${params.channel}/${params.minBundleId}/${params.bundleId}/${encodeURIComponent(params.cohort)}`;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), params.requestTimeout ?? 5000);
+      try {
+        const res = await fetch(url, {
+          signal: controller.signal,
+          headers: { 'Content-Type': 'application/json', ...params.requestHeaders },
+        });
+        if (res.status !== 200) throw new Error(res.statusText);
+        const info = await res.json();
+        if (
+          info?.status === 'ROLLBACK' &&
+          info?.id === NIL_UUID &&
+          info?.fileUrl == null &&
+          params.bundleId === NIL_UUID
+        ) {
+          return { status: 'UP_TO_DATE' };
+        }
+        return info;
+      } finally {
+        clearTimeout(timeoutId);
+      }
+    },
+  };
+}
 
 // We surface the minimum that the UI needs. The full shape (id, fileHash,
 // manifestUrl, etc.) is in @hot-updater/core's AppUpdateAvailableInfo.

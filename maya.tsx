@@ -7,6 +7,7 @@ import { ThemeProvider } from '@/ui/theme';
 import Navigator from '@/views/navigator';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { analytics, ANDROID, API_URL, server, useStore } from '@/data';
+import { createUpdateResolver } from '@/data/server/ota';
 
 const Maya = () => {
   const appState = useRef(AppState.currentState);
@@ -56,7 +57,7 @@ const Maya = () => {
 // commit. Native side handles auto-rollback (RCTContentDidAppear + 10s grace +
 // signal/exception handlers).
 export default HotUpdater.wrap({
-  baseURL: API_URL + 'hot-updater',
+  resolver: createUpdateResolver(API_URL + 'hot-updater'),
   updateStrategy: 'appVersion',
   reloadOnForceUpdate: true,
   fallbackComponent: ({ status, progress }) => (
