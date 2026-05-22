@@ -1,7 +1,7 @@
 // Code-mode (roundtable protocol) types. Tracks CLIENT_API.md.
 // Lives outside the auto-generated types.tsx so pydantic2ts doesn't clobber it.
 
-export type ChatMode = 'chat' | 'code';
+export type ChatMode = 'chat' | 'code' | 'solo';
 
 export type CodeWSRequest =
   | 'set_mode'

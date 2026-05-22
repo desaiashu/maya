@@ -50,15 +50,19 @@ export const threadid = (chatid: string, messid: number) =>
 export const emptyChat = (protocol: string = 'maya'): ChatInfo => {
   const state = useStore.getState();
   const userid = state.currentUser.userid;
-  const participants =
-    protocol === 'roundtable'
-      ? [userid, 'maya', 'moderator']
-      : [userid, 'maya', 'system', 'uncensored', 'oracle'];
+  let participants: string[];
+  if (protocol === 'roundtable') {
+    participants = [userid, 'maya', 'moderator'];
+  } else if (protocol === 'solo') {
+    participants = [userid, 'solo'];
+  } else {
+    participants = [userid, 'maya', 'system', 'uncensored', 'oracle'];
+  }
   return {
     chatid: '_',
     slug: '_',
     creator: userid,
-    participants,
+    participants: participants,
     // Keep the topic stable across protocols so the `_new chat` drawer route
     // resolves regardless of mode; server will rename on first response.
     topic: 'new chat',
@@ -95,6 +99,12 @@ export const newCommunityChat = () => {
 
 export const newCodeChat = () => {
   const chat: ChatInfo = emptyChat('roundtable');
+  server.createChat(chat);
+  return chat;
+};
+
+export const newSoloChat = () => {
+  const chat: ChatInfo = emptyChat('solo');
   server.createChat(chat);
   return chat;
 };

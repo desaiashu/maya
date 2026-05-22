@@ -31,6 +31,7 @@ import {
   ANDROID,
   newCommunityChat,
   newCodeChat,
+  newSoloChat,
   hashChatID,
   WEB_URL,
   DOWNLOAD_URL,
@@ -55,6 +56,7 @@ interface chatOptionsProps {
 const VIEW_MODE_OPTIONS = [
   { label: 'Chat', value: 'chat' },
   { label: 'Code', value: 'code' },
+  { label: 'Solo', value: 'solo' },
 ];
 
 const ViewModeToggle: React.FC = () => {
@@ -65,7 +67,7 @@ const ViewModeToggle: React.FC = () => {
       options={VIEW_MODE_OPTIONS}
       value={viewMode}
       onChange={mode => {
-        setViewMode(mode as 'chat' | 'code');
+        setViewMode(mode as 'chat' | 'code' | 'solo');
         analytics.track('view_mode', { mode });
       }}
     />
@@ -135,7 +137,11 @@ const renderRightMenu = (props: chatOptionsProps) => {
           const viewMode = useStore.getState().viewMode;
           analytics.track('new_chat', { mode: viewMode });
           const newChat =
-            viewMode === 'code' ? newCodeChat() : newCommunityChat();
+            viewMode === 'code'
+              ? newCodeChat()
+              : viewMode === 'solo'
+              ? newSoloChat()
+              : newCommunityChat();
           navigation.reset({
             index: 0,
             routes: [{ name: newChat.chatid + newChat.topic, params: newChat }],
@@ -189,12 +195,13 @@ const Chat: React.FC = () => {
     ],
   }));
   const isCodeMode = chatInfo.protocol === 'roundtable';
+  const isSoloMode = chatInfo.protocol === 'solo';
 
-  // Phase-1: ensure server agrees a roundtable chat is in code mode on entry.
+  // Phase-1: ensure server agrees a roundtable/solo chat is in the right mode on entry.
   useEffect(() => {
-    if (isCodeMode && chatInfo.chatid !== '_') {
-      server.setMode(chatInfo.chatid, 'code');
-    }
+    if (chatInfo.chatid === '_') return;
+    if (isCodeMode) server.setMode(chatInfo.chatid, 'code');
+    else if (isSoloMode) server.setMode(chatInfo.chatid, 'solo');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatInfo.chatid]);
 

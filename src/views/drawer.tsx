@@ -177,9 +177,10 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
   const visibleRoutes = routes.filter(route => {
     const chat = route.params as ChatInfo | undefined;
     if (!chat || !chat.protocol) return true; // keep meta routes
-    return viewMode === 'code'
-      ? chat.protocol === 'roundtable'
-      : chat.protocol !== 'roundtable';
+    if (viewMode === 'code') return chat.protocol === 'roundtable';
+    if (viewMode === 'solo') return chat.protocol === 'solo';
+    // chat mode: everything that isn't a code/solo chat
+    return chat.protocol !== 'roundtable' && chat.protocol !== 'solo';
   });
 
   // TODO: make sure this is the right timing to refresh
@@ -196,7 +197,7 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
     <SafeAreaView edges={['top']} style={styles.container}>
       <View style={styles.header}>
         <Words tag="h3" style={styles.headerText}>
-          {viewMode === 'code' ? 'Code' : 'Chats'}
+          {viewMode === 'code' ? 'Code' : viewMode === 'solo' ? 'Solo' : 'Chats'}
         </Words>
       </View>
       <DrawerContentScrollView {...props}>
