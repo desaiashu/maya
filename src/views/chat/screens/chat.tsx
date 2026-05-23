@@ -62,13 +62,30 @@ const VIEW_MODE_OPTIONS = [
 const ViewModeToggle: React.FC = () => {
   const viewMode = useStore((s: State) => s.viewMode);
   const setViewMode = useStore((s: State) => s.setViewMode);
+  const navigation =
+    useNavigation<DrawerNavigationProp<RootStackParamList, 'Chat'>>();
   return (
     <Toggle
       options={VIEW_MODE_OPTIONS}
       value={viewMode}
       onChange={mode => {
-        setViewMode(mode as 'chat' | 'code' | 'solo');
-        analytics.track('view_mode', { mode });
+        const next = mode as 'chat' | 'code' | 'solo';
+        if (next === viewMode) return;
+        setViewMode(next);
+        analytics.track('view_mode', { mode: next });
+        // Switching modes lands the user on a fresh chat in the new mode —
+        // the previously-selected chat almost certainly belongs to a
+        // different protocol and is filtered out of the drawer anyway.
+        const newChat =
+          next === 'code'
+            ? newCodeChat()
+            : next === 'solo'
+            ? newSoloChat()
+            : newCommunityChat();
+        navigation.reset({
+          index: 0,
+          routes: [{ name: newChat.chatid + newChat.topic, params: newChat }],
+        });
       }}
     />
   );
