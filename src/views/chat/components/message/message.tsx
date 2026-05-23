@@ -60,7 +60,11 @@ const MessageUI: React.FC<MessageProps> = props => {
   //Add thumbs and confidence later
   const showConfidence = false;
   const showThumbs = false;
-  const showPerspective = username === 'maya' && !stream && !info;
+  // Gate on the message's sender (userid), not the resolved username — the
+  // username comes from the profiles lookup and breaks silently if the bot's
+  // profile has different casing or hasn't been fetched yet.
+  const showPerspective =
+    current.sender === 'maya' && !stream && !info;
 
   const { perspective } = useStore((state: State) => ({
     perspective:
